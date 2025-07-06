@@ -10,12 +10,7 @@ export const UNIVERSAL_CONSTANTS = {
   DEGREE:   369
 };
 
-// 1) Fourier-Toroidal Spiral: 1000× depth, 369° sampling
-export function QD_ToroidalSpiral_Fourier(
-  seed: number,
-  depth: number,
-  harmonics = 1000
-): number[] {
+export function QD_ToroidalSpiral_Fourier(seed: number, depth: number, harmonics = 1000): number[] {
   const results: number[] = [];
   for (let i = 0; i < UNIVERSAL_CONSTANTS.DEGREE; i++) {
     let angle = (seed * UNIVERSAL_CONSTANTS.TWO_PI / UNIVERSAL_CONSTANTS.AVO1000 + i) % UNIVERSAL_CONSTANTS.TWO_PI;
@@ -26,17 +21,11 @@ export function QD_ToroidalSpiral_Fourier(
   return results;
 }
 
-// 2) Modular-Prime Toroidal
 export function CM_ModuloPrime_Toroidal(seed: number, modulus: number): number {
   return ((seed % modulus) + modulus) % modulus;
 }
 
-// 3) Neural Adaptive Feedback: 1000 iters, 369° wrap
-export function NA_FeedbackLoop_Toroidal(
-  seed: number,
-  factor: number,
-  iters = 1000
-): number {
+export function NA_FeedbackLoop_Toroidal(seed: number, factor: number, iters = 1000): number {
   let s = seed;
   for (let i = 0; i < iters; i++) {
     s += Math.sin(s * factor) * Math.cos(i / UNIVERSAL_CONSTANTS.AVO1000);
@@ -45,10 +34,7 @@ export function NA_FeedbackLoop_Toroidal(
   return s;
 }
 
-// 4) Sacred Angle Transform: 369° sampled
-export function GS_SacredAngleTransform_369(
-  baseAngle: number
-): number[] {
+export function GS_SacredAngleTransform_369(baseAngle: number): number[] {
   const out: number[] = [];
   for (let d = 0; d < UNIVERSAL_CONSTANTS.DEGREE; d++) {
     const rad = (baseAngle + d) * (Math.PI / 180);
@@ -57,12 +43,7 @@ export function GS_SacredAngleTransform_369(
   return out;
 }
 
-// 5) Cross-Domain Fusion: avg of spiral, mod, feedback ×1000 potency
-export function HF_CrossDomainFusion_1000(
-  a: number,
-  b: number,
-  c: number
-): number {
+export function HF_CrossDomainFusion_1000(a: number, b: number, c: number): number {
   const spiral = QD_ToroidalSpiral_Fourier(a, 8)[0];
   const modp   = CM_ModuloPrime_Toroidal(b, 23);
   const fb     = NA_FeedbackLoop_Toroidal(c, 0.333);

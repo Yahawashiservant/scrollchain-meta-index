@@ -18,23 +18,23 @@ export class AfterQuantumCore {
 
   static crownEncode(input: string, omega: number, lambda: number): string {
     const enc = input.split("").map((ch,i) =>
-      String.fromCharCode(ch.charCodeAt(0) ^ ((omega+lambda+i)%256))
+      String.fromCharCode(ch.charCodeAt(0) ^ ((omega + lambda + i) % 256))
     ).join("");
     return Buffer.from(enc).toString("base64");
   }
 
-  static livingQuantumGrowth(init: number, envFactor=3.1415, iterations=12): number {
+  static livingQuantumGrowth(init: number, envFactor = 3.1415, iterations = 12): number {
     let state = init;
-    for (let i=0; i<iterations; i++) {
-      const wave = Math.sin(state + envFactor) * Math.log(i+2);
-      const noise= (Math.random()-0.5)*0.05*1000;
-      state = (state + wave)*(1+noise);
+    for (let i = 0; i < iterations; i++) {
+      const wave  = Math.sin(state + envFactor) * Math.log(i + 2);
+      const noise = (Math.random() - 0.5) * 0.05 * 1000;
+      state = (state + wave) * (1 + noise);
     }
     return state;
   }
 
   static scrollEntropy(probs: number[], pisanoMod: number, prophecyVal: number): number {
-    const shannon = -probs.reduce((s,p)=>s + p*Math.log(p),0);
-    return shannon + pisanoMod*0.001 + prophecyVal*0.001;
+    const shannon = -probs.reduce((s,p) => s + p * Math.log(p), 0);
+    return shannon + pisanoMod * 0.001 + prophecyVal * 0.001;
   }
 }
