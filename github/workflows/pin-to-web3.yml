@@ -1,11 +1,11 @@
-name: Pin to Web3.Storage
+name: Pin ScrollChain Archive to Web3.Storage
 
 on:
   workflow_dispatch:
   push:
     paths:
-      - '**.scroll'
       - '**.zip'
+      - 'dao/proposals/register-cid.scroll'
 
 jobs:
   pin:
@@ -13,11 +13,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Upload to web3.storage
+      - name: Upload archive to Web3.Storage
         run: |
           curl -X POST https://api.web3.storage/upload \
-            -H "Authorization: Bearer ${{ secrets.WEB3_STORAGE_TOKEN }}" \
-            -H "Content-Type: application/octet-stream" \
+            -H "Authorization: Bearer ${{ secrets.Web3Storage_API_Token }}" \
+            -H "Content-Type: application/zip" \
             --data-binary @scrollchain-infra-2025-07-06.zip \
             > pin-response.json
 
@@ -25,8 +25,8 @@ jobs:
         run: |
           CID=$(jq -r '.cid' pin-response.json)
           echo "📡 Pinned CID: $CID"
-          sed -i "s/cid: .*/cid: $CID/" dao/proposals/register-cid.scroll
+          sed -i "s/^cid: .*/cid: $CID/" dao/proposals/register-cid.scroll
           git config user.name "ScrollBot"
           git config user.email "bot@scrollchain.io"
-          git commit -am "🔗 Update scroll with pinned CID: $CID"
+          git commit -am "🔗 Update scroll with pinned CID: $CID" || echo "No changes"
           git push origin main
