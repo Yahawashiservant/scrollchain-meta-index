@@ -1,0 +1,7 @@
+#!/bin/bash
+echo "🌐 Welcome to ScrollChain Sovereignty Onboarding"
+echo "This script will guide new users through:"
+echo "- Forking the scrollchain-meta-index repo"
+echo "- Pinning their first scroll"
+echo "- Publishing a sovereign viewer"
+echo "- Creating a DAO proposal"
