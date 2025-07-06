@@ -2,7 +2,10 @@ import { HF_CrossDomainFusion_1000, UNIVERSAL_CONSTANTS } from "../QuantumMathLi
 import { createScrollSigil } from "../scrollDominion";
 
 export interface EntropyTrail {
-  ts: number; qhash: string; sample: number[]; prophecy?: string;
+  ts:       number;
+  qhash:    string;
+  sample:   number[];
+  prophecy?: string;
 }
 
 export class ForgeEngine {

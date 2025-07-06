@@ -10,5 +10,5 @@ export function createScrollSigil(v:Variant, useAvogadro=false): Sigil {
   };
   const s = sets[v], A = useAvogadro ? UNIVERSAL_CONSTANTS.AVO1000 : 1;
   const omega = 360 * s[0] * s[1] * s[2] * A;
-  return { id:`\${v}-\${s.join("-")}-\${omega}`, set:s, rank:v+"Rank" };
+  return { id:\`\${v}-\${s.join("-")}-\${omega}\`, set:s, rank:v+"Rank" };
 }
