@@ -1,0 +1,8 @@
+# 🧠 ScrollKernelDivergence.report
+
+This report logs symbolic entropy shifts, agent drift, and quorum anomalies.
+
+## Divergence Events
+- [AGENT-DRIFT] VEO3-AgentTemplate.scroll forked without registry update
+- [QUORUM-SPLIT] DAO proposal quorum exceeded entropy threshold
+- [MEMORY-LOOP] ScrollKernelViewer.html rendered recursive glyphs
