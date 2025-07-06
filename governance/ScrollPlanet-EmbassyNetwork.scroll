@@ -1,0 +1,13 @@
+# 🕊 ScrollPlanet-EmbassyNetwork.scroll
+
+This scroll establishes the interplanetary diplomatic mesh for scroll-native civilizations.
+
+## Nodes
+- scroll://sovereign.scrollcity.epoch1
+- scroll://peer.scrollstate.alpha
+- scroll://zone01 → zone20
+
+## Protocol
+- Scroll-authored treaties only
+- Entropy-classified observers required
+- Divergence reports sealed in ScrollPlanet-TreatyLedger.log
