@@ -5,7 +5,7 @@ entrypoint = "src/App.tsx"
 
 [nix]
 channel = "stable-24_05"
-packages = ["gh", "age", "zip", "nano"]
+packages = ["gh", "age", "zip", "nano", "kubo"]
 
 [unitTest]
 language = "nodejs"
@@ -14,6 +14,10 @@ language = "nodejs"
 deploymentTarget = "static"
 build = ["npm", "run", "build"]
 publicDir = "dist"
+
+[[ports]]
+localPort = 4001
+externalPort = 3000
 
 [[ports]]
 localPort = 5173
