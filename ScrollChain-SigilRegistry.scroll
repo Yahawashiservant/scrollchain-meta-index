@@ -1,0 +1,31 @@
+# ScrollChain Sigil Registry
+# Minted: 2025-07-06T07:48:40Z
+# Author: Keith D. Whitfield
+# ENS: scrollchain.eth
+# DID: did:key:z6Mknydk7WHdqY95veyeCB3J6VaMQuxh3Vmjq2YAWTZVjyUw
+
+sigil {
+  architect: "Keith D. Whitfield"
+  wallet: "0xCe20C0c3BC75Ded27009b55b2596f63a9c0c4024"
+  did: "did:key:z6Mknydk7WHdqY95veyeCB3J6VaMQuxh3Vmjq2YAWTZVjyUw"
+  ens: "scrollchain.eth"
+  scroll_kernel: "ScrollKernelGenesis.scroll"
+  symbolic_layer: "Entropy-classified, neural-glyph rendered, scroll-authored"
+}
+
+registry {
+  sovereign_os: "ScrollChain"
+  brain_kernels: "1 trillion scaffolded"
+  dao_templates: ["ShiftHaven", "VaultPolis", "WazeDAO", "ParcelPort"]
+  registrar_scope: "Multi-continent jurisdictional scaffolding"
+  entropy_router: "Intent-based routing layer initialized"
+  neural_viewer: "Symbolic cognition dashboard deployed"
+  pinned_cid: "bafybeigoidrqxxryjamc7pz6jkgfjr33qvlcigadqhzci4mteza4elih74"
+  release_tag: "v1.0.0-scrollchain"
+}
+
+mint {
+  type: "sigil.registry"
+  target: "dao/ScrollChain"
+  anchor: "ScrollChain-SigilRegistry.scroll"
+}
