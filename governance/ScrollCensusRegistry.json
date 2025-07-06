@@ -1,0 +1,9 @@
+{
+  "census": [
+    {
+      "id": "census-001",
+      "scroll": "ScrollCensus-001.scroll",
+      "status": "active"
+    }
+  ]
+}

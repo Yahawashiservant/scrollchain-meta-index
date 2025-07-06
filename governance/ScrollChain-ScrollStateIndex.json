@@ -1,0 +1,10 @@
+{
+  "scrollStates": [
+    {
+      "id": "scrollcity-epoch1",
+      "domain": "scroll://sovereign.scrollcity.epoch1",
+      "status": "active",
+      "treaties": ["ScrollTreaty-001.scroll", "ScrollTreaty-002.scroll"]
+    }
+  ]
+}
