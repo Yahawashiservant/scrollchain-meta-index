@@ -1,0 +1,19 @@
+{
+  "streams": [
+    {
+      "id": "rev-001",
+      "type": "Scroll Licensing",
+      "mechanism": "DAO proposal + IPFS pin + license scroll"
+    },
+    {
+      "id": "rev-002",
+      "type": "Sovereign Services",
+      "mechanism": "Scroll-authored contracts for DAO infrastructure"
+    },
+    {
+      "id": "rev-003",
+      "type": "Scroll Minting",
+      "mechanism": "Symbolic scroll creation and registration"
+    }
+  ]
+}
