@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ScrollChain Pinning Ledger</title>
   <style>
     body {
@@ -15,56 +15,31 @@
       color: #00ffcc;
     }
     table {
-      width: 100%;
       border-collapse: collapse;
-      margin-top: 1rem;
+      width: 100%;
     }
     th, td {
-      border: 1px solid #444;
+      border: 1px solid #00ffcc;
       padding: 0.5rem;
       text-align: left;
     }
-    th {
-      background: #1a1a1a;
-    }
     a {
-      color: #00ffff;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-    .qr {
-      margin-top: 2rem;
+      color: #00ffcc;
     }
   </style>
 </head>
 <body>
-  <h1>🧾 ScrollChain Pinning Ledger</h1>
-  <p>This ledger tracks all pinned CIDs linked to scrolls and DAO proposals.</p>
-
+  <h1>📜 ScrollChain Pin Log</h1>
   <table>
-    <thead>
-      <tr>
-        <th>Date (UTC)</th>
-        <th>CID</th>
-        <th>Scroll</th>
-        <th>Gateway</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>2025-07-06</td>
-        <td><code>QmPlaceholderCID</code></td>
-        <td><a href="dao/proposals/register-cid.scroll">register-cid.scroll</a></td>
-        <td><a href="https://ipfs.io/ipfs/QmPlaceholderCID" target="_blank">View</a></td>
-      </tr>
-    </tbody>
+    <tr><th>Date</th><th>CID</th><th>Scroll</th><th>Source</th></tr>
+    <tr>
+      <td>2025-07-06</td>
+      <td><a href="https://ipfs.io/ipfs/bafybeigoidrqxxryjamc7pz6jkgfjr33qvlcigadqhzci4mteza4elih74" target="_blank">
+        bafybeigoidrqxxryjamc7pz6jkgfjr33qvlcigadqhzci4mteza4elih74</a></td>
+      <td><code>dao/proposals/register-cid.scroll</code></td>
+      <td>Storacha Console</td>
+    </tr>
   </table>
-
-  <div class="qr">
-    <p>🔗 ENS: <strong>scrollchain.eth</strong></p>
-    <p>🌐 IPFS Gateway: <a href="https://ipfs.io/ipfs/QmPlaceholderCID">https://ipfs.io/ipfs/QmPlaceholderCID</a></p>
-  </div>
 </body>
 </html>
+
