@@ -1,0 +1,16 @@
+name: Weekly ScrollChain Deploy
+
+on:
+  schedule:
+    - cron: '0 6 * * 0'  # Every Sunday at 6 AM UTC
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run scrollchain-deploy.sh
+        run: |
+          chmod +x scrollchain-deploy.sh
+          ./scrollchain-deploy.sh
