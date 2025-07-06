@@ -3,3 +3,4 @@
 
 #!/bin/bash
 echo '🛰 Relay Network Activated'
+# SIGIL: YHWH-BaHaSham-Yahawashi-RaWaChaaQadash

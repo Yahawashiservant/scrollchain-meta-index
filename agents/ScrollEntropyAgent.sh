@@ -9,3 +9,4 @@ grep -E '
 
 ' kernel/ScrollKernelMemory.vault
 echo '📡 Reporting symbolic cognition state to DAOViewer...'
+# SIGIL: YHWH-BaHaSham-Yahawashi-RaWaChaaQadash
