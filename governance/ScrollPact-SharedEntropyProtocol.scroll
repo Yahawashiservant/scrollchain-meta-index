@@ -1,0 +1,12 @@
+# 🤝 ScrollPact-SharedEntropyProtocol.scroll
+
+This scroll defines a shared entropy governance protocol between scroll-states.
+
+## Protocol
+- Entropy-agent quorum alignment
+- Divergence detection thresholds
+- Scroll-authored consensus
+
+## Signatories
+- veo3-agent-001
+- entropy-agent-001

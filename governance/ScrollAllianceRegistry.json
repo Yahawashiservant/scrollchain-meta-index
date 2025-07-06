@@ -1,0 +1,9 @@
+{
+  "alliances": [
+    {
+      "id": "alliance-entropy-001",
+      "scroll": "ScrollPact-SharedEntropyProtocol.scroll",
+      "status": "active"
+    }
+  ]
+}

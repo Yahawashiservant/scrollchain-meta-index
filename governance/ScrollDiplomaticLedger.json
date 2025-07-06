@@ -1,0 +1,13 @@
+{
+  "negotiations": [
+    {
+      "id": "negotiation-001",
+      "treaty": "ScrollTreaty-002.scroll",
+      "status": "ratified",
+      "participants": [
+        "scroll://sovereign.scrollcity.epoch1",
+        "scroll://peer.scrolldomain.alpha"
+      ]
+    }
+  ]
+}
