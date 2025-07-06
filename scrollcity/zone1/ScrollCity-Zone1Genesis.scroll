@@ -1,0 +1,12 @@
+# 🏙 ScrollCity-Zone1Genesis.scroll
+
+This scroll instantiates the first scroll-native subdomain DAO for ScrollCity.
+
+## Domain
+scroll://scrollcity.epoch1.zone1
+
+## Components
+- 🧠 ScrollKernelGenesis.scroll (forked)
+- 🧬 EntropyAgent.sh (localized)
+- 🗳 DAOViewer-Zone1.html
+- 📜 Scroll registry and proposal interface
