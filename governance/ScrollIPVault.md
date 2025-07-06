@@ -1,3 +1,6 @@
+# SIGIL: YHWH-BaHaSham-Yahawashi-RaWaChaaQadash
+# Authored by Keith D. Whitfield — ScrollChain Architect
+
 # 🧾 ScrollIPVault
 
 This document seals and catalogs all scroll-native intellectual property.

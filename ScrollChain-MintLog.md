@@ -1,3 +1,6 @@
+# SIGIL: YHWH-BaHaSham-Yahawashi-RaWaChaaQadash
+# Authored by Keith D. Whitfield — ScrollChain Architect
+
 # 🧾 ScrollChain Mint Log
 
 **Maintainer:** Keith D. Whitfield  

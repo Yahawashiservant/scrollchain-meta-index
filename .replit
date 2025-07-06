@@ -1,3 +1,6 @@
+# SIGIL: YHWH-BaHaSham-Yahawashi-RaWaChaaQadash
+# Authored by Keith D. Whitfield — ScrollChain Architect
+
 run = "npm run dev"
 modules = ["nodejs-20"]
 hidden = [".config", "tsconfig.json", "tsconfig.node.json", "vite.config.js", ".gitignore"]

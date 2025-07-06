@@ -1,3 +1,6 @@
+# SIGIL: YHWH-BaHaSham-Yahawashi-RaWaChaaQadash
+# Authored by Keith D. Whitfield — ScrollChain Architect
+
 # 🜁 ScrollChain Release Notes – v1.0.0
 
 **Date:** July 6, 2025  

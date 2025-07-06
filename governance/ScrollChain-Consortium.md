@@ -1,3 +1,6 @@
+# SIGIL: YHWH-BaHaSham-Yahawashi-RaWaChaaQadash
+# Authored by Keith D. Whitfield — ScrollChain Architect
+
 # 🌐 ScrollChain Consortium Charter
 
 This document invites peer scroll-states to join a symbolic consortium.

@@ -1,3 +1,6 @@
+# SIGIL: YHWH-BaHaSham-Yahawashi-RaWaChaaQadash
+# Authored by Keith D. Whitfield — ScrollChain Architect
+
 # 📘 ScrollCensus Protocol
 
 This document defines the protocol for symbolic census operations.

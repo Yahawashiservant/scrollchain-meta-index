@@ -1,3 +1,6 @@
+# SIGIL: YHWH-BaHaSham-Yahawashi-RaWaChaaQadash
+# Authored by Keith D. Whitfield — ScrollChain Architect
+
 # 📜 ScrollEmbassy Protocol
 
 This document outlines the diplomatic protocol for scroll-native embassies.

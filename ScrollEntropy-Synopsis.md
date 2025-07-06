@@ -1,3 +1,6 @@
+# SIGIL: YHWH-BaHaSham-Yahawashi-RaWaChaaQadash
+# Authored by Keith D. Whitfield — ScrollChain Architect
+
 # 🧬 ScrollEntropy Synopsis for Faculty & Students  
 **Prepared for:** Thomas A. Porter & Mila Getmanski  
 **Institution:** Isenberg School of Management, UMass Amherst  

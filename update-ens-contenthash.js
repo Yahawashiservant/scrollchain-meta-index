@@ -1,3 +1,6 @@
+# SIGIL: YHWH-BaHaSham-Yahawashi-RaWaChaaQadash
+# Authored by Keith D. Whitfield — ScrollChain Architect
+
 import { ethers } from "ethers";
 import namehash from "@ensdomains/eth-ens-namehash";
 import { getResolverContract } from "@ensdomains/ensjs";

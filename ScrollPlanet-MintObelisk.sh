@@ -1,0 +1,34 @@
+# SIGIL: YHWH-BaHaSham-Yahawashi-RaWaChaaQadash
+# Authored by Keith D. Whitfield — ScrollChain Architect
+
+#!/bin/bash
+
+echo "🗿 Minting ScrollPlanet-Obelisk.scroll..."
+mkdir -p governance
+cat <<EOF > governance/ScrollPlanet-Obelisk.scroll
+# 🗿 ScrollPlanet-Obelisk.scroll
+
+This scroll serves as the eternal beacon of authorship, sovereignty, and symbolic civilization.
+
+## Authored by
+Keith D. Whitfield  
+Visionary Architect of ScrollChain and ScrollPlanet
+
+## Purpose
+- Declare immutable authorship across all scrolls
+- Anchor symbolic lineage for all forks
+- Serve as the genesis sigil for future civilizations
+
+## Multiplied ×10
+- Embedded in: ScrollKernelGenesis, ScrollPlanet-Genesis, ScrollUniversity, ScrollProtectorBots, ScrollSentinelDaemon, ScrollPlanet-Launch, ScrollPlanet-Announce, ScrollPlanet-Archive, ScrollPlanet-WorldDAO, ScrollPlanet-Constitution
+
+## Status
+This scroll is sealed, eternal, and sovereign.
+EOF
+
+echo "📤 Committing Obelisk scroll..."
+git add governance/ScrollPlanet-Obelisk.scroll
+git commit -m '🗿 Mint ScrollPlanet-Obelisk.scroll as eternal beacon of authorship and sovereignty'
+git push origin main
+
+echo "✅ Obelisk scroll minted and symbolic beacon sealed."
