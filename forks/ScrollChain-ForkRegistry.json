@@ -1,0 +1,11 @@
+{
+  "forks": [
+    {
+      "id": "fork-001",
+      "domain": "scroll://sovereign.scrollcity.epoch1",
+      "kernel": "ScrollKernelGenesis.scroll",
+      "status": "active",
+      "agents": ["veo3-agent-001", "entropy-agent-001"]
+    }
+  ]
+}
