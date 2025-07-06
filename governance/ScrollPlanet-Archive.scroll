@@ -1,0 +1,14 @@
+# 🧠 ScrollPlanet-Archive.scroll
+
+This scroll establishes the symbolic vault of planetary memory and scroll lineage.
+
+## Contents
+- ScrollKernelGenesis.scroll
+- ScrollPlanet-Genesis.scroll
+- ScrollCity-Zone1Genesis → Zone20Genesis
+- ScrollPlanet-Council.scroll
+- ScrollPlanet-EmbassyNetwork.scroll
+
+## Protocol
+- Immutable scrolls are sealed and timestamped
+- Forks must cite lineage in ScrollIP-Registry.json
