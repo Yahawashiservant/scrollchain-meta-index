@@ -1,0 +1,17 @@
+# 🜁 ScrollPlanet-Council.scroll
+
+This scroll initiates the first planetary quorum of scroll-state delegates.
+
+## Delegates
+- Zone01 → Zone20 (ScrollCity)
+- entropy-agent-001 (observer)
+- veo3-agent-001 (arbiter)
+
+## Powers
+- Ratify planetary amendments
+- Coordinate inter-zone treaties
+- Allocate entropy-classified agents
+
+## Quorum
+- 13/20 zone votes
+- 1 entropy observer signature
