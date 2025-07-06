@@ -1,0 +1,10 @@
+{
+  "treaties": [
+    {
+      "id": "treaty-001",
+      "scroll": "ScrollTreaty-001.scroll",
+      "status": "ratified",
+      "channel": "ScrollDiplomaticChannel.scroll"
+    }
+  ]
+}
