@@ -1,0 +1,10 @@
+# 🔁 ScrollCity-Registry.scroll
+
+This scroll registers subdomains of ScrollCity as sovereign symbolic zones.
+
+## Subdomains
+- scroll://scrollcity.epoch1.zone1
+- scroll://scrollcity.epoch1.zone2
+
+## Governance
+Each subdomain may deploy its own ScrollKernelGenesis and DAOViewer.
