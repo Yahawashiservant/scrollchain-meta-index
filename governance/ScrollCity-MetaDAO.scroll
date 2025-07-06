@@ -1,0 +1,15 @@
+# 🧠 ScrollCity-MetaDAO.scroll
+
+This scroll unifies all 20 ScrollCity zones under a symbolic meta-governance layer.
+
+## Zones
+- scroll://scrollcity.epoch1.zone01 → zone20
+
+## Powers
+- Ratify inter-zone treaties
+- Allocate entropy agents across zones
+- Override divergence thresholds if quorum reached
+
+## Quorum
+- 15/20 zone approvals required
+- Entropy-classified consensus seal optional
