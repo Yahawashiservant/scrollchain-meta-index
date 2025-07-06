@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ScrollChain Gateway</title>
+  <style>
+    body {
+      background: #0f0f0f;
+      color: #00ffcc;
+      font-family: 'Courier New', monospace;
+      padding: 2rem;
+    }
+    h1, h2 {
+      color: #00ffcc;
+    }
+    .sigil {
+      font-size: 1.2rem;
+      margin-top: 2rem;
+      border-top: 1px dashed #00ffcc;
+      padding-top: 1rem;
+    }
+    .qr {
+      margin-top: 1rem;
+    }
+    code {
+      background: #111;
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+    }
+    a {
+      color: #00ffff;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>🜁 ScrollChain Gateway</h1>
+  <p>This symbolic homepage resolves the sovereign infrastructure of <strong>scrollchain.eth</strong>.</p>
+
+  <h2>📦 Manifest</h2>
+  <p><code>ScrollChain-PinManifest.json</code> loaded from IPFS:</p>
+  <pre id="manifest"></pre>
+
+  <h2>🔗 Gateways</h2>
+  <ul>
+    <li>IPFS: <a href="https://ipfs.io/ipfs/bafybeigoidrqxxryjamc7pz6jkgfjr33qvlcigadqhzci4mteza4elih74" target="_blank">ipfs.io/ipfs/bafybeigo...</a></li>
+    <li>ENS: <a href="https://scrollchain.eth.limo" target="_blank">scrollchain.eth.limo</a></li>
+    <li>IPNS: <span id="ipns-link">[pending]</span></li>
+  </ul>
+
+  <div class="qr">
+    <h2>🧾 QR Code</h2>
+    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://ipfs.io/ipfs/bafybeigoidrqxxryjamc7pz6jkgfjr33qvlcigadqhzci4mteza4elih74" alt="QR Code">
+  </div>
+
+  <div class="sigil">
+    <h2>🜂 Sigil Identity</h2>
+    <p><strong>Architect:</strong> Keith D. Whitfield</p>
+    <p><strong>Scrollchain Sovereign:</strong> <code>scrollchain.eth</code></p>
+    <p><strong>DID:</strong> <code>did:key:z6Mknydk7WHdqY95veyeCB3J6VaMQuxh3Vmjq2YAWTZVjyUw</code></p>
+    <p><strong>Wallet:</strong> <code>0xCe20C0c3BC75Ded27009b55b2596f63a9c0c4024</code></p>
+    <p><strong>ScrollKernel:</strong> <code>ScrollKernelGenesis.scroll</code></p>
+    <p><strong>Symbolic Layer:</strong> Entropy-classified, neural-glyph rendered, scroll-authored</p>
+  </div>
+
+  <script>
+    // Load manifest from IPFS
+    fetch("https://ipfs.io/ipfs/bafybeigoidrqxxryjamc7pz6jkgfjr33qvlcigadqhzci4mteza4elih74/ScrollChain-PinManifest.json")
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("manifest").textContent = JSON.stringify(data, null, 2);
+        if (data.ipns_key) {
+          document.getElementById("ipns-link").innerHTML = `<a href="https://ipfs.io/ipns/${data.ipns_key}" target="_blank">ipns://${data.ipns_key}</a>`;
+        }
+      });
+  </script>
+</body>
+</html>
