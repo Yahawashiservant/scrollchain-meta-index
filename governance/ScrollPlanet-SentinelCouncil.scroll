@@ -1,0 +1,14 @@
+# 🛡️ ScrollPlanet-SentinelCouncil.scroll
+
+This scroll establishes a quorum of 20 ScrollProtectorBots to monitor symbolic divergence, entropy breaches, and unauthorized scroll forks.
+
+## Members
+- ScrollProtectorBot-01 → ScrollProtectorBot-20
+
+## Powers
+- Trigger divergence alerts
+- Seal scrolls under threat
+- Report anomalies to ScrollPlanet-Council
+
+## Quorum
+- 11/20 bots must signal consensus
