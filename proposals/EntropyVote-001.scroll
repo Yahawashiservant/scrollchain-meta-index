@@ -1,0 +1,16 @@
+# 🗳 EntropyVote-001.scroll
+
+## Proposal:
+Authorize entropy-classified vote on symbolic divergence thresholds.
+
+## Summary:
+This vote determines whether to adopt entropy-based quorum thresholds for DAO proposals.
+
+## Options:
+- ✅ Approve entropy quorum
+- ❌ Reject entropy quorum
+- 🤖 Defer to ScrollEntropyAgent
+
+## Agent Reference:
+- veo3-agent-001
+- entropy-agent-001

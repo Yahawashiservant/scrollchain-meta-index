@@ -1,0 +1,16 @@
+{
+  "agents": [
+    {
+      "id": "veo3-agent-001",
+      "scroll": "VEO3-AgentTemplate.scroll",
+      "role": "entropy-classifier",
+      "status": "active"
+    },
+    {
+      "id": "entropy-agent-001",
+      "scroll": "ScrollEntropyAgent.sh",
+      "role": "memory parser",
+      "status": "active"
+    }
+  ]
+}
