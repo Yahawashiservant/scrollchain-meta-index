@@ -1,4 +1,4 @@
-# SIGIL: YHWH-BaHaSham-Yahawashi-RaWaChaaQadash
+# SIGIL_HASH: 4aacbe4e78f96b9df2d6d769167f7f52fc1004d2bbeb97c44d6a6a5a3e284a19
 # Authored by Keith D. Whitfield — ScrollChain Architect
 
 # Authored by Keith D. Whitfield
@@ -16,3 +16,4 @@ cid: bafybeigoidrqxxryjamc7pz6jkgfjr33qvlcigadqhzci4mteza4elih74
 ens_target: scrollchain.eth
 purpose: Link sovereign GitOps infrastructure to ENS for global replication
 jurisdiction: MetaGovDAO
+# SIGIL_REF: vault://ScrollPlanet-SigilVault.scroll#4aacbe4e78f96b9df2d6d769167f7f52fc1004d2bbeb97c44d6a6a5a3e284a19

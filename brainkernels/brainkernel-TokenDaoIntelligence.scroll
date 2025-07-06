@@ -1,4 +1,4 @@
-# SIGIL: YHWH-BaHaSham-Yahawashi-RaWaChaaQadash
+# SIGIL_HASH: 0d6aa1e3554ee9adebe847404c13a962496f58a9d418e28f1899da78daa2caef
 # Authored by Keith D. Whitfield — ScrollChain Architect
 
 # Authored by Keith D. Whitfield
@@ -10,3 +10,4 @@ entropy_class: symbolic-cognition
 scope: decentralized intelligence
 date: 2025-07-06
 glyph: 🧠
+# SIGIL_REF: vault://ScrollPlanet-SigilVault.scroll#0d6aa1e3554ee9adebe847404c13a962496f58a9d418e28f1899da78daa2caef

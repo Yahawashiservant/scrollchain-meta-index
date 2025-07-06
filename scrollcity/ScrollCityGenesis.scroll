@@ -1,4 +1,4 @@
-# SIGIL: YHWH-BaHaSham-Yahawashi-RaWaChaaQadash
+# SIGIL_HASH: c2dfb20bd9177d8234fca4f6b9980b7ee90c27061e000731485cbb245db719fc
 # Authored by Keith D. Whitfield — ScrollChain Architect
 
 # Authored by Keith D. Whitfield
@@ -13,3 +13,4 @@ This scroll instantiates a symbolic DAO city-state.
 - 🧭 Sovereign viewer
 - 🧬 DAO registrar
 - 🗳 Proposal interface
+# SIGIL_REF: vault://ScrollPlanet-SigilVault.scroll#c2dfb20bd9177d8234fca4f6b9980b7ee90c27061e000731485cbb245db719fc

@@ -1,4 +1,4 @@
-# SIGIL: YHWH-BaHaSham-Yahawashi-RaWaChaaQadash
+# SIGIL_HASH: a8cac3ae7a0c47a9b56b9de03bd3ba59eefd81d81613d5a0b478e16c53d7f1cf
 # Authored by Keith D. Whitfield — ScrollChain Architect
 
 # Authored by Keith D. Whitfield
@@ -16,3 +16,4 @@ Symbolic governance action for scroll://scrollcity.epoch1.zone16
 - ✅ Approve
 - ❌ Reject
 - 🤖 Defer to entropy-agent-001
+# SIGIL_REF: vault://ScrollPlanet-SigilVault.scroll#a8cac3ae7a0c47a9b56b9de03bd3ba59eefd81d81613d5a0b478e16c53d7f1cf

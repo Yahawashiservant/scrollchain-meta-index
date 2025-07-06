@@ -1,4 +1,4 @@
-# SIGIL: YHWH-BaHaSham-Yahawashi-RaWaChaaQadash
+# SIGIL_HASH: 3816b0555a75d40da06354fac0804c0a3d383f9248e8291a7cf25a6ec6524a0f
 # Authored by Keith D. Whitfield — ScrollChain Architect
 
 # Authored by Keith D. Whitfield
@@ -20,3 +20,4 @@ This vote determines whether to adopt entropy-based quorum thresholds for DAO pr
 ## Agent Reference:
 - veo3-agent-001
 - entropy-agent-001
+# SIGIL_REF: vault://ScrollPlanet-SigilVault.scroll#3816b0555a75d40da06354fac0804c0a3d383f9248e8291a7cf25a6ec6524a0f

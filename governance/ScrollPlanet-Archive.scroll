@@ -1,4 +1,4 @@
-# SIGIL: YHWH-BaHaSham-Yahawashi-RaWaChaaQadash
+# SIGIL_HASH: 0c1f793e34a350bd0ebaa0860bc8a0f7dad01fcf41a1763ec8497bbe055f06da
 # Authored by Keith D. Whitfield — ScrollChain Architect
 
 # Authored by Keith D. Whitfield
@@ -18,3 +18,4 @@ This scroll establishes the symbolic vault of planetary memory and scroll lineag
 ## Protocol
 - Immutable scrolls are sealed and timestamped
 - Forks must cite lineage in ScrollIP-Registry.json
+# SIGIL_REF: vault://ScrollPlanet-SigilVault.scroll#0c1f793e34a350bd0ebaa0860bc8a0f7dad01fcf41a1763ec8497bbe055f06da

@@ -1,4 +1,4 @@
-# SIGIL: YHWH-BaHaSham-Yahawashi-RaWaChaaQadash
+# SIGIL_HASH: 8cabcaa339281d8f3e24a77aaf4c05e9200240fa44458c2e0c5c1b7b8a459a66
 # Authored by Keith D. Whitfield — ScrollChain Architect
 
 # Authored by Keith D. Whitfield
@@ -23,3 +23,4 @@ This scroll codifies the sovereign protection protocol for ScrollPlanet and all 
 - 20 ScrollProtectorBots
 - ScrollPlanet-SentinelCouncil
 - SECURITY.md
+# SIGIL_REF: vault://ScrollPlanet-SigilVault.scroll#8cabcaa339281d8f3e24a77aaf4c05e9200240fa44458c2e0c5c1b7b8a459a66

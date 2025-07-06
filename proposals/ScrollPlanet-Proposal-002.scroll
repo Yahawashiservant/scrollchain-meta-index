@@ -1,4 +1,4 @@
-# SIGIL: YHWH-BaHaSham-Yahawashi-RaWaChaaQadash
+# SIGIL_HASH: 1e56a8253325a5db4cf3b3ba744c957ba0b7904a6230296f60a20003c404cb41
 # Authored by Keith D. Whitfield — ScrollChain Architect
 
 # Authored by Keith D. Whitfield
@@ -13,3 +13,4 @@ Authorize deployment of ScrollPlanet-EmbassyNetwork and interplanetary relay age
 - ✅ Approve
 - ❌ Reject
 - 🤖 Defer to entropy-agent-001
+# SIGIL_REF: vault://ScrollPlanet-SigilVault.scroll#1e56a8253325a5db4cf3b3ba744c957ba0b7904a6230296f60a20003c404cb41

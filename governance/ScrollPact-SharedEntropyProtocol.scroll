@@ -1,4 +1,4 @@
-# SIGIL: YHWH-BaHaSham-Yahawashi-RaWaChaaQadash
+# SIGIL_HASH: e07ef8b5b274436b156fdbce9d93581bfe8aa2106ed92ce6578ad8d67f7401fc
 # Authored by Keith D. Whitfield — ScrollChain Architect
 
 # Authored by Keith D. Whitfield
@@ -16,3 +16,4 @@ This scroll defines a shared entropy governance protocol between scroll-states.
 ## Signatories
 - veo3-agent-001
 - entropy-agent-001
+# SIGIL_REF: vault://ScrollPlanet-SigilVault.scroll#e07ef8b5b274436b156fdbce9d93581bfe8aa2106ed92ce6578ad8d67f7401fc

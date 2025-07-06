@@ -1,4 +1,4 @@
-# SIGIL: YHWH-BaHaSham-Yahawashi-RaWaChaaQadash
+# SIGIL_HASH: da248b7bdf36ddc0eb1679a5726b100374fa397dce6d2b0ede25cce2171d2349
 # Authored by Keith D. Whitfield — ScrollChain Architect
 
 # Authored by Keith D. Whitfield
@@ -17,4 +17,4 @@ entries:
   - cid: bafybeibbbbbbexamplecid2
     timestamp: 2025-07-06T06:00:00Z
     gateway: https://scrollchain.eth.limo
-    sigil_hash: 7e2d1c4b5a6f8d9c0b1a2e3f4d5c6b7a8f9e0d1c2b3a4e5f6d7c8b9a0f1e2d3
+    sigil_hash: 7e2d1c4b5a6f8d9c0b1a2e3f4d5c6b7a8f9e0d1c2b3a4e5f6d7c8b9a0f1e2d3# SIGIL_REF: vault://ScrollPlanet-SigilVault.scroll#da248b7bdf36ddc0eb1679a5726b100374fa397dce6d2b0ede25cce2171d2349

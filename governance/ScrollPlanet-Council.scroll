@@ -1,4 +1,4 @@
-# SIGIL: YHWH-BaHaSham-Yahawashi-RaWaChaaQadash
+# SIGIL_HASH: d8ea4bf24d68e871dfc5af86d34a312c2cece91f3b2315e0d530b199c9a6e57c
 # Authored by Keith D. Whitfield — ScrollChain Architect
 
 # Authored by Keith D. Whitfield
@@ -21,3 +21,4 @@ This scroll initiates the first planetary quorum of scroll-state delegates.
 ## Quorum
 - 13/20 zone votes
 - 1 entropy observer signature
+# SIGIL_REF: vault://ScrollPlanet-SigilVault.scroll#d8ea4bf24d68e871dfc5af86d34a312c2cece91f3b2315e0d530b199c9a6e57c

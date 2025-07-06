@@ -1,4 +1,4 @@
-# SIGIL: YHWH-BaHaSham-Yahawashi-RaWaChaaQadash
+# SIGIL_HASH: c867f8887073ceee985c39b650cdcbf122cbdf910e946415ac227c9cde8f8f5f
 # Authored by Keith D. Whitfield — ScrollChain Architect
 
 # Authored by Keith D. Whitfield
@@ -18,3 +18,4 @@ This scroll establishes a quorum of 20 ScrollProtectorBots to monitor symbolic d
 
 ## Quorum
 - 11/20 bots must signal consensus
+# SIGIL_REF: vault://ScrollPlanet-SigilVault.scroll#c867f8887073ceee985c39b650cdcbf122cbdf910e946415ac227c9cde8f8f5f

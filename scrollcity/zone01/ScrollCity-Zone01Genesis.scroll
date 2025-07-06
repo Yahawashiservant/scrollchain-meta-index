@@ -1,4 +1,4 @@
-# SIGIL: YHWH-BaHaSham-Yahawashi-RaWaChaaQadash
+# SIGIL_HASH: d75f7bc56255dc9fe7c9b6ea2a2852fb49af1885033964b7dbfc5dd867126cdc
 # Authored by Keith D. Whitfield — ScrollChain Architect
 
 # Authored by Keith D. Whitfield
@@ -7,3 +7,4 @@
 # 🏙 ScrollCity-Zone01Genesis.scroll
 
 This scroll instantiates scroll://scrollcity.epoch1.zone01 as a symbolic subdomain DAO.
+# SIGIL_REF: vault://ScrollPlanet-SigilVault.scroll#d75f7bc56255dc9fe7c9b6ea2a2852fb49af1885033964b7dbfc5dd867126cdc

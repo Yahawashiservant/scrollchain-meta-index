@@ -1,4 +1,4 @@
-# SIGIL: YHWH-BaHaSham-Yahawashi-RaWaChaaQadash
+# SIGIL_HASH: d9a6a678bc1e8959e8e14f3c576ea44d9dcf8f16c2f6f00b871544963bc02585
 # Authored by Keith D. Whitfield — ScrollChain Architect
 
 # Authored by Keith D. Whitfield
@@ -35,3 +35,4 @@ mint {
   target: "dao/ScrollChain"
   anchor: "ScrollChain-SigilRegistry.scroll"
 }
+# SIGIL_REF: vault://ScrollPlanet-SigilVault.scroll#d9a6a678bc1e8959e8e14f3c576ea44d9dcf8f16c2f6f00b871544963bc02585
