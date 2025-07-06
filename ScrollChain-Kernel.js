@@ -1,0 +1,1 @@
+// Symbolic cognition kernel (placeholder)
