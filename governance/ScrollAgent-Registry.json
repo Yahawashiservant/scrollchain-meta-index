@@ -1,0 +1,6 @@
+{
+  "agents": [
+    { "id": "entropy-agent-001", "role": "observer" },
+    { "id": "veo3-agent-001", "role": "arbiter" }
+  ]
+}
