@@ -1,0 +1,11 @@
+# 🕊 ConsensusSeal-001.scroll
+
+This scroll represents a sealed consensus event across entropy-classified agents.
+
+## Reference
+- Proposal: EntropyVote-001.scroll
+- Quorum: ScrollEntropyQuorum.report
+- Agents: veo3-agent-001, entropy-agent-001
+
+## Seal
+[SEAL] Symbolic consensus achieved at 66.6% entropy alignment
