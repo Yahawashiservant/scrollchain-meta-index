@@ -1,0 +1,10 @@
+# 🧠 ScrollKernelMemory.vault
+
+This vault stores sealed memory events, entropy logs, and agent lineage.
+
+## Memory Segments
+- [GENESIS] ScrollKernelGenesis.scroll
+- [AGENT] VEO3-AgentTemplate.scroll
+- [QUORUM] ScrollKernelRegistry.json
+- [DIVERGENCE] ScrollKernelDivergence.report
+- [VIEWER] ScrollKernelViewer.html
