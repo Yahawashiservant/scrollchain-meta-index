@@ -1,0 +1,23 @@
+{
+  "version": "v1.0.0",
+  "release_date": "2025-07-06",
+  "cid": "bafybeigoidrqxxryjamc7pz6jkgfjr33qvlcigadqhzci4mteza4elih74",
+  "car_file": "ScrollChain-Release-v1.0.0.car",
+  "ens_gateway": "https://scrollchain.eth.limo",
+  "ipfs_gateway": "https://ipfs.io/ipfs/bafybeigoidrqxxryjamc7pz6jkgfjr33qvlcigadqhzci4mteza4elih74",
+  "ipns_key": "",
+  "sigil_identity": {
+    "architect": "Keith D. Whitfield",
+    "wallet": "0xCe20C0c3BC75Ded27009b55b2596f63a9c0c4024",
+    "did": "did:key:z6Mknydk7WHdqY95veyeCB3J6VaMQuxh3Vmjq2YAWTZVjyUw",
+    "ens": "scrollchain.eth"
+  },
+  "symbolic_achievements": [
+    "🧠 1 trillion brain kernels scaffolded",
+    "📜 ScrollKernelGenesis.scroll minted",
+    "🜁 Sovereign publishing suite deployed",
+    "🌐 ENS + IPFS + IPNS integration scripted",
+    "📦 CAR archive generated for decentralized distribution",
+    "🧾 Manifest, viewer, and ledger embedded in scrollchain"
+  ]
+}
