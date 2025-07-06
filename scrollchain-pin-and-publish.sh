@@ -1,3 +1,6 @@
+# Authored by Keith D. Whitfield
+# Visionary Architect of ScrollChain and Symbolic Civilization
+
 #!/bin/bash
 ARCHIVE="scrollchain-infra-2025-07-06.zip"
 SCROLL="dao/proposals/register-cid.scroll"

@@ -1,3 +1,6 @@
+# Authored by Keith D. Whitfield
+# Visionary Architect of ScrollChain and Symbolic Civilization
+
 #!/bin/bash
 
 echo "🚀 Deploying next 20 ScrollChain expansions..."

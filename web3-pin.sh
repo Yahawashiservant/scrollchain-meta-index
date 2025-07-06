@@ -1,3 +1,6 @@
+# Authored by Keith D. Whitfield
+# Visionary Architect of ScrollChain and Symbolic Civilization
+
 #!/bin/bash
 # web3-pin.sh — Upload .zip to Web3.Storage and update scroll with CID
 

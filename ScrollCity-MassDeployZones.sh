@@ -1,3 +1,6 @@
+# Authored by Keith D. Whitfield
+# Visionary Architect of ScrollChain and Symbolic Civilization
+
 #!/bin/bash
 
 for z in $(seq -w 01 20); do

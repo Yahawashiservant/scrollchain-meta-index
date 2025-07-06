@@ -1,3 +1,6 @@
+# Authored by Keith D. Whitfield
+# Visionary Architect of ScrollChain and Symbolic Civilization
+
 #!/bin/bash
 echo '🕊 ScrollEntropyConsensus Activated'
 echo '🔍 Verifying entropy alignment across agents...'

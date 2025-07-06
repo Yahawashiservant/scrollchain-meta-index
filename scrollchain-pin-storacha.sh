@@ -1,3 +1,6 @@
+# Authored by Keith D. Whitfield
+# Visionary Architect of ScrollChain and Symbolic Civilization
+
 #!/bin/bash
 
 CID="bafybeigoidrqxxryjamc7pz6jkgfjr33qvlcigadqhzci4mteza4elih74"
