@@ -1,0 +1,26 @@
+{
+  "ScrollChain-IndexViewer.html": {
+    "glyph": "📂",
+    "title": "Index Viewer",
+    "description": "Visual ledger of segmented ScrollChain files by category",
+    "gateway": "./ScrollChain-IndexViewer.html"
+  },
+  "ScrollChain-SigilViewer.html": {
+    "glyph": "🜁",
+    "title": "Sigil & Kernel Gallery",
+    "description": "Symbolic scrolls for authorship, sovereignty, and cognition",
+    "gateway": "./ScrollChain-SigilViewer.html"
+  },
+  "ScrollChain-RootViewer.html": {
+    "glyph": "🧭",
+    "title": "Sovereign Dashboard",
+    "description": "Unified publishing interface linking all viewers and gateways",
+    "gateway": "./ScrollChain-RootViewer.html"
+  },
+  "ScrollChain-PinLog.scroll": {
+    "glyph": "📌",
+    "title": "Pin Log",
+    "description": "Chronological log of IPFS pins, CIDs, and sigil hashes",
+    "gateway": "./sigils/ScrollChain-PinLog.scroll"
+  }
+}
