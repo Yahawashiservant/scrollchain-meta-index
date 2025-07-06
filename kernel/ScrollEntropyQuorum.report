@@ -1,0 +1,11 @@
+# 🧠 ScrollEntropyQuorum.report
+
+This report logs entropy-classified quorum thresholds and agent-classified divergence events.
+
+## Quorum Thresholds
+- [VOTE-001] Entropy quorum: 66.6% symbolic alignment
+- [AGENT] entropy-agent-001 classified divergence at 58.2%
+- [ACTION] Proposal deferred to VEO3-AgentTemplate.scroll
+
+## Notes
+This report is sealed and referenced by ScrollEntropyDashboard.html and DAOViewer.html.
