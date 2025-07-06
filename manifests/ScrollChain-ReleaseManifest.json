@@ -1,0 +1,42 @@
+{
+  "version": "v1.0.0",
+  "timestamp": "2025-07-06T16:35:29Z",
+  "author": "did:key:z6Mknydk7WHdqY95veyeCB3J6VaMQuxh3Vmjq2YAWTZVjyUw",
+  "ens": "scrollchain.eth",
+  "gateway": "https://scrollchain.eth.limo",
+  "github": "https://github.com/Yahawashiservant/scrollchain-meta-index",
+  "pages": "https://yahawashiservant.github.io/scrollchain-meta-index/",
+  "commit": "7430fa98d8637545c7ccf947175ccff7ff829b5e",
+  "files": [
+    {
+      "name": "ScrollChain-ViewerManifest.json",
+      "type": "manifest",
+      "path": "ScrollChain-ViewerManifest.json"
+    },
+    {
+      "name": "ScrollChain-PinManifest.json",
+      "type": "manifest",
+      "path": "manifests/ScrollChain-PinManifest.json"
+    },
+    {
+      "name": "ScrollChain-PinLog.scroll",
+      "type": "sigil",
+      "path": "sigils/ScrollChain-PinLog.scroll"
+    },
+    {
+      "name": "ScrollChain-RootViewer.html",
+      "type": "viewer",
+      "path": "ScrollChain-RootViewer.html"
+    },
+    {
+      "name": "ScrollChain-PinViewer.html",
+      "type": "viewer",
+      "path": "viewer/ScrollChain-PinViewer.html"
+    },
+    {
+      "name": "README.md",
+      "type": "index",
+      "path": "README.md"
+    }
+  ]
+}
