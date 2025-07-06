@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ScrollChain Upload to Storacha</title>
+  <style>
+    body {
+      font-family: monospace;
+      background: #0f0f0f;
+      color: #00ffcc;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+    }
+    h1 {
+      color: #00ffff;
+    }
+    #dropzone {
+      border: 2px dashed #00ffcc;
+      padding: 2rem;
+      width: 80%;
+      text-align: center;
+      margin-top: 2rem;
+    }
+    #cid {
+      margin-top: 1rem;
+      font-size: 1.2rem;
+      color: #00ff88;
+    }
+  </style>
+</head>
+<body>
+  <h1>🌀 Upload to Storacha</h1>
+  <p>Drag and drop your <code>.zip</code> or <code>.car</code> file below:</p>
+  <div id="dropzone">Drop file here</div>
+  <div id="cid"></div>
+
+  <script type="module">
+    import { createUploader } from 'https://cdn.jsdelivr.net/npm/@web3-storage/w3up-client/+esm';
+
+    const dropzone = document.getElementById('dropzone');
+    const cidDisplay = document.getElementById('cid');
+
+    dropzone.addEventListener('dragover', e => {
+      e.preventDefault();
+      dropzone.style.borderColor = '#00ffff';
+    });
+
+    dropzone.addEventListener('drop', async e => {
+      e.preventDefault();
+      dropzone.style.borderColor = '#00ffcc';
+      const file = e.dataTransfer.files[0];
+      if (!file) return;
+
+      cidDisplay.textContent = 'Uploading...';
+
+      const client = await createUploader();
+      await client.login('did:key:z6MkrHtVEEdzMmEYgPTk7KpJJQ3T4tE6irXdCqpUtsTNSoN9');
+      const space = await client.createSpace('scrollchain');
+      await client.setCurrentSpace(space);
+
+      const cid = await client.uploadFile(file);
+      cidDisplay.innerHTML = `✅ CID: <code>${cid}</code><br><a href="https://ipfs.io/ipfs/${cid}" target="_blank">View on IPFS</a>`;
+    });
+  </script>
+</body>
+</html>
