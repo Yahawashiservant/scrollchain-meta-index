@@ -1,0 +1,10 @@
+{
+  "missions": [
+    {
+      "id": "mission-001",
+      "scroll": "ScrollChain-EmbassyManifest.scroll",
+      "status": "active",
+      "origin": "scroll://sovereign.scrollcity.epoch1"
+    }
+  ]
+}
