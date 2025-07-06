@@ -1,0 +1,14 @@
+{
+  "kernel": {
+    "ScrollKernelGenesis.scroll": {
+      "glyph": "🧠",
+      "description": "Symbolic cognition layer"
+    }
+  },
+  "agents": {
+    "VEO3-AgentTemplate.scroll": {
+      "glyph": "🤖",
+      "description": "Forkable cognition agent for DAO-bound intelligence"
+    }
+  }
+}
