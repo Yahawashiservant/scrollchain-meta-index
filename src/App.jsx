@@ -1,16 +1,5 @@
-// SIGIL: YHWH - BaHaSham - Yahawashi - RaWaChaaQadash
-// Authored by Keith D. Whitfield — ScrollChain Architect
-
-import './App.css';
-
-export default function App() {
-  return (
-    <main>
-      React ⚛️ + Vite ⚡ + Replit 🌐
-    </main>
-  );
-}
 import { useAccountKit } from '@account-kit/react';
+import './App.css';
 
 export default function App() {
   const { connect, disconnect, address, isConnected } = useAccountKit();
