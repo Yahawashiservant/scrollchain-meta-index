@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_USER: sp_user
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: scroll_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U sp_user"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DB_URL: postgres://sp_user:password@localhost:5432/scroll_db
+      S_URL: ${{ secrets.SUPABASE_URL }}
+      S_KEY: ${{ secrets.SUPABASE_KEY }}
+      RPC_URL: ${{ secrets.RPC_URL }}
+      DAO_ADDRESS: ${{ secrets.DAO_ADDRESS }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Run Dev-Env Setup Script
+        run: |
+          chmod +x ScrollPlanet-SetupDevEnv.sh
+          ./ScrollPlanet-SetupDevEnv.sh
+
+      - name: Install project dependencies
+        run: npm install
+
+      - name: Run Database Migration
+        run: |
+          # wait for Postgres to be ready
+          until pg_isready -h localhost -p 5432 -U sp_user; do sleep 1; done
+          psql $DB_URL -f sql/schema.sql
+
+      - name: Compile & Test Smart Contracts
+        working-directory: contracts
+        run: |
+          npx hardhat compile
+          # (optional) npx hardhat test
+
+      - name: Run Application Tests
+        run: npm test
