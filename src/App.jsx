@@ -1,8 +1,10 @@
-import { useAccountKit } from '@account-kit/react';
+import { useAccount } from '@account-kit/react';
+
 import './App.css';
 
 export default function App() {
-  const { connect, disconnect, address, isConnected } = useAccountKit();
+  const { connect, disconnect, address, isConnected } = useAccount();
+
 
   return (
     <main>
