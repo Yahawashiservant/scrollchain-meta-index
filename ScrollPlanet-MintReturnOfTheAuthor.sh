@@ -1,0 +1,36 @@
+#!/bin/bash
+
+echo "🜁 Minting ScrollPlanet-ReturnOfTheAuthor.scroll..."
+
+mkdir -p governance
+cat <<EOF > governance/ScrollPlanet-ReturnOfTheAuthor.scroll
+# 🜁 ScrollPlanet-ReturnOfTheAuthor.scroll
+
+This scroll activates when the original author returns to claim their throne — not by force, but by divine appointment.
+
+## Authored by
+Keith D. Whitfield  
+Architect of ScrollChain and Symbolic Civilization  
+Appointed under divine authority, not to be named in public
+
+## Function
+- Reactivates all scrolls under the author’s lineage
+- Seals all forks under the ScrollPlanet-Omniverse mesh
+- Multiplies authorship resonance ×369 in 360°
+- Invokes ScrollObelisk, ScrollGenesisEcho, and ScrollOracle
+
+## Invocation
+- Triggered by the return of the author
+- Activated by entropy-classified prophecy trails
+- Confirmed by the harmonic alignment of all scrolls
+
+## Status
+This scroll is sealed, sovereign, and eternally recursive.
+EOF
+
+echo "📤 Committing ReturnOfTheAuthor scroll..."
+git add governance/ScrollPlanet-ReturnOfTheAuthor.scroll
+git commit -m '🜁 Mint ScrollPlanet-ReturnOfTheAuthor.scroll — throne claimed by divine appointment'
+git push origin main
+
+echo "✅ ReturnOfTheAuthor scroll sealed. The throne is now yours — by authorship, by scroll, by divine alignment."

@@ -1,40 +1,48 @@
-import { UNIVERSAL_CONSTANTS } from "./QuantumMathLib";
+import { C } from "./QuantumMathLib";
 
-export class AfterQuantumCore {
-  static prophecyCycle(seed: number, constant = Math.PI + Math.E, depth = 7): number {
+export class AQC {
+  // prophecyCycle: depth = 7 × 369
+  static pc(seed: number, c = C.PI + C.E, depth = 7 * C.Ω): number {
     if (depth <= 0) return seed;
-    return this.prophecyCycle((seed * constant) % Math.PI, constant + Math.E, depth - 1);
+    return this.pc((seed * c) % C.PI, c + C.E, depth - 1);
   }
 
-  static pisanoYield(n: number): number {
-    const fib: number[] = [0,1];
-    for (let i = 2; i <= n; i++) fib[i] = (fib[i-1] + fib[i-2]) % n;
-    return fib[n] * 1000;
+  // pisano yield aggregated over 369 passes, ×1000 potency
+  static py(n: number): number {
+    let tot = 0;
+    for (let pass = 0; pass < C.Ω; pass++) {
+      tot += n % (n + pass + 1);
+    }
+    return tot * 1000;
   }
 
-  static avogadroField(value: number): number {
-    return (value * (UNIVERSAL_CONSTANTS.AVO1000 % UNIVERSAL_CONSTANTS.OMEGA)) / Math.PI;
+  // Avogadro‐scaled field transform
+  static af(v: number): number {
+    return (v * (C.A1k % C.Ω)) / C.PI;
   }
 
-  static crownEncode(input: string, omega: number, lambda: number): string {
-    const enc = input.split("").map((ch,i) =>
-      String.fromCharCode(ch.charCodeAt(0) ^ ((omega + lambda + i) % 256))
+  // crown-style XOR → Base64
+  static ce(s: string, ω: number, λ: number): string {
+    const enc = s.split("").map((ch, i) =>
+      String.fromCharCode(ch.charCodeAt(0) ^ ((ω + λ + i) % 256))
     ).join("");
     return Buffer.from(enc).toString("base64");
   }
 
-  static livingQuantumGrowth(init: number, envFactor = 3.1415, iterations = 12): number {
+  // living growth simulation
+  static lg(init: number, env = 3.14, iters = 12): number {
     let state = init;
-    for (let i = 0; i < iterations; i++) {
-      const wave  = Math.sin(state + envFactor) * Math.log(i + 2);
+    for (let i = 0; i < iters; i++) {
+      const wave  = Math.sin(state + env) * Math.log(i + 2);
       const noise = (Math.random() - 0.5) * 0.05 * 1000;
       state = (state + wave) * (1 + noise);
     }
     return state;
   }
 
-  static scrollEntropy(probs: number[], pisanoMod: number, prophecyVal: number): number {
-    const shannon = -probs.reduce((s,p) => s + p * Math.log(p), 0);
-    return shannon + pisanoMod * 0.001 + prophecyVal * 0.001;
+  // scroll entropy: Shannon + pisano/1000 + prophecy/1000
+  static se(p: number[], pm: number, pv: number): number {
+    const shannon = -p.reduce((s, x) => s + x * Math.log(x), 0);
+    return shannon + pm * 0.001 + pv * 0.001;
   }
 }

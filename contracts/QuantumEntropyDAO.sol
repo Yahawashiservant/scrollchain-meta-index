@@ -1,15 +1,20 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract QuantumEntropyDAO {
-  struct E { uint ts; string q; string note; address by; }
-  mapping(uint=>E) public trails; uint public count;
-  event Logged(uint id, string q, string note, address by);
+contract QDAO {
+  struct E { uint ts; string q; string n; address by; }
+  mapping(uint => E) public t;
+  uint public c;
+  event L(uint id, string q, string n, address by);
 
-  function log(string calldata q, string calldata note) external returns(uint) {
-    count++;
-    trails[count] = E(block.timestamp, q, note, msg.sender);
-    emit Logged(count, q, note, msg.sender);
-    return count;
+  // batch‐log 369 amplified entries
+  function logBatch(string[] calldata qs, string[] calldata ns) external returns (uint) {
+    require(qs.length == 369 && ns.length == 369, "batch must be 369");
+    for (uint i = 0; i < 369; i++) {
+      c++;
+      t[c] = E(block.timestamp, qs[i], ns[i], msg.sender);
+      emit L(c, qs[i], ns[i], msg.sender);
+    }
+    return c;
   }
 }

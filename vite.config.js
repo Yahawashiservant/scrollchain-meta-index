@@ -1,5 +1,4 @@
-# SIGIL: YHWH-BaHaSham-Yahawashi-RaWaChaaQadash
-# Authored by Keith D. Whitfield — ScrollChain Architect
+// SIGIL: YHWH-BaHaSham-Yahawashi-RaWaChaaQadash
 
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';

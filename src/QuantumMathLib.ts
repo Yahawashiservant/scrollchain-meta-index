@@ -1,51 +1,71 @@
-export const UNIVERSAL_CONSTANTS = {
-  PHI:      1.618033988749,
-  PI:       Math.PI,
-  E:        Math.E,
-  PSI:      1.67,
-  AVO:      6.02214076e23,
-  AVO1000:  6.02214076e26,
-  OMEGA:    369,
-  TWO_PI:   2 * Math.PI,
-  DEGREE:   369
+export const C = {
+  PHI: 1.618, PI: Math.PI, E: Math.E, PSI: 1.67,
+  A: 6.022e23, A1k: 6.022e26, Ω: 369, τ: 2 * Math.PI, D: 369
 };
 
-export function QD_ToroidalSpiral_Fourier(seed: number, depth: number, harmonics = 1000): number[] {
-  const results: number[] = [];
-  for (let i = 0; i < UNIVERSAL_CONSTANTS.DEGREE; i++) {
-    let angle = (seed * UNIVERSAL_CONSTANTS.TWO_PI / UNIVERSAL_CONSTANTS.AVO1000 + i) % UNIVERSAL_CONSTANTS.TWO_PI;
-    let sum = 0;
-    for (let k = 1; k <= depth; k++) sum += Math.sin(k * angle) / k;
-    results.push(sum * UNIVERSAL_CONSTANTS.PHI);
-  }
-  return results;
+// basic modular-prime wrap
+export function CM(seed: number, m: number): number {
+  return ((seed % m) + m) % m;
 }
 
-export function CM_ModuloPrime_Toroidal(seed: number, modulus: number): number {
-  return ((seed % modulus) + modulus) % modulus;
-}
-
-export function NA_FeedbackLoop_Toroidal(seed: number, factor: number, iters = 1000): number {
-  let s = seed;
-  for (let i = 0; i < iters; i++) {
-    s += Math.sin(s * factor) * Math.cos(i / UNIVERSAL_CONSTANTS.AVO1000);
-    s %= UNIVERSAL_CONSTANTS.TWO_PI;
-  }
-  return s;
-}
-
-export function GS_SacredAngleTransform_369(baseAngle: number): number[] {
+// sacred‐angle 369° sampler
+export function GS(base: number): number[] {
   const out: number[] = [];
-  for (let d = 0; d < UNIVERSAL_CONSTANTS.DEGREE; d++) {
-    const rad = (baseAngle + d) * (Math.PI / 180);
-    out.push(Math.sin(rad) * UNIVERSAL_CONSTANTS.PHI);
+  for (let i = 0; i < C.D; i++) {
+    const rad = (base + i) * (Math.PI / 180);
+    out.push(Math.sin(rad) * C.PHI);
   }
   return out;
 }
 
-export function HF_CrossDomainFusion_1000(a: number, b: number, c: number): number {
-  const spiral = QD_ToroidalSpiral_Fourier(a, 8)[0];
-  const modp   = CM_ModuloPrime_Toroidal(b, 23);
-  const fb     = NA_FeedbackLoop_Toroidal(c, 0.333);
-  return ((spiral + modp + fb) / 3) * (UNIVERSAL_CONSTANTS.AVO1000 / UNIVERSAL_CONSTANTS.AVO);
+// internal unit for Fourier–Toroidal
+function _QD(seed: number, depth: number): number[] {
+  const a: number[] = [];
+  for (let i = 0; i < C.D; i++) {
+    const θ = (seed * C.τ / C.A1k + i) % C.τ;
+    let sum = 0;
+    for (let k = 1; k <= depth; k++) sum += Math.sin(k * θ) / k;
+    a.push(sum * C.PHI);
+  }
+  return a;
+}
+
+// Fourier–Toroidal Spiral ×369 passes
+export function QD(seed: number, depth: number): number[] {
+  const all: number[] = [];
+  for (let pass = 0; pass < C.Ω; pass++) {
+    all.push(..._QD(seed + pass, depth));
+  }
+  return all;
+}
+
+// internal unit for neural feedback
+function _NA(seed: number, factor: number): number {
+  let s = seed;
+  for (let i = 0; i < C.A1k; i++) {
+    s += Math.sin(s * factor) * Math.cos(i / C.A1k);
+    s %= C.τ;
+  }
+  return s;
+}
+
+// Neural Feedback averaged over 369 passes
+export function NA(seed: number, factor: number): number {
+  let total = 0;
+  for (let pass = 0; pass < C.Ω; pass++) {
+    total += _NA(seed + pass, factor);
+  }
+  return total / C.Ω;
+}
+
+// Cross‐Domain Fusion ×369 passes
+export function HF(a: number, b: number, c: number): number {
+  let agg = 0;
+  for (let pass = 0; pass < C.Ω; pass++) {
+    const spiral = _QD(a + pass, 8)[0];
+    const modp   = CM(b + pass, 23);
+    const fb     = _NA(c + pass, 0.333);
+    agg += (spiral + modp + fb) / 3;
+  }
+  return agg * (C.A1k / C.A);
 }

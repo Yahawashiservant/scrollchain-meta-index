@@ -5,6 +5,7 @@ CREATE TABLE entropy_trails(
   sample FLOAT8[]  NOT NULL,
   note  TEXT
 );
+
 CREATE TABLE prophecy_histories(
   id        UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   trail_id  UUID REFERENCES entropy_trails(id),

@@ -1,22 +1,20 @@
-import { HF_CrossDomainFusion_1000, UNIVERSAL_CONSTANTS } from "../QuantumMathLib";
-import { createScrollSigil } from "../scrollDominion";
+import { HF } from "../QuantumMathLib";
+import { C }  from "../QuantumMathLib";
 
-export interface EntropyTrail {
-  ts:       number;
-  qhash:    string;
-  sample:   number[];
-  prophecy?: string;
-}
-
-export class ForgeEngine {
-  static generateEntropyTrail(seed: number): EntropyTrail {
-    const sample = HF_CrossDomainFusion_1000(seed, seed+1, seed+2);
-    const sum    = [sample].flat().reduce((a,b)=>a+b,0) % UNIVERSAL_CONSTANTS.OMEGA;
-    return {
-      ts: Date.now(),
-      qhash: sum.toString(36) + "-" + 1,
-      sample: [sample],
-      prophecy: \`Seed\${seed}@\${new Date().toISOString()}\`
-    };
+export class FE {
+  // generate 369 amplified entropy trails
+  static gen(seed: number) {
+    const all: any[] = [];
+    for (let pass = 0; pass < C.Ω; pass++) {
+      const x = HF(seed + pass, seed + pass + 1, seed + pass + 2);
+      const h = (x % C.Ω).toString(36) + "-" + C.Ω.toString(36);
+      all.push({
+        ts: Date.now(),
+        qhash: h,
+        sample: [x],
+        prophecy: `S${seed + pass}@${new Date().toISOString()}`
+      });
+    }
+    return all;
   }
 }
