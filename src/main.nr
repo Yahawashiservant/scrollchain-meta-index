@@ -1,3 +1,4 @@
-fn main(private sigil: Field, public hash: Field) {
-    constrain hash == sigil;
+fn main(sigil: Field, hash: pub Field) {
+    assert(hash == sigil);
 }
+

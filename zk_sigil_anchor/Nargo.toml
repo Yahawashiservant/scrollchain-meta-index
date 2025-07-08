@@ -1,6 +1,4 @@
 [package]
 name = "zk_sigil_anchor"
 type = "bin"
-authors = [""]
-
-[dependencies]
+version = "0.1.0"
