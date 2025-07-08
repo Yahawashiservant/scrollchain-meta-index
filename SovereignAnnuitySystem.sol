@@ -67,6 +67,14 @@ contract SovereignAnnuitySystem is ERC721URIStorage, Ownable {
         emit PayoutClaimed(msg.sender, tokenId, adjustedPayout);
         // In production: transfer stablecoin or kernel-backed asset
     }
+function getEntropicMultiplier(uint256 tokenId) public view returns (uint256) {
+    bytes32 entropyHash = keccak256(abi.encodePacked(
+        annuities[tokenId].entropySignal,
+        annuities[tokenId].lastClaimed,
+        block.timestamp
+    ));
+    return uint256(entropyHash) % 500 + 9750; // 97.5%–102.5%
+}
 
     function setInflationRate(uint256 tokenId, uint256 rate) external onlyOwner {
         annuities[tokenId].inflationRate = rate;
@@ -89,4 +97,12 @@ contract SovereignAnnuitySystem is ERC721URIStorage, Ownable {
         emit InheritanceProposed(tokenId, heir);
         // DAO logic would ratify and transfer
     }
+    function generateSigil(uint256 tokenId) public view returns (bytes32) {
+    return keccak256(abi.encodePacked(
+        ownerOf(tokenId),
+        tokenId,
+        tokenURI(tokenId)
+    ));
+}
+
 }

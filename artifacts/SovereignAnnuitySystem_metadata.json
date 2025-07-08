@@ -494,12 +494,50 @@
 						"type": "uint256"
 					}
 				],
+				"name": "generateSigil",
+				"outputs": [
+					{
+						"internalType": "bytes32",
+						"name": "",
+						"type": "bytes32"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "tokenId",
+						"type": "uint256"
+					}
+				],
 				"name": "getApproved",
 				"outputs": [
 					{
 						"internalType": "address",
 						"name": "",
 						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "tokenId",
+						"type": "uint256"
+					}
+				],
+				"name": "getEntropicMultiplier",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
 					}
 				],
 				"stateMutability": "view",
@@ -1200,11 +1238,11 @@
 			]
 		},
 		"SovereignAnnuitySystem.sol": {
-			"keccak256": "0x15749c510686741271845b21769f78d037d63263ec2ad523ecf950c29ac04c0d",
+			"keccak256": "0x09433bb64dfab4df1dec72cdf1464febfe150ed298f998bdf2c9240e3e2f1300",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://f4310c5e2532b3df0c48dd7cc91371ed730c9e73e8aabea14f9027c2966ef625",
-				"dweb:/ipfs/QmUED8CpsspvxqGf59BV2c2D22nSXfsNTsjzgnxhVfCzu7"
+				"bzz-raw://16e8f393162e0a0fdd046bdd7559665d8e777ac2f9924b25d3665bf6bf95877b",
+				"dweb:/ipfs/QmeScRoLHi5cAWx6sJqBxacngYfXyy6YbZWAoooPkHEL6U"
 			]
 		}
 	},
