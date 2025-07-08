@@ -8,7 +8,7 @@ entrypoint = "src/App.tsx"
 
 [nix]
 channel = "stable-24_05"
-packages = ["gh", "age", "zip", "nano", "kubo", "try", "zulu11", "postgresql_12", "lsof"]
+packages = ["gh", "age", "zip", "nano", "kubo", "try", "zulu11", "postgresql_12", "lsof", "rustup", "sigil"]
 
 [unitTest]
 language = "nodejs"

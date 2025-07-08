@@ -6,55 +6,37 @@
   <style>
     body { font-family: monospace; background: #0e0e0e; color: #f0f0f0; padding: 2rem; }
     h1 { color: #ffd700; }
-    input, button { font-size: 1rem; padding: 0.5rem; margin: 0.5rem 0; }
     ul { list-style: none; padding: 0; }
     li { margin-bottom: 1rem; border-bottom: 1px solid #444; padding-bottom: 0.5rem; }
   </style>
 </head>
 <body>
-  <h1>📜 ScrollPlanet Prophecy Viewer</h1>
-
-  <div>
-    <input id="message" placeholder="Enter your prophecy..." size="40" />
-    <button onclick="submitProphecy()">Submit</button>
-  </div>
-
-  <h2>🔮 Past Prophecies</h2>
-  <ul id="prophecies"></ul>
+  <h1>📜 Prophecy Scroll</h1>
+  <ul id="prophecies">Loading...</ul>
 
   <script>
     const provider = new ethers.JsonRpcProvider("https://sepolia-rpc.scroll.io");
     const contractAddress = "0xD7ACd2a9FD159E69Bb102A1ca21C9a3e3A5F771B";
     const abi = [
-      "event ProphecySubmitted(address indexed prophet, string message, uint256 timestamp)",
-      "function submitProphecy(string message)"
+      "event ProphecySubmitted(address indexed prophet, string message, uint256 timestamp)"
     ];
 
     const contract = new ethers.Contract(contractAddress, abi, provider);
     const ul = document.getElementById("prophecies");
 
     async function loadProphecies() {
-      const events = await contract.queryFilter("ProphecySubmitted");
-      events.reverse().forEach(e => {
-        const li = document.createElement("li");
-        li.textContent = `${e.args.prophet}: "${e.args.message}" @ ${new Date(e.args.timestamp * 1000).toLocaleString()}`;
-        ul.appendChild(li);
-      });
-    }
-
-    async function submitProphecy() {
-      const message = document.getElementById("message").value;
-      if (!message) return alert("Enter a prophecy first.");
-
-      if (!window.ethereum) return alert("MetaMask required.");
-      await ethereum.request({ method: "eth_requestAccounts" });
-
-      const signer = new ethers.BrowserProvider(window.ethereum).getSigner();
-      const writeContract = new ethers.Contract(contractAddress, abi, await signer);
-      const tx = await writeContract.submitProphecy(message);
-      await tx.wait();
-      alert("Prophecy submitted!");
-      location.reload();
+      try {
+        const events = await contract.queryFilter("ProphecySubmitted");
+        ul.innerHTML = "";
+        events.reverse().forEach(e => {
+          const li = document.createElement("li");
+          li.textContent = `${e.args.prophet}: \"${e.args.message}\" @ ${new Date(e.args.timestamp * 1000).toLocaleString()}`;
+          ul.appendChild(li);
+        });
+      } catch (err) {
+        ul.innerHTML = "<li>⚠️ Failed to load prophecies.</li>";
+        console.error(err);
+      }
     }
 
     loadProphecies();
