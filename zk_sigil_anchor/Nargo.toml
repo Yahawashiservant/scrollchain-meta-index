@@ -3,4 +3,4 @@ name = "zk_sigil_anchor"
 type = "bin"
 version = "0.1.0"
 [dependencies]
-noir_poseidon = { git = "git@github.com:noir-lang/noir-poseidon.git", tag = "v0.1.0" }
+poseidon2 = { path = "../../../noir_poseidon/poseidon2_noir" }
