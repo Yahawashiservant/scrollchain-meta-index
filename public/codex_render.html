@@ -177,6 +177,27 @@
         <div class="prophecy-stream" id="prophecy-stream"></div>
       </div>
 
+      <!-- NFT Minting Codex Panel -->
+      <div class="panel">
+        <div class="panel-title">🖼️ NFT Minting Codex</div>
+        <div class="minting-interface">
+          <input type="text" id="nft-name" placeholder="Enter scroll name..." style="width: 100%; margin: 5px 0; padding: 8px; background: rgba(0,0,0,0.5); color: #fdf6e3; border: 1px solid #444; border-radius: 4px;">
+          <textarea id="nft-metadata" placeholder="Enter metadata or scroll content..." style="width: 100%; height: 60px; margin: 5px 0; padding: 8px; background: rgba(0,0,0,0.5); color: #fdf6e3; border: 1px solid #444; border-radius: 4px; resize: vertical;"></textarea>
+          <button class="btn" onclick="mintScroll()" style="width: 100%;">🔮 Mint Scroll to IPFS</button>
+          <div id="mint-status" style="margin-top: 10px; font-size: 12px;"></div>
+        </div>
+      </div>
+
+      <!-- Key Gate Authenticator Panel -->
+      <div class="panel">
+        <div class="panel-title">🔑 Key Gate Authenticator</div>
+        <div class="auth-interface">
+          <input type="password" id="api-key" placeholder="Enter API key for validation..." style="width: 100%; margin: 5px 0; padding: 8px; background: rgba(0,0,0,0.5); color: #fdf6e3; border: 1px solid #444; border-radius: 4px;">
+          <button class="btn" onclick="authenticate()" style="width: 100%;">🔐 Validate Key</button>
+          <div id="auth-status" style="margin-top: 10px; font-size: 12px;"></div>
+        </div>
+      </div>
+
       <!-- Entropy Visualization Panel -->
       <div class="panel">
         <div class="panel-title">🧠 Entropy Visualization</div>
@@ -195,15 +216,33 @@
     let realtimeMode = false;
     let updateInterval;
 
-    // Sample data structure based on your modules
-    const moduleData = Array.from({length: 100}, (_, i) => ({
-      id: i + 1,
-      name: `Module ${i + 1}`,
-      hash: Math.floor(Math.random() * 1000000000),
-      scroll: Math.random() * 10,
-      weight: (i + 1) * 6,
-      status: Math.random() > 0.1 ? 'active' : 'inactive'
-    }));
+    // Backend API connection
+    let moduleData = [];
+    let apiConnected = false;
+    
+    // Fetch real module data from backend
+    async function fetchModuleData() {
+      try {
+        const response = await fetch('/api/modules');
+        const data = await response.json();
+        moduleData = data;
+        apiConnected = true;
+        console.log('✅ Connected to ScrollChain backend');
+        return data;
+      } catch (error) {
+        console.log('⚠️ Using mock data - backend unavailable');
+        // Fallback to mock data
+        moduleData = Array.from({length: 100}, (_, i) => ({
+          id: i + 1,
+          name: `AfterQuantumCore_${i + 1}`,
+          hash: Math.floor(Math.random() * 1000000000),
+          scroll: Math.random() * 10,
+          weight: (i + 1) * 6,
+          status: Math.random() > 0.1 ? 'active' : 'inactive'
+        }));
+        return moduleData;
+      }
+    }
 
     const apiKeys = [
       { name: 'Supabase', status: 'active', key: 'SUPABASE_URL' },
@@ -214,13 +253,114 @@
       { name: 'Google Cloud', status: 'active', key: 'GOOGLE_CLOUD_API_KEY' }
     ];
 
-    // Initialize dashboard
-    function initDashboard() {
+    // Initialize dashboard with backend connection
+    async function initDashboard() {
+      await fetchModuleData();
+      await fetchProphecyData();
       renderApiStatus();
       renderModuleActivity();
       renderProphecyStream();
       renderEntropyVisualization();
       renderMainVisualization();
+    }
+
+    // Fetch prophecy data from backend
+    async function fetchProphecyData() {
+      try {
+        const response = await fetch('/api/prophecies');
+        const data = await response.json();
+        prophecyData = data;
+        return data;
+      } catch (error) {
+        console.log('⚠️ Using mock prophecy data');
+        return [];
+      }
+    }
+
+    // NFT Minting function
+    async function mintScroll() {
+      const name = document.getElementById('nft-name').value;
+      const metadata = document.getElementById('nft-metadata').value;
+      const statusDiv = document.getElementById('mint-status');
+      
+      if (!name || !metadata) {
+        statusDiv.innerHTML = '<span style="color: #ff6b6b;">❌ Please fill in both name and metadata</span>';
+        return;
+      }
+
+      statusDiv.innerHTML = '<span style="color: #ffd700;">🔄 Minting scroll to IPFS...</span>';
+
+      try {
+        const response = await fetch('/api/mint', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, metadata, timestamp: new Date().toISOString() })
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok) {
+          statusDiv.innerHTML = `<span style="color: #00ff00;">✅ Scroll minted successfully!</span><br><small>CID: ${result.cid || 'Generated'}</small>`;
+          
+          // Add to prophecy stream
+          addToProphecyStream(`Scroll "${name}" minted to IPFS`, 'MINT');
+          
+          // Clear form
+          document.getElementById('nft-name').value = '';
+          document.getElementById('nft-metadata').value = '';
+        } else {
+          statusDiv.innerHTML = `<span style="color: #ff6b6b;">❌ Minting failed: ${result.error || 'Unknown error'}</span>`;
+        }
+      } catch (error) {
+        statusDiv.innerHTML = '<span style="color: #ff6b6b;">❌ Network error - check backend connection</span>';
+        console.error('Mint error:', error);
+      }
+    }
+
+    // Key authentication function
+    async function authenticate() {
+      const key = document.getElementById('api-key').value;
+      const statusDiv = document.getElementById('auth-status');
+      
+      if (!key) {
+        statusDiv.innerHTML = '<span style="color: #ff6b6b;">❌ Please enter an API key</span>';
+        return;
+      }
+
+      statusDiv.innerHTML = '<span style="color: #ffd700;">🔄 Validating key...</span>';
+
+      try {
+        const response = await fetch('/api/validate-key', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ key })
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok && result.valid) {
+          statusDiv.innerHTML = `<span style="color: #00ff00;">✅ Key validated successfully!</span><br><small>Service: ${result.service || 'Unknown'}</small>`;
+          addToProphecyStream('API key validated', 'AUTH');
+        } else {
+          statusDiv.innerHTML = '<span style="color: #ff6b6b;">❌ Invalid or expired API key</span>';
+        }
+      } catch (error) {
+        statusDiv.innerHTML = '<span style="color: #ff6b6b;">❌ Validation error - check backend connection</span>';
+        console.error('Auth error:', error);
+      }
+    }
+
+    // Add entry to prophecy stream
+    function addToProphecyStream(message, type) {
+      const time = new Date().toLocaleTimeString();
+      const entry = { time, module: type, message };
+      
+      // Add to existing prophecy data
+      if (!window.prophecyData) window.prophecyData = [];
+      window.prophecyData.unshift(entry);
+      
+      // Re-render prophecy stream
+      renderProphecyStream();
     }
 
     function renderApiStatus() {
