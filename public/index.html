@@ -1,0 +1,781 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧭 ScrollChain Sovereign Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        :root {
+            --primary: #0066ff;
+            --secondary: #6c5ce7;
+            --accent: #fd79a8;
+            --dark: #2d3748;
+            --darker: #1a202c;
+            --light: #f7fafc;
+            --border: #e2e8f0;
+            --glow: rgba(0, 102, 255, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+            color: var(--light);
+            overflow-x: hidden;
+        }
+
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            background: rgba(26, 32, 44, 0.95);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid var(--border);
+            padding: 2rem;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .main-content {
+            margin-left: 300px;
+            padding: 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-section {
+            margin-bottom: 2rem;
+        }
+
+        .nav-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-item:hover {
+            background: rgba(0, 102, 255, 0.1);
+            transform: translateX(4px);
+        }
+
+        .nav-item.active {
+            background: var(--primary);
+            box-shadow: 0 4px 12px var(--glow);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header h2 {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--light);
+            opacity: 0.8;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            min-height: 400px;
+        }
+
+        .chart-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        .visualization-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            min-height: 500px;
+        }
+
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            font-size: 1.125rem;
+            color: var(--accent);
+        }
+
+        .pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: .5;
+            }
+        }
+
+        .scroll-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .scroll-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .scroll-item:last-child {
+            border-bottom: none;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .status-pending {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+        }
+
+        #network-graph {
+            width: 100%;
+            height: 400px;
+        }
+
+        .node {
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .node:hover {
+            r: 12;
+        }
+
+        .link {
+            stroke: var(--primary);
+            stroke-opacity: 0.6;
+            stroke-width: 2px;
+        }
+
+        .glow-effect {
+            filter: drop-shadow(0 0 10px var(--glow));
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                position: relative;
+                height: auto;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="sidebar">
+            <div class="logo">
+                <span style="font-size: 2rem;">🧭</span>
+                <h1>ScrollChain</h1>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-title">Core Systems</div>
+                <div class="nav-item active" data-view="overview">
+                    <span>📊</span>
+                    <span>Overview</span>
+                </div>
+                <div class="nav-item" data-view="scrolls">
+                    <span>📜</span>
+                    <span>Scrolls</span>
+                </div>
+                <div class="nav-item" data-view="zones">
+                    <span>🏙️</span>
+                    <span>ScrollCity Zones</span>
+                </div>
+                <div class="nav-item" data-view="entropy">
+                    <span>🧬</span>
+                    <span>Entropy Maps</span>
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-title">Governance</div>
+                <div class="nav-item" data-view="dao">
+                    <span>🏛️</span>
+                    <span>DAO Registry</span>
+                </div>
+                <div class="nav-item" data-view="proposals">
+                    <span>📋</span>
+                    <span>Proposals</span>
+                </div>
+                <div class="nav-item" data-view="voting">
+                    <span>🗳️</span>
+                    <span>Voting</span>
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-title">Infrastructure</div>
+                <div class="nav-item" data-view="agents">
+                    <span>🤖</span>
+                    <span>Agents</span>
+                </div>
+                <div class="nav-item" data-view="network">
+                    <span>🌐</span>
+                    <span>Network</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div id="content-area">
+                <!-- Dynamic content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class ScrollChainDashboard {
+            constructor() {
+                this.currentView = 'overview';
+                this.data = {
+                    scrolls: [],
+                    zones: [],
+                    entropyMaps: []
+                };
+                this.init();
+            }
+
+            async init() {
+                await this.loadData();
+                this.bindEvents();
+                this.renderView('overview');
+            }
+
+            async loadData() {
+                try {
+                    const [scrollsRes, zonesRes, entropyRes] = await Promise.all([
+                        fetch('/api/scrolls'),
+                        fetch('/api/zones'),
+                        fetch('/api/entropy-maps')
+                    ]);
+
+                    this.data.scrolls = await scrollsRes.json();
+                    this.data.zones = await zonesRes.json();
+                    this.data.entropyMaps = await entropyRes.json();
+                } catch (error) {
+                    console.error('Failed to load data:', error);
+                }
+            }
+
+            bindEvents() {
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        const view = e.currentTarget.dataset.view;
+                        this.switchView(view);
+                    });
+                });
+            }
+
+            switchView(view) {
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                document.querySelector(`[data-view="${view}"]`).classList.add('active');
+                this.currentView = view;
+                this.renderView(view);
+            }
+
+            renderView(view) {
+                const contentArea = document.getElementById('content-area');
+                
+                switch(view) {
+                    case 'overview':
+                        contentArea.innerHTML = this.renderOverview();
+                        this.initOverviewCharts();
+                        break;
+                    case 'scrolls':
+                        contentArea.innerHTML = this.renderScrolls();
+                        break;
+                    case 'zones':
+                        contentArea.innerHTML = this.renderZones();
+                        this.initZoneVisualization();
+                        break;
+                    case 'entropy':
+                        contentArea.innerHTML = this.renderEntropy();
+                        this.initEntropyVisualization();
+                        break;
+                    case 'network':
+                        contentArea.innerHTML = this.renderNetwork();
+                        this.initNetworkGraph();
+                        break;
+                    default:
+                        contentArea.innerHTML = this.renderPlaceholder(view);
+                }
+            }
+
+            renderOverview() {
+                return `
+                    <div class="header">
+                        <h2>🧭 ScrollChain Sovereign Dashboard</h2>
+                        <div style="font-family: 'JetBrains Mono'; color: var(--accent);">
+                            Author: Keith D. Whitfield
+                        </div>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card glow-effect">
+                            <div class="stat-value">${this.data.scrolls.length}</div>
+                            <div class="stat-label">Active Scrolls</div>
+                        </div>
+                        <div class="stat-card glow-effect">
+                            <div class="stat-value">${this.data.zones.length}</div>
+                            <div class="stat-label">ScrollCity Zones</div>
+                        </div>
+                        <div class="stat-card glow-effect">
+                            <div class="stat-value">${this.data.entropyMaps.length}</div>
+                            <div class="stat-label">Entropy Maps</div>
+                        </div>
+                        <div class="stat-card glow-effect">
+                            <div class="stat-value">1T</div>
+                            <div class="stat-label">Brain Kernels</div>
+                        </div>
+                    </div>
+
+                    <div class="charts-grid">
+                        <div class="chart-container">
+                            <div class="chart-title">📈 System Activity</div>
+                            <div id="activity-chart"></div>
+                        </div>
+                        <div class="chart-container">
+                            <div class="chart-title">🌐 Network Status</div>
+                            <div id="network-status"></div>
+                        </div>
+                    </div>
+
+                    <div class="visualization-container">
+                        <div class="chart-title">🧬 Symbolic Civilization Layer</div>
+                        <div id="main-visualization"></div>
+                    </div>
+                `;
+            }
+
+            renderScrolls() {
+                return `
+                    <div class="header">
+                        <h2>📜 Scroll Registry</h2>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <div class="chart-title">Scroll Archives</div>
+                        <div class="scroll-list">
+                            ${this.data.scrolls.map(scroll => `
+                                <div class="scroll-item">
+                                    <span>${scroll}</span>
+                                    <span class="status-badge status-active">Active</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            renderZones() {
+                return `
+                    <div class="header">
+                        <h2>🏙️ ScrollCity Zones</h2>
+                    </div>
+                    
+                    <div class="visualization-container">
+                        <div class="chart-title">Zone Network Topology</div>
+                        <div id="zone-network"></div>
+                    </div>
+                `;
+            }
+
+            renderEntropy() {
+                return `
+                    <div class="header">
+                        <h2>🧬 Entropy Visualization</h2>
+                    </div>
+                    
+                    <div class="visualization-container">
+                        <div class="chart-title">Entropy Flow Dynamics</div>
+                        <div id="entropy-flow"></div>
+                    </div>
+                `;
+            }
+
+            renderNetwork() {
+                return `
+                    <div class="header">
+                        <h2>🌐 Network Graph</h2>
+                    </div>
+                    
+                    <div class="visualization-container">
+                        <div class="chart-title">ScrollChain Network Topology</div>
+                        <div id="network-graph"></div>
+                    </div>
+                `;
+            }
+
+            renderPlaceholder(view) {
+                return `
+                    <div class="header">
+                        <h2>🔮 ${view.charAt(0).toUpperCase() + view.slice(1)}</h2>
+                    </div>
+                    
+                    <div class="visualization-container">
+                        <div class="loading pulse">
+                            Initializing ${view} module...
+                        </div>
+                    </div>
+                `;
+            }
+
+            initOverviewCharts() {
+                this.createActivityChart();
+                this.createNetworkStatus();
+                this.createMainVisualization();
+            }
+
+            createActivityChart() {
+                const data = Array.from({length: 24}, (_, i) => ({
+                    hour: i,
+                    activity: Math.random() * 100
+                }));
+
+                const svg = d3.select('#activity-chart')
+                    .append('svg')
+                    .attr('width', '100%')
+                    .attr('height', 200);
+
+                const margin = {top: 20, right: 20, bottom: 30, left: 40};
+                const width = 300 - margin.left - margin.right;
+                const height = 200 - margin.top - margin.bottom;
+
+                const x = d3.scaleLinear().domain([0, 23]).range([0, width]);
+                const y = d3.scaleLinear().domain([0, 100]).range([height, 0]);
+
+                const line = d3.line()
+                    .x(d => x(d.hour))
+                    .y(d => y(d.activity))
+                    .curve(d3.curveMonotoneX);
+
+                const g = svg.append('g')
+                    .attr('transform', `translate(${margin.left},${margin.top})`);
+
+                g.append('path')
+                    .datum(data)
+                    .attr('fill', 'none')
+                    .attr('stroke', '#0066ff')
+                    .attr('stroke-width', 2)
+                    .attr('d', line);
+            }
+
+            createNetworkStatus() {
+                const statusData = [
+                    {name: 'Online', value: 85, color: '#10b981'},
+                    {name: 'Syncing', value: 10, color: '#f59e0b'},
+                    {name: 'Offline', value: 5, color: '#ef4444'}
+                ];
+
+                const svg = d3.select('#network-status')
+                    .append('svg')
+                    .attr('width', '100%')
+                    .attr('height', 200);
+
+                const radius = 80;
+                const arc = d3.arc()
+                    .innerRadius(40)
+                    .outerRadius(radius);
+
+                const pie = d3.pie()
+                    .value(d => d.value);
+
+                const g = svg.append('g')
+                    .attr('transform', 'translate(150,100)');
+
+                const arcs = g.selectAll('.arc')
+                    .data(pie(statusData))
+                    .enter().append('g')
+                    .attr('class', 'arc');
+
+                arcs.append('path')
+                    .attr('d', arc)
+                    .attr('fill', d => d.data.color);
+            }
+
+            createMainVisualization() {
+                const svg = d3.select('#main-visualization')
+                    .append('svg')
+                    .attr('width', '100%')
+                    .attr('height', 300);
+
+                // Create animated particles
+                const particles = Array.from({length: 50}, (_, i) => ({
+                    id: i,
+                    x: Math.random() * 800,
+                    y: Math.random() * 300,
+                    vx: (Math.random() - 0.5) * 2,
+                    vy: (Math.random() - 0.5) * 2,
+                    radius: Math.random() * 3 + 1
+                }));
+
+                const simulation = d3.forceSimulation(particles)
+                    .force('charge', d3.forceManyBody().strength(-30))
+                    .force('center', d3.forceCenter(400, 150))
+                    .force('collision', d3.forceCollide().radius(d => d.radius + 1));
+
+                const circles = svg.selectAll('circle')
+                    .data(particles)
+                    .enter().append('circle')
+                    .attr('r', d => d.radius)
+                    .attr('fill', '#0066ff')
+                    .attr('opacity', 0.7);
+
+                simulation.on('tick', () => {
+                    circles
+                        .attr('cx', d => d.x)
+                        .attr('cy', d => d.y);
+                });
+            }
+
+            initZoneVisualization() {
+                const zones = this.data.zones;
+                const svg = d3.select('#zone-network')
+                    .append('svg')
+                    .attr('width', '100%')
+                    .attr('height', 400);
+
+                const nodes = zones.map((zone, i) => ({
+                    id: zone.id,
+                    name: zone.name,
+                    x: 100 + (i % 4) * 150,
+                    y: 100 + Math.floor(i / 4) * 150,
+                    radius: 20
+                }));
+
+                const nodeElements = svg.selectAll('.zone-node')
+                    .data(nodes)
+                    .enter().append('g')
+                    .attr('class', 'zone-node')
+                    .attr('transform', d => `translate(${d.x},${d.y})`);
+
+                nodeElements.append('circle')
+                    .attr('r', d => d.radius)
+                    .attr('fill', '#6c5ce7')
+                    .attr('stroke', '#0066ff')
+                    .attr('stroke-width', 2);
+
+                nodeElements.append('text')
+                    .text(d => d.name)
+                    .attr('text-anchor', 'middle')
+                    .attr('dy', 5)
+                    .attr('fill', 'white')
+                    .attr('font-size', '12px');
+            }
+
+            initEntropyVisualization() {
+                const svg = d3.select('#entropy-flow')
+                    .append('svg')
+                    .attr('width', '100%')
+                    .attr('height', 400);
+
+                // Create flowing entropy visualization
+                const flowData = Array.from({length: 100}, (_, i) => ({
+                    x: Math.random() * 800,
+                    y: Math.random() * 400,
+                    intensity: Math.random()
+                }));
+
+                svg.selectAll('.entropy-point')
+                    .data(flowData)
+                    .enter().append('circle')
+                    .attr('class', 'entropy-point')
+                    .attr('cx', d => d.x)
+                    .attr('cy', d => d.y)
+                    .attr('r', d => d.intensity * 5)
+                    .attr('fill', d => d3.interpolateViridis(d.intensity))
+                    .attr('opacity', 0.7);
+            }
+
+            initNetworkGraph() {
+                const nodes = [
+                    {id: 'core', group: 1},
+                    {id: 'scrolls', group: 2},
+                    {id: 'zones', group: 2},
+                    {id: 'agents', group: 3},
+                    {id: 'dao', group: 3}
+                ];
+
+                const links = [
+                    {source: 'core', target: 'scrolls'},
+                    {source: 'core', target: 'zones'},
+                    {source: 'scrolls', target: 'agents'},
+                    {source: 'zones', target: 'dao'}
+                ];
+
+                const svg = d3.select('#network-graph')
+                    .append('svg')
+                    .attr('width', '100%')
+                    .attr('height', 400);
+
+                const simulation = d3.forceSimulation(nodes)
+                    .force('link', d3.forceLink(links).id(d => d.id))
+                    .force('charge', d3.forceManyBody().strength(-300))
+                    .force('center', d3.forceCenter(400, 200));
+
+                const link = svg.append('g')
+                    .selectAll('line')
+                    .data(links)
+                    .enter().append('line')
+                    .attr('class', 'link');
+
+                const node = svg.append('g')
+                    .selectAll('circle')
+                    .data(nodes)
+                    .enter().append('circle')
+                    .attr('class', 'node')
+                    .attr('r', 15)
+                    .attr('fill', d => d3.schemeCategory10[d.group]);
+
+                simulation.on('tick', () => {
+                    link
+                        .attr('x1', d => d.source.x)
+                        .attr('y1', d => d.source.y)
+                        .attr('x2', d => d.target.x)
+                        .attr('y2', d => d.target.y);
+
+                    node
+                        .attr('cx', d => d.x)
+                        .attr('cy', d => d.y);
+                });
+            }
+        }
+
+        // Initialize dashboard when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new ScrollChainDashboard();
+        });
+    </script>
+</body>
+</html>

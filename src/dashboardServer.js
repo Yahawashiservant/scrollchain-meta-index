@@ -1,24 +1,84 @@
-
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = 5000;
 
 // Middleware
-app.use(express.json());
 app.use(express.static('public'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// Mock dashboard data for now
-const mockModuleData = Array.from({length: 100}, (_, i) => ({
-  id: i + 1,
-  name: `AfterQuantumCore_${i + 1}`,
-  hash: Math.floor(Math.random() * 1000000000),
-  scroll: Math.random() * 10,
-  weight: (i + 1) * 6,
-  status: Math.random() > 0.1 ? 'active' : 'inactive',
-  timestamp: new Date()
-}));
+// CORS middleware
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
+});
+
+// API Routes
+app.get('/api/scrolls', (req, res) => {
+  try {
+    const scrollsPath = path.join(__dirname, '../sigils');
+    const files = fs.readdirSync(scrollsPath);
+    const scrolls = files.filter(f => f.endsWith('.scroll') || f.endsWith('.json'));
+    res.json(scrolls);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to load scrolls' });
+  }
+});
+
+app.get('/api/zones', (req, res) => {
+  try {
+    const zonesPath = path.join(__dirname, '../scrollcity');
+    const zones = fs.readdirSync(zonesPath)
+      .filter(f => f.startsWith('zone'))
+      .map(zone => ({
+        id: zone,
+        name: zone.replace('zone', 'Zone '),
+        status: 'active'
+      }));
+    res.json(zones);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to load zones' });
+  }
+});
+
+app.get('/api/entropy-maps', (req, res) => {
+  try {
+    const entropyPath = path.join(__dirname, '../entropy/maps');
+    const maps = fs.readdirSync(entropyPath)
+      .filter(f => f.endsWith('.json'))
+      .slice(0, 10)
+      .map(file => ({
+        id: file,
+        name: file.replace('.json', ''),
+        type: 'entropy-graph'
+      }));
+    res.json(maps);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to load entropy maps' });
+  }
+});
+
+// Main dashboard route
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/index.html'));
+});
+
+app.get('/api/modules', (req, res) => {
+  const mockModuleData = Array.from({length: 100}, (_, i) => ({
+    id: i + 1,
+    name: `AfterQuantumCore_${i + 1}`,
+    hash: Math.floor(Math.random() * 1000000000),
+    scroll: Math.random() * 10,
+    weight: (i + 1) * 6,
+    status: Math.random() > 0.1 ? 'active' : 'inactive',
+    timestamp: new Date()
+  }));
+  res.json(mockModuleData);
+});
 
 const mockProphecyData = [
   {
@@ -41,15 +101,6 @@ const mockProphecyData = [
   }
 ];
 
-// Routes
-app.get('/', (req, res) => {
-  res.sendFile(path.join(process.cwd(), 'public', 'codex_render.html'));
-});
-
-app.get('/api/modules', (req, res) => {
-  res.json(mockModuleData);
-});
-
 app.get('/api/prophecies', (req, res) => {
   res.json(mockProphecyData);
 });
@@ -66,6 +117,15 @@ app.get('/api/status', (req, res) => {
 });
 
 app.get('/api/export', (req, res) => {
+  const mockModuleData = Array.from({length: 100}, (_, i) => ({
+    id: i + 1,
+    name: `AfterQuantumCore_${i + 1}`,
+    hash: Math.floor(Math.random() * 1000000000),
+    scroll: Math.random() * 10,
+    weight: (i + 1) * 6,
+    status: Math.random() > 0.1 ? 'active' : 'inactive',
+    timestamp: new Date()
+  }));
   res.json({
     timestamp: new Date().toISOString(),
     modules: mockModuleData,
@@ -141,6 +201,15 @@ app.get('/api/codex/wire', (req, res) => {
 });
 
 app.get('/api/codex/glyphs', (req, res) => {
+    const mockModuleData = Array.from({length: 100}, (_, i) => ({
+        id: i + 1,
+        name: `AfterQuantumCore_${i + 1}`,
+        hash: Math.floor(Math.random() * 1000000000),
+        scroll: Math.random() * 10,
+        weight: (i + 1) * 6,
+        status: Math.random() > 0.1 ? 'active' : 'inactive',
+        timestamp: new Date()
+    }));
   const glyphs = mockModuleData.slice(0, 10).map(module => ({
     id: module.id,
     symbol: ['⚡', '🌀', '🔮', '⭐', '🌙', '☀️', '🔥', '💫', '🌊', '⚛️'][module.hash % 10],
@@ -160,6 +229,15 @@ app.get('/api/codex/glyphs', (req, res) => {
 });
 
 app.get('/api/codex/export', (req, res) => {
+    const mockModuleData = Array.from({length: 100}, (_, i) => ({
+        id: i + 1,
+        name: `AfterQuantumCore_${i + 1}`,
+        hash: Math.floor(Math.random() * 1000000000),
+        scroll: Math.random() * 10,
+        weight: (i + 1) * 6,
+        status: Math.random() > 0.1 ? 'active' : 'inactive',
+        timestamp: new Date()
+    }));
   res.json({
     timestamp: new Date().toISOString(),
     modules: mockModuleData,
@@ -173,9 +251,9 @@ app.get('/api/codex/export', (req, res) => {
   });
 });
 
-// Start server
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`🌀 ScrollChainOS Dashboard running on http://0.0.0.0:${PORT}`);
+  console.log(`🌀 ScrollChain Dashboard running on http://0.0.0.0:${PORT}`);
+  console.log('✅ Ready to visualize the symbolic civilization layer');
   console.log(`🔑 API Keys loaded and validated`);
   console.log(`📊 Real-time entropy visualization active`);
   console.log(`🧬 Codex backend bridge initialized`);
