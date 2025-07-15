@@ -65,3 +65,19 @@ externalPort = 8008
 [[ports]]
 localPort = 5182
 externalPort = 8080
+
+[workflows]
+runButton = "Dashboard Server"
+
+[[workflows.workflow]]
+name = "Dashboard Server"
+author = 42343702
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm install express @types/express"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npx ts-node src/dashboardServer.ts"
