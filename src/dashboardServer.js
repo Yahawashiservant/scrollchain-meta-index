@@ -179,5 +179,4 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`🔑 API Keys loaded and validated`);
   console.log(`📊 Real-time entropy visualization active`);
   console.log(`🧬 Codex backend bridge initialized`);
-  console.log(`🌐 Access your dashboard at: https://${process.env.REPL_SLUG || 'your-repl'}.${process.env.REPL_OWNER || 'username'}.repl.co`);
 });
