@@ -1,10 +1,6 @@
-# SIGIL: YHWH-BaHaSham-Yahawashi-RaWaChaaQadash
-# Authored by Keith D. Whitfield — ScrollChain Architect
-
-run = "npm run dev"
-modules = ["nodejs-20"]
+run = "npm run start"
+modules = ["bash", "nodejs-20", "web"]
 hidden = [".config", "tsconfig.json", "tsconfig.node.json", "vite.config.js", ".gitignore"]
-entrypoint = "src/App.tsx"
 
 [nix]
 channel = "stable-24_05"
@@ -15,8 +11,8 @@ language = "nodejs"
 
 [deployment]
 deploymentTarget = "static"
-build = ["npm", "run", "build"]
 publicDir = "dist"
+run = ["sh", "-c", "npm run start"]
 
 [[ports]]
 localPort = 3000
