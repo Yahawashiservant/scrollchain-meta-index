@@ -1,5 +1,14 @@
 import { BigNumber } from "@ethersproject/bignumber";
 
+import { validateApiKeys, initializeServices } from './environmentLoader.js';
+
+// Validate API keys before starting
+validateApiKeys();
+const services = initializeServices();
+
+console.log('🔑 API Keys loaded successfully');
+console.log('🚀 Starting AfterQuantumCore modules...');
+
 const modules = Array.from({ length: 100 }, (_, i) => i + 1);
 
 async function runAll() {
