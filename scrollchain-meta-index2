@@ -1,0 +1,50 @@
+#!/bin/bash
+# 📜 ScrollChainOS Glyph Dashboard Launcher
+# 🔮 By Keith Whitfield & Copilot
+
+echo "🌀 ScrollChainOS Glyph Engine — Initializing..."
+sleep 1
+
+# ✨ Step 1: System Prep
+echo "🔄 Updating system packages..."
+sudo apt update && sudo apt upgrade -y
+
+# 📦 Step 2: Install Dev Dependencies
+echo "📦 Installing Node.js, npm, Python, Docker..."
+sudo apt install -y git nodejs npm python3 python3-pip docker.io
+
+# 🧬 Step 3: Clone ScrollChainOS Meta Index
+echo "🌐 Cloning scrollchain-meta-index..."
+git clone https://github.com/Yahawashiservant/scrollchain-meta-index.git
+cd scrollchain-meta-index
+
+# 🔧 Step 4: Install Node Dependencies
+echo "📦 Installing project dependencies..."
+npm install express @types/express d3 web3.storage openai supabase-js dotenv
+
+# 🐍 Optional: Python dependencies if needed
+# pip3 install flask supabase openai requests
+
+# 🧾 Step 5: Create Env File (Use real values or export secrets externally)
+echo "🔑 Setting up environment variables..."
+touch .env
+echo "OPENAI_API_KEY=your-openai-key" >> .env
+echo "SUPABASE_URL=your-supabase-url" >> .env
+echo "SUPABASE_KEY=your-supabase-key" >> .env
+echo "ALCHEMY_API_KEY=your-alchemy-key" >> .env
+echo "NFT_STORAGE_API_KEY=your-nft-storage-key" >> .env
+echo "Web3Storage_API_Token=your-web3storage-key" >> .env
+
+# 🚀 Step 6: Start Backend Server
+echo "🚀 Launching Dashboard Server..."
+npx ts-node src/dashboardServer.ts &
+
+# 🌐 Step 7: Launch Frontend Dashboard (Live Server optional)
+echo "🌐 Opening Scroll Dashboard UI..."
+xdg-open http://localhost:5000 || open http://localhost:5000
+
+# 🛡️ Monitor Services
+echo "🧪 Running ports:"
+sudo lsof -i -P -n | grep LISTEN
+
+echo "✅ ScrollChainOS Dashboard ready. Visual codex rendering active."
