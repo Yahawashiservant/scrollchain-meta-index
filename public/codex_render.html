@@ -1,0 +1,434 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ScrollChainOS MetaCodex Dashboard</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    body { 
+      font-family: 'Courier New', monospace; 
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%); 
+      color: #fdf6e3; 
+      margin: 0; 
+      padding: 20px; 
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding: 20px;
+      background: rgba(255, 215, 0, 0.1);
+      border-radius: 10px;
+      border: 2px solid #FFD700;
+    }
+    .title { 
+      font-size: 28px; 
+      margin-bottom: 10px; 
+      color: #FFD700;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    }
+    .subtitle {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-bottom: 20px;
+    }
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    .panel {
+      background: rgba(34, 34, 34, 0.9);
+      border-radius: 10px;
+      padding: 20px;
+      border: 1px solid #444;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+    .panel-title {
+      font-size: 18px;
+      color: #FFD700;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .glyph { 
+      margin: 5px 0; 
+      padding: 8px 12px; 
+      background: rgba(255, 215, 0, 0.1); 
+      border-radius: 5px; 
+      border-left: 3px solid #FFD700;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+    .glyph:hover {
+      background: rgba(255, 215, 0, 0.2);
+      transform: translateX(5px);
+    }
+    .api-status {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+    .api-status.active { background: #00ff00; }
+    .api-status.inactive { background: #ff0000; }
+    svg { 
+      display: block; 
+      margin: 20px auto; 
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+    }
+    .entropy-viz {
+      width: 100%;
+      height: 300px;
+    }
+    .module-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .module-card {
+      background: rgba(255, 215, 0, 0.1);
+      padding: 10px;
+      border-radius: 5px;
+      text-align: center;
+      font-size: 12px;
+      border: 1px solid rgba(255, 215, 0, 0.3);
+    }
+    .controls {
+      margin: 20px 0;
+      text-align: center;
+    }
+    .btn {
+      background: #FFD700;
+      color: #000;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 0 10px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+    .btn:hover {
+      background: #FFA500;
+      transform: translateY(-2px);
+    }
+    .prophecy-stream {
+      height: 200px;
+      overflow-y: auto;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 5px;
+      padding: 10px;
+      border: 1px solid #333;
+    }
+    .prophecy-entry {
+      padding: 5px 0;
+      border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+      font-size: 13px;
+    }
+    @keyframes pulse {
+      0% { opacity: 0.5; }
+      50% { opacity: 1; }
+      100% { opacity: 0.5; }
+    }
+    .pulsing {
+      animation: pulse 2s infinite;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="title">🌀 ScrollChainOS MetaCodex Dashboard</div>
+      <div class="subtitle">Real-time Entropy Visualization & API Integration Portal</div>
+      <div class="controls">
+        <button class="btn" onclick="refreshData()">🔄 Refresh Data</button>
+        <button class="btn" onclick="toggleRealtime()">⚡ Toggle Realtime</button>
+        <button class="btn" onclick="exportData()">📥 Export Entropy</button>
+      </div>
+    </div>
+
+    <div class="dashboard-grid">
+      <!-- API Status Panel -->
+      <div class="panel">
+        <div class="panel-title">🔑 API Gateway Status</div>
+        <div id="api-status"></div>
+      </div>
+
+      <!-- Module Activity Panel -->
+      <div class="panel">
+        <div class="panel-title">📦 Active Modules</div>
+        <div id="module-activity"></div>
+      </div>
+
+      <!-- Prophecy Stream Panel -->
+      <div class="panel">
+        <div class="panel-title">🔮 Prophecy Stream</div>
+        <div class="prophecy-stream" id="prophecy-stream"></div>
+      </div>
+
+      <!-- Entropy Visualization Panel -->
+      <div class="panel">
+        <div class="panel-title">🧠 Entropy Visualization</div>
+        <svg class="entropy-viz" id="entropy-viz"></svg>
+      </div>
+    </div>
+
+    <!-- Main Entropy Graph -->
+    <div class="panel">
+      <div class="panel-title">🌍 Global Entropy Network</div>
+      <svg width="100%" height="400" id="main-viz"></svg>
+    </div>
+  </div>
+
+  <script>
+    let realtimeMode = false;
+    let updateInterval;
+
+    // Sample data structure based on your modules
+    const moduleData = Array.from({length: 100}, (_, i) => ({
+      id: i + 1,
+      name: `Module ${i + 1}`,
+      hash: Math.floor(Math.random() * 1000000000),
+      scroll: Math.random() * 10,
+      weight: (i + 1) * 6,
+      status: Math.random() > 0.1 ? 'active' : 'inactive'
+    }));
+
+    const apiKeys = [
+      { name: 'Supabase', status: 'active', key: 'SUPABASE_URL' },
+      { name: 'OpenAI', status: 'active', key: 'OPENAI_API_KEY' },
+      { name: 'Alchemy', status: 'active', key: 'ALCHEMY_API_KEY' },
+      { name: 'NFT Storage', status: 'active', key: 'NFT_STORAGE_API_KEY' },
+      { name: 'Web3 Storage', status: 'active', key: 'WEB3_STORAGE_API_TOKEN' },
+      { name: 'Google Cloud', status: 'active', key: 'GOOGLE_CLOUD_API_KEY' }
+    ];
+
+    // Initialize dashboard
+    function initDashboard() {
+      renderApiStatus();
+      renderModuleActivity();
+      renderProphecyStream();
+      renderEntropyVisualization();
+      renderMainVisualization();
+    }
+
+    function renderApiStatus() {
+      const container = d3.select('#api-status');
+      container.selectAll('.glyph').remove();
+
+      container.selectAll('.glyph')
+        .data(apiKeys)
+        .enter()
+        .append('div')
+        .attr('class', 'glyph')
+        .html(d => `
+          <span class="api-status ${d.status}"></span>
+          <strong>${d.name}</strong> — ${d.key}
+        `);
+    }
+
+    function renderModuleActivity() {
+      const container = d3.select('#module-activity');
+      const activeModules = moduleData.filter(d => d.status === 'active').slice(0, 20);
+
+      container.selectAll('.module-grid').remove();
+      const grid = container.append('div').attr('class', 'module-grid');
+
+      grid.selectAll('.module-card')
+        .data(activeModules)
+        .enter()
+        .append('div')
+        .attr('class', 'module-card')
+        .html(d => `
+          <div><strong>M${d.id}</strong></div>
+          <div>H: ${d.hash.toString().slice(0, 6)}...</div>
+          <div>S: ${d.scroll.toFixed(2)}</div>
+          <div>W: ${d.weight}</div>
+        `);
+    }
+
+    function renderProphecyStream() {
+      const container = d3.select('#prophecy-stream');
+      const prophecies = [
+        { time: '12:34:56', module: 'M47', message: 'Entropy threshold exceeded' },
+        { time: '12:34:45', module: 'M91', message: 'Quantum coherence detected' },
+        { time: '12:34:32', module: 'M23', message: 'Scroll alignment complete' },
+        { time: '12:34:21', module: 'M67', message: 'Neural pattern emerging' },
+        { time: '12:34:10', module: 'M89', message: 'Prophecy weight calculated' }
+      ];
+
+      container.selectAll('.prophecy-entry').remove();
+      container.selectAll('.prophecy-entry')
+        .data(prophecies)
+        .enter()
+        .append('div')
+        .attr('class', 'prophecy-entry')
+        .html(d => `
+          <span style="color: #FFD700;">[${d.time}]</span> 
+          <span style="color: #00ff00;">${d.module}</span>: ${d.message}
+        `);
+    }
+
+    function renderEntropyVisualization() {
+      const svg = d3.select('#entropy-viz');
+      svg.selectAll('*').remove();
+
+      const width = 280;
+      const height = 280;
+      const margin = 20;
+
+      const data = moduleData.slice(0, 10);
+
+      const xScale = d3.scaleLinear()
+        .domain(d3.extent(data, d => d.scroll))
+        .range([margin, width - margin]);
+
+      const yScale = d3.scaleLinear()
+        .domain(d3.extent(data, d => d.weight))
+        .range([height - margin, margin]);
+
+      const colorScale = d3.scaleSequential(d3.interpolateViridis)
+        .domain(d3.extent(data, d => d.hash));
+
+      svg.selectAll('circle')
+        .data(data)
+        .enter()
+        .append('circle')
+        .attr('cx', d => xScale(d.scroll))
+        .attr('cy', d => yScale(d.weight))
+        .attr('r', 6)
+        .attr('fill', d => colorScale(d.hash))
+        .attr('opacity', 0.8)
+        .on('mouseover', function(event, d) {
+          d3.select(this).attr('r', 10);
+        })
+        .on('mouseout', function(event, d) {
+          d3.select(this).attr('r', 6);
+        });
+    }
+
+    function renderMainVisualization() {
+      const svg = d3.select('#main-viz');
+      svg.selectAll('*').remove();
+
+      const width = 1000;
+      const height = 400;
+      const margin = { top: 20, right: 20, bottom: 40, left: 60 };
+
+      const data = moduleData.slice(0, 50);
+
+      const xScale = d3.scaleLinear()
+        .domain([1, 50])
+        .range([margin.left, width - margin.right]);
+
+      const yScale = d3.scaleLinear()
+        .domain(d3.extent(data, d => d.scroll))
+        .range([height - margin.bottom, margin.top]);
+
+      const line = d3.line()
+        .x(d => xScale(d.id))
+        .y(d => yScale(d.scroll))
+        .curve(d3.curveMonotoneX);
+
+      // Add axes
+      svg.append('g')
+        .attr('transform', `translate(0,${height - margin.bottom})`)
+        .call(d3.axisBottom(xScale))
+        .attr('color', '#FFD700');
+
+      svg.append('g')
+        .attr('transform', `translate(${margin.left},0)`)
+        .call(d3.axisLeft(yScale))
+        .attr('color', '#FFD700');
+
+      // Add line
+      svg.append('path')
+        .datum(data)
+        .attr('fill', 'none')
+        .attr('stroke', '#FFD700')
+        .attr('stroke-width', 2)
+        .attr('d', line);
+
+      // Add points
+      svg.selectAll('.dot')
+        .data(data)
+        .enter()
+        .append('circle')
+        .attr('class', 'dot')
+        .attr('cx', d => xScale(d.id))
+        .attr('cy', d => yScale(d.scroll))
+        .attr('r', 4)
+        .attr('fill', '#FFD700')
+        .on('mouseover', function(event, d) {
+          d3.select(this).attr('r', 8);
+        })
+        .on('mouseout', function(event, d) {
+          d3.select(this).attr('r', 4);
+        });
+    }
+
+    // Control functions
+    function refreshData() {
+      // Simulate data refresh
+      moduleData.forEach(d => {
+        d.scroll += (Math.random() - 0.5) * 0.1;
+        d.weight += Math.floor((Math.random() - 0.5) * 10);
+      });
+      
+      renderModuleActivity();
+      renderProphecyStream();
+      renderEntropyVisualization();
+      renderMainVisualization();
+    }
+
+    function toggleRealtime() {
+      realtimeMode = !realtimeMode;
+      if (realtimeMode) {
+        updateInterval = setInterval(refreshData, 2000);
+        document.querySelector('.btn:nth-child(2)').textContent = '⏸️ Stop Realtime';
+      } else {
+        clearInterval(updateInterval);
+        document.querySelector('.btn:nth-child(2)').textContent = '⚡ Toggle Realtime';
+      }
+    }
+
+    function exportData() {
+      const exportData = {
+        timestamp: new Date().toISOString(),
+        modules: moduleData,
+        apiStatus: apiKeys
+      };
+      
+      const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'scrollchain-entropy-export.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // Initialize on load
+    initDashboard();
+
+    // Add some pulsing animation to active elements
+    setInterval(() => {
+      d3.selectAll('.api-status.active').classed('pulsing', true);
+      setTimeout(() => {
+        d3.selectAll('.api-status.active').classed('pulsing', false);
+      }, 1000);
+    }, 3000);
+  </script>
+</body>
+</html>
