@@ -47,21 +47,28 @@ export default function LoginPage() {
           onClick={() => openAuthModal()}
           disabled={isLoggingIn}
           className={cn(
-            "w-full h-12 text-base font-medium bg-gradient-to-r from-gray-600/80 to-gray-800/80",
-            "hover:from-gray-700/90 hover:to-gray-900/90 border-0 shadow-lg hover:shadow-xl",
-            "dark:from-gray-300/20 dark:to-gray-500/30 dark:hover:from-gray-200/30 dark:hover:to-gray-400/40",
-            "backdrop-blur-sm text-white dark:text-gray-100",
-            "transition-all duration-200"
+            "w-full h-14 text-lg font-bold bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500",
+            "hover:from-pink-600 hover:via-purple-600 hover:to-indigo-600 border-0 shadow-2xl hover:shadow-3xl",
+            "backdrop-blur-sm text-white animate-pulse-glow",
+            "transition-all duration-300 transform hover:scale-105",
+            "relative overflow-hidden"
           )}
         >
-          {isLoggingIn ? (
-            <>
-              <Loader2 className={cn("animate-spin -ml-1 mr-3 h-5 w-5")} />
-              Log in
-            </>
-          ) : (
-            <>Login</>
-          )}
+          <div className="absolute inset-0 bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-400 opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
+          <div className="relative z-10 flex items-center justify-center">
+            {isLoggingIn ? (
+              <>
+                <Loader2 className={cn("animate-spin -ml-1 mr-3 h-6 w-6")} />
+                Connecting...
+              </>
+            ) : (
+              <>
+                <span className="mr-2">✨</span>
+                Connect Wallet
+                <span className="ml-2">✨</span>
+              </>
+            )}
+          </div>
         </Button>
       </CardContent>
     </Card>

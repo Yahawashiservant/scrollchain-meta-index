@@ -14,6 +14,17 @@ export default withAccountKitUi({
                 md: "calc(var(--radius) - 2px)",
                 sm: "calc(var(--radius) - 4px)",
             },
+            boxShadow: {
+                '3xl': '0 35px 60px -12px rgba(0, 0, 0, 0.25)',
+                'glow': '0 0 20px rgba(232, 37, 148, 0.5)',
+            },
+            animation: {
+                'float': 'float 6s ease-in-out infinite',
+                'pulse-glow': 'pulse-glow 3s ease-in-out infinite',
+                'gradient': 'gradient-shift 8s ease infinite',
+                'slide-in': 'slide-in 0.8s ease-out',
+                'scale-in': 'scale-in 0.6s ease-out',
+            },
             colors: {
                 background: "hsl(var(--background))",
                 foreground: "hsl(var(--foreground))",
