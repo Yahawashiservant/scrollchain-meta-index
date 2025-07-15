@@ -1,9 +1,9 @@
 
 <line_number>1</line_number>
-import { ScrollChainDashboard } from './dashboardAPI.js';
-import { initializeServices } from './environmentLoader.js';
+const { ScrollChainDashboard } = require('./dashboardAPI');
+const { initializeServices } = require('./environmentLoader');
 
-export class CodexBackendBridge {
+class CodexBackendBridge {
   private dashboard: ScrollChainDashboard;
   private services: any;
 
@@ -136,3 +136,7 @@ export class CodexBackendBridge {
     };
   }
 }
+
+
+
+module.exports = { CodexBackendBridge };

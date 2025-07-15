@@ -1,8 +1,9 @@
 
-import express from 'express';
-import path from 'path';
-import { ScrollChainDashboard } from './dashboardAPI.js';
-import { CodexBackendBridge } from './codexBackendBridge.js';
+const express = require('express');
+const path = require('path');
+// Import our modules - we'll convert to require for now
+const { ScrollChainDashboard } = require('./dashboardAPI');
+const { CodexBackendBridge } = require('./codexBackendBridge');
 
 const app = express();
 const PORT = process.env.PORT || 5000;

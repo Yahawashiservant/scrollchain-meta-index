@@ -1,5 +1,5 @@
 
-import { validateApiKeys, initializeServices } from './environmentLoader.js';
+const { validateApiKeys, initializeServices } = require('./environmentLoader');
 
 export interface ModuleData {
   id: number;
@@ -18,7 +18,7 @@ export interface ProphecyEntry {
   entropy: string;
 }
 
-export class ScrollChainDashboard {
+class ScrollChainDashboard {
   private services: any;
   private moduleCache: Map<number, ModuleData> = new Map();
 
@@ -191,3 +191,7 @@ export class ScrollChainDashboard {
     }
   }
 }
+
+
+
+module.exports = { ScrollChainDashboard };

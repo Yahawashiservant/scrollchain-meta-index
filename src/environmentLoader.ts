@@ -1,10 +1,9 @@
-
-import { config } from 'dotenv';
+const { config } = require('dotenv');
 
 // Load environment variables
 config();
 
-export const API_KEYS = {
+exports.API_KEYS = {
   ALCHEMY_API_KEY: process.env.ALCHEMY_API_KEY || process.env.NEXT_PUBLIC_ALCHEMY_API_KEY,
   GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
   GOOGLE_CLOUD_API_KEY: process.env.GOOGLE_CLOUD_API_KEY,
@@ -17,45 +16,47 @@ export const API_KEYS = {
 };
 
 // Validate critical API keys
-export function validateApiKeys() {
+function validateApiKeys() {
   const missing: string[] = [];
-  
-  if (!API_KEYS.SUPABASE_URL) missing.push('SUPABASE_URL');
-  if (!API_KEYS.SUPABASE_API_KEY) missing.push('SUPABASE_KEY/Supabase_Api_Key');
-  
+
+  if (!exports.API_KEYS.SUPABASE_URL) missing.push('SUPABASE_URL');
+  if (!exports.API_KEYS.SUPABASE_API_KEY) missing.push('SUPABASE_KEY/Supabase_Api_Key');
+
   if (missing.length > 0) {
     console.error('Missing required API keys:', missing);
     throw new Error(`Missing required environment variables: ${missing.join(', ')}`);
   }
-  
+
   console.log('✅ All critical API keys validated');
   return true;
 }
 
+exports.validateApiKeys = validateApiKeys;
+
 // Initialize all services
-export function initializeServices() {
+exports.initializeServices = function() {
   validateApiKeys();
-  
+
   return {
     supabase: {
-      url: API_KEYS.SUPABASE_URL!,
-      key: API_KEYS.SUPABASE_API_KEY!,
+      url: exports.API_KEYS.SUPABASE_URL,
+      key: exports.API_KEYS.SUPABASE_API_KEY,
     },
     alchemy: {
-      apiKey: API_KEYS.ALCHEMY_API_KEY,
+      apiKey: exports.API_KEYS.ALCHEMY_API_KEY,
     },
     openai: {
-      apiKey: API_KEYS.OPENAI_API_KEY,
+      apiKey: exports.API_KEYS.OPENAI_API_KEY,
     },
     nftStorage: {
-      apiKey: API_KEYS.NFT_STORAGE_API_KEY,
+      apiKey: exports.API_KEYS.NFT_STORAGE_API_KEY,
     },
     web3Storage: {
-      apiToken: API_KEYS.WEB3_STORAGE_API_TOKEN,
+      apiToken: exports.API_KEYS.WEB3_STORAGE_API_TOKEN,
     },
     google: {
-      apiKey: API_KEYS.GOOGLE_API_KEY,
-      cloudApiKey: API_KEYS.GOOGLE_CLOUD_API_KEY,
+      apiKey: exports.API_KEYS.GOOGLE_API_KEY,
+      cloudApiKey: exports.API_KEYS.GOOGLE_CLOUD_API_KEY,
     },
   };
 }
