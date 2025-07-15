@@ -47,6 +47,17 @@ class GlyphEngine {
                     <span class="attr">Entropy: ${metadata.entropy || 0}</span>
                     <span class="attr">Weight: ${metadata.weight || 0}</span>
                 </div>
+                <div class="nft-metadata" style="margin-top: 10px; font-size: 0.8rem; color: #888;">
+                    Created by ${metadata.creator || 'Unknown'} • ${metadata.minted ? new Date(metadata.minted).toLocaleString() : 'Unknown date'}
+                </div>
+                <div class="nft-actions" style="margin-top: 15px;">
+                    <button onclick="glyphEngine.previewNFT('${metadata.cid}')" style="background: #0066ff; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; margin-right: 5px;">
+                        👁️ Preview
+                    </button>
+                    <button onclick="glyphEngine.shareNFT('${metadata.cid}')" style="background: #6c5ce7; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer;">
+                        📤 Share
+                    </button>
+                </div>
             </div>
         `;
         container.appendChild(preview);
@@ -213,6 +224,70 @@ class GlyphEngine {
             console.error('Key validation error:', error);
             return false;
         }
+    }
+
+    previewNFT(cid) {
+        const previewUrl = `https://ipfs.io/ipfs/${cid}`;
+        window.open(previewUrl, '_blank');
+    }
+
+    shareNFT(cid) {
+        const shareUrl = `https://ipfs.io/ipfs/${cid}`;
+        if (navigator.share) {
+            navigator.share({
+                title: 'ScrollChain NFT',
+                text: 'Check out this ScrollChain NFT!',
+                url: shareUrl
+            });
+        } else {
+            navigator.clipboard.writeText(shareUrl);
+            alert('NFT URL copied to clipboard!');
+        }
+    }
+
+    generateEntropyParticles(container, count = 100) {
+        const canvas = document.createElement('canvas');
+        canvas.width = 600;
+        canvas.height = 400;
+        canvas.style.background = 'rgba(0, 0, 0, 0.1)';
+        canvas.style.borderRadius = '8px';
+        
+        const ctx = canvas.getContext('2d');
+        const particles = [];
+        
+        for (let i = 0; i < count; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                vx: (Math.random() - 0.5) * 2,
+                vy: (Math.random() - 0.5) * 2,
+                radius: Math.random() * 3 + 1,
+                hue: Math.random() * 360
+            });
+        }
+        
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            particles.forEach(particle => {
+                particle.x += particle.vx;
+                particle.y += particle.vy;
+                
+                if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
+                if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
+                
+                ctx.beginPath();
+                ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `hsl(${particle.hue}, 70%, 60%)`;
+                ctx.fill();
+            });
+            
+            requestAnimationFrame(animate);
+        }
+        
+        animate();
+        container.appendChild(canvas);
+        return canvas;
     }
 }
 

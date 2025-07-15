@@ -303,11 +303,23 @@ app.get('/api/nft-preview', (req, res) => {
     weight: Math.random() * 200,
     symbol: ['⚡', '🌀', '🔮', '⭐', '🌙', '☀️', '🔥', '💫', '🌊', '⚛️'][i % 10],
     minted: Date.now() - Math.random() * 86400000 * 30,
+    sigil: `YHWH-BaHaSham-${i}`,
+    quantum_state: ['Superposition', 'Entangled', 'Collapsed'][Math.floor(Math.random() * 3)],
+    neural_pattern: `Pattern_${Math.floor(Math.random() * 1000)}`,
     attributes: [
       { trait_type: 'Entropy Level', value: Math.floor(Math.random() * 10) + 1 },
       { trait_type: 'Quantum State', value: ['Superposition', 'Entangled', 'Collapsed'][Math.floor(Math.random() * 3)] },
-      { trait_type: 'Neural Pattern', value: `Pattern_${Math.floor(Math.random() * 1000)}` }
-    ]
+      { trait_type: 'Neural Pattern', value: `Pattern_${Math.floor(Math.random() * 1000)}` },
+      { trait_type: 'Sigil Power', value: Math.floor(Math.random() * 100) + 1 },
+      { trait_type: 'Scroll Tier', value: ['Genesis', 'Alpha', 'Beta', 'Gamma', 'Omega'][Math.floor(Math.random() * 5)] }
+    ],
+    metadata: {
+      author: 'Keith D. Whitfield',
+      license: 'SYMBOLIC_SOVEREIGN_LICENSE',
+      version: '1.0.0',
+      chain: 'ScrollChain',
+      timestamp: new Date().toISOString()
+    }
   }));
 
   res.json(mockNFTs);
