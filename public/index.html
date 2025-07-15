@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="glyph_module.js"></script>
     <style>
         :root {
             --primary: #0066ff;
@@ -18,6 +19,8 @@
             --light: #f7fafc;
             --border: #e2e8f0;
             --glow: rgba(0, 102, 255, 0.3);
+            --success: #10b981;
+            --error: #ef4444;
         }
 
         * {
@@ -201,12 +204,162 @@
         }
 
         @keyframes pulse {
-            0%, 100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: .5;
-            }
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+
+        /* NFT Preview Styles */
+        .nft-preview {
+            margin-bottom: 1rem;
+        }
+
+        .nft-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+
+        .nft-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .nft-glyph {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .nft-cid {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .nft-attributes {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .attr {
+            background: rgba(0, 102, 255, 0.2);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+        }
+
+        /* Key Authenticator Styles */
+        .key-authenticator {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .auth-header h3 {
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .service-auth {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .service-auth label {
+            min-width: 120px;
+            font-weight: 500;
+        }
+
+        .service-auth input {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--light);
+            min-width: 200px;
+        }
+
+        .service-auth button {
+            padding: 0.5rem 1rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .service-auth button:hover {
+            background: var(--secondary);
+        }
+
+        .status {
+            font-size: 1.5rem;
+            min-width: 30px;
+        }
+
+        /* DAO Threads Styles */
+        .dao-threads {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .dao-thread {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .thread-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .thread-glyph {
+            font-size: 1.5rem;
+        }
+
+        .thread-title {
+            flex: 1;
+            font-weight: 600;
+        }
+
+        .thread-entropy {
+            font-size: 0.875rem;
+            color: var(--accent);
+        }
+
+        .thread-body {
+            padding: 1rem;
+        }
+
+        .thread-commits {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .commit {
+            background: var(--primary);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
         }
 
         .scroll-list {
@@ -241,26 +394,6 @@
         .status-pending {
             background: rgba(245, 158, 11, 0.2);
             color: #f59e0b;
-        }
-
-        #network-graph {
-            width: 100%;
-            height: 400px;
-        }
-
-        .node {
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .node:hover {
-            r: 12;
-        }
-
-        .link {
-            stroke: var(--primary);
-            stroke-opacity: 0.6;
-            stroke-width: 2px;
         }
 
         .glow-effect {
@@ -301,6 +434,26 @@
                     <span>📊</span>
                     <span>Overview</span>
                 </div>
+                <div class="nav-item" data-view="nft-codex">
+                    <span>📦</span>
+                    <span>NFT Codex</span>
+                </div>
+                <div class="nav-item" data-view="brain-kernels">
+                    <span>🧠</span>
+                    <span>Brain Kernels</span>
+                </div>
+                <div class="nav-item" data-view="dao-governance">
+                    <span>🌍</span>
+                    <span>DAO Governance</span>
+                </div>
+                <div class="nav-item" data-view="key-gate">
+                    <span>🔑</span>
+                    <span>Key Gate</span>
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-title">Governance</div>
                 <div class="nav-item" data-view="scrolls">
                     <span>📜</span>
                     <span>Scrolls</span>
@@ -312,22 +465,6 @@
                 <div class="nav-item" data-view="entropy">
                     <span>🧬</span>
                     <span>Entropy Maps</span>
-                </div>
-            </div>
-
-            <div class="nav-section">
-                <div class="nav-title">Governance</div>
-                <div class="nav-item" data-view="dao">
-                    <span>🏛️</span>
-                    <span>DAO Registry</span>
-                </div>
-                <div class="nav-item" data-view="proposals">
-                    <span>📋</span>
-                    <span>Proposals</span>
-                </div>
-                <div class="nav-item" data-view="voting">
-                    <span>🗳️</span>
-                    <span>Voting</span>
                 </div>
             </div>
 
@@ -358,7 +495,11 @@
                 this.data = {
                     scrolls: [],
                     zones: [],
-                    entropyMaps: []
+                    entropyMaps: [],
+                    modules: [],
+                    prophecies: [],
+                    brainKernels: [],
+                    daoThreads: []
                 };
                 this.init();
             }
@@ -371,18 +512,67 @@
 
             async loadData() {
                 try {
-                    const [scrollsRes, zonesRes, entropyRes] = await Promise.all([
+                    const [scrollsRes, zonesRes, entropyRes, modulesRes, propheciesRes] = await Promise.all([
                         fetch('/api/scrolls'),
                         fetch('/api/zones'),
-                        fetch('/api/entropy-maps')
+                        fetch('/api/entropy-maps'),
+                        fetch('/api/modules'),
+                        fetch('/api/prophecies')
                     ]);
 
                     this.data.scrolls = await scrollsRes.json();
                     this.data.zones = await zonesRes.json();
                     this.data.entropyMaps = await entropyRes.json();
+                    this.data.modules = await modulesRes.json();
+                    this.data.prophecies = await propheciesRes.json();
+
+                    // Generate mock brain kernel data
+                    this.data.brainKernels = this.generateBrainKernelData();
+                    this.data.daoThreads = this.generateDAOThreads();
                 } catch (error) {
                     console.error('Failed to load data:', error);
                 }
+            }
+
+            generateBrainKernelData() {
+                return Array.from({length: 50}, (_, i) => ({
+                    timestamp: Date.now() - (50 - i) * 3600000,
+                    entropy: Math.random() * 10,
+                    activation: Math.random() > 0.7,
+                    kernelId: `BK_${i + 1}`
+                }));
+            }
+
+            generateDAOThreads() {
+                return [
+                    {
+                        title: "ScrollPlanet Governance Upgrade",
+                        description: "Implementing quantum consensus mechanism for multi-dimensional voting",
+                        entropy: 8.7,
+                        commits: [
+                            { hash: "a1b2c3d4", message: "Add quantum voting" },
+                            { hash: "e5f6g7h8", message: "Implement consensus" }
+                        ]
+                    },
+                    {
+                        title: "Brain Kernel Integration",
+                        description: "Deploying neural pattern recognition for autonomous governance",
+                        entropy: 9.2,
+                        commits: [
+                            { hash: "i9j0k1l2", message: "Neural network init" },
+                            { hash: "m3n4o5p6", message: "Pattern recognition" }
+                        ]
+                    },
+                    {
+                        title: "Entropy Alignment Protocol",
+                        description: "Synchronizing cross-dimensional entropy flows for optimal governance",
+                        entropy: 7.8,
+                        commits: [
+                            { hash: "q7r8s9t0", message: "Entropy sync" },
+                            { hash: "u1v2w3x4", message: "Flow optimization" }
+                        ]
+                    }
+                ];
             }
 
             bindEvents() {
@@ -411,6 +601,22 @@
                     case 'overview':
                         contentArea.innerHTML = this.renderOverview();
                         this.initOverviewCharts();
+                        break;
+                    case 'nft-codex':
+                        contentArea.innerHTML = this.renderNFTCodex();
+                        this.initNFTCodex();
+                        break;
+                    case 'brain-kernels':
+                        contentArea.innerHTML = this.renderBrainKernels();
+                        this.initBrainKernels();
+                        break;
+                    case 'dao-governance':
+                        contentArea.innerHTML = this.renderDAOGovernance();
+                        this.initDAOGovernance();
+                        break;
+                    case 'key-gate':
+                        contentArea.innerHTML = this.renderKeyGate();
+                        this.initKeyGate();
                         break;
                     case 'scrolls':
                         contentArea.innerHTML = this.renderScrolls();
@@ -451,8 +657,8 @@
                             <div class="stat-label">ScrollCity Zones</div>
                         </div>
                         <div class="stat-card glow-effect">
-                            <div class="stat-value">${this.data.entropyMaps.length}</div>
-                            <div class="stat-label">Entropy Maps</div>
+                            <div class="stat-value">${this.data.modules.length}</div>
+                            <div class="stat-label">Active Modules</div>
                         </div>
                         <div class="stat-card glow-effect">
                             <div class="stat-value">1T</div>
@@ -474,6 +680,76 @@
                     <div class="visualization-container">
                         <div class="chart-title">🧬 Symbolic Civilization Layer</div>
                         <div id="main-visualization"></div>
+                    </div>
+                `;
+            }
+
+            renderNFTCodex() {
+                return `
+                    <div class="header">
+                        <h2>📦 NFT Preview / Minting Codex</h2>
+                    </div>
+                    
+                    <div class="charts-grid">
+                        <div class="chart-container">
+                            <div class="chart-title">Recent Mints</div>
+                            <div id="nft-preview-container"></div>
+                        </div>
+                        <div class="chart-container">
+                            <div class="chart-title">Mint New NFT</div>
+                            <div id="nft-mint-form">
+                                <div style="margin-bottom: 1rem;">
+                                    <label>Name:</label>
+                                    <input type="text" id="nft-name" placeholder="Scroll Name" style="width: 100%; padding: 0.5rem; margin-top: 0.5rem; border-radius: 0.5rem; border: 1px solid var(--border); background: rgba(255,255,255,0.1); color: var(--light);">
+                                </div>
+                                <div style="margin-bottom: 1rem;">
+                                    <label>Metadata:</label>
+                                    <textarea id="nft-metadata" placeholder="Scroll Description" style="width: 100%; height: 100px; padding: 0.5rem; margin-top: 0.5rem; border-radius: 0.5rem; border: 1px solid var(--border); background: rgba(255,255,255,0.1); color: var(--light);"></textarea>
+                                </div>
+                                <button onclick="dashboard.mintNFT()" style="background: var(--primary); color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 0.5rem; cursor: pointer;">🔮 Mint to IPFS</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            renderBrainKernels() {
+                return `
+                    <div class="header">
+                        <h2>🧠 Brain Kernel Activation History</h2>
+                    </div>
+                    
+                    <div class="visualization-container">
+                        <div class="chart-title">Entropy Curves</div>
+                        <svg id="brain-kernel-chart"></svg>
+                    </div>
+                `;
+            }
+
+            renderDAOGovernance() {
+                return `
+                    <div class="header">
+                        <h2>🌍 DAO Governance Entropy Threads</h2>
+                    </div>
+                    
+                    <div class="visualization-container">
+                        <div class="chart-title">Active Governance Threads</div>
+                        <div id="dao-threads-container"></div>
+                    </div>
+                `;
+            }
+
+            renderKeyGate() {
+                return `
+                    <div class="header">
+                        <h2>🔑 Key Gate Authenticator</h2>
+                    </div>
+                    
+                    <div id="key-authenticator-container"></div>
+                    
+                    <div class="visualization-container">
+                        <div class="chart-title">Service Status</div>
+                        <div id="service-status-container"></div>
                     </div>
                 `;
             }
@@ -555,6 +831,106 @@
                 this.createActivityChart();
                 this.createNetworkStatus();
                 this.createMainVisualization();
+            }
+
+            initNFTCodex() {
+                const container = document.getElementById('nft-preview-container');
+                
+                // Sample NFT previews
+                const mockNFTs = [
+                    { name: 'ScrollKernel Genesis', cid: 'bafybei...abc123', symbol: '🔮', entropy: 9.5, weight: 150 },
+                    { name: 'Quantum Scroll', cid: 'bafybei...def456', symbol: '⚡', entropy: 8.2, weight: 120 },
+                    { name: 'Entropy Sigil', cid: 'bafybei...ghi789', symbol: '🌀', entropy: 7.8, weight: 95 }
+                ];
+
+                mockNFTs.forEach(nft => {
+                    glyphEngine.renderNFTPreview(container, nft);
+                });
+            }
+
+            initBrainKernels() {
+                const svg = document.getElementById('brain-kernel-chart');
+                glyphEngine.renderEntropyGraph(svg, this.data.brainKernels);
+            }
+
+            initDAOGovernance() {
+                const container = document.getElementById('dao-threads-container');
+                glyphEngine.renderDAOThreads(container, this.data.daoThreads);
+            }
+
+            initKeyGate() {
+                const container = document.getElementById('key-authenticator-container');
+                glyphEngine.createKeyAuthenticator(container);
+                this.loadServiceStatus();
+            }
+
+            async loadServiceStatus() {
+                try {
+                    const response = await fetch('/api/status');
+                    const status = await response.json();
+                    
+                    const statusContainer = document.getElementById('service-status-container');
+                    statusContainer.innerHTML = `
+                        <div class="service-status-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                            ${Object.entries(status).map(([service, isActive]) => `
+                                <div class="service-card" style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 0.5rem;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <span>${service}</span>
+                                        <span style="color: ${isActive ? 'var(--success)' : 'var(--error)'}">
+                                            ${isActive ? '✅' : '❌'}
+                                        </span>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                } catch (error) {
+                    console.error('Failed to load service status:', error);
+                }
+            }
+
+            async mintNFT() {
+                const name = document.getElementById('nft-name').value;
+                const metadata = document.getElementById('nft-metadata').value;
+
+                if (!name || !metadata) {
+                    alert('Please fill in both name and metadata');
+                    return;
+                }
+
+                try {
+                    const response = await fetch('/api/mint', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ name, metadata })
+                    });
+
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        alert(`NFT minted successfully! CID: ${result.cid}`);
+                        
+                        // Add to preview
+                        const container = document.getElementById('nft-preview-container');
+                        const newNFT = {
+                            name,
+                            cid: result.cid,
+                            symbol: '🔮',
+                            entropy: Math.random() * 10,
+                            weight: Math.random() * 200
+                        };
+                        glyphEngine.renderNFTPreview(container, newNFT);
+                        
+                        // Clear form
+                        document.getElementById('nft-name').value = '';
+                        document.getElementById('nft-metadata').value = '';
+                    } else {
+                        alert('Minting failed');
+                    }
+                } catch (error) {
+                    console.error('Minting error:', error);
+                    alert('Minting error occurred');
+                }
             }
 
             createActivityChart() {
@@ -748,13 +1124,13 @@
                     .selectAll('line')
                     .data(links)
                     .enter().append('line')
-                    .attr('class', 'link');
+                    .attr('stroke', '#0066ff')
+                    .attr('stroke-width', 2);
 
                 const node = svg.append('g')
                     .selectAll('circle')
                     .data(nodes)
                     .enter().append('circle')
-                    .attr('class', 'node')
                     .attr('r', 15)
                     .attr('fill', d => d3.schemeCategory10[d.group]);
 
@@ -773,8 +1149,9 @@
         }
 
         // Initialize dashboard when DOM is loaded
+        let dashboard;
         document.addEventListener('DOMContentLoaded', () => {
-            new ScrollChainDashboard();
+            dashboard = new ScrollChainDashboard();
         });
     </script>
 </body>

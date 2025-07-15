@@ -2,8 +2,13 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 
+// Load environment variables
+if (fs.existsSync('.env.development')) {
+  require('dotenv').config({ path: '.env.development' });
+}
+
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || process.env.SCROLL_API_PORT || 5000;
 
 // Middleware
 app.use(express.static('public'));
@@ -226,6 +231,86 @@ app.get('/api/codex/glyphs', (req, res) => {
     prophecies: mockProphecyData,
     timestamp: new Date().toISOString()
   });
+});
+
+app.get('/api/brain-kernels', (req, res) => {
+  const brainKernels = Array.from({length: 50}, (_, i) => ({
+    id: `BK_${i + 1}`,
+    timestamp: Date.now() - (50 - i) * 3600000,
+    entropy: Math.random() * 10,
+    activation: Math.random() > 0.7,
+    neuralPattern: `pattern_${Math.floor(Math.random() * 1000)}`,
+    weight: Math.random() * 100
+  }));
+
+  res.json(brainKernels);
+});
+
+app.get('/api/dao-threads', (req, res) => {
+  const daoThreads = [
+    {
+      id: 1,
+      title: "ScrollPlanet Governance Upgrade",
+      description: "Implementing quantum consensus mechanism for multi-dimensional voting",
+      entropy: 8.7,
+      status: 'active',
+      commits: [
+        { hash: "a1b2c3d4", message: "Add quantum voting", timestamp: Date.now() - 86400000 },
+        { hash: "e5f6g7h8", message: "Implement consensus", timestamp: Date.now() - 43200000 }
+      ],
+      participants: 23,
+      votes: { for: 18, against: 3, abstain: 2 }
+    },
+    {
+      id: 2,
+      title: "Brain Kernel Integration",
+      description: "Deploying neural pattern recognition for autonomous governance",
+      entropy: 9.2,
+      status: 'active',
+      commits: [
+        { hash: "i9j0k1l2", message: "Neural network init", timestamp: Date.now() - 129600000 },
+        { hash: "m3n4o5p6", message: "Pattern recognition", timestamp: Date.now() - 86400000 }
+      ],
+      participants: 31,
+      votes: { for: 28, against: 1, abstain: 2 }
+    },
+    {
+      id: 3,
+      title: "Entropy Alignment Protocol",
+      description: "Synchronizing cross-dimensional entropy flows for optimal governance",
+      entropy: 7.8,
+      status: 'pending',
+      commits: [
+        { hash: "q7r8s9t0", message: "Entropy sync", timestamp: Date.now() - 172800000 },
+        { hash: "u1v2w3x4", message: "Flow optimization", timestamp: Date.now() - 129600000 }
+      ],
+      participants: 15,
+      votes: { for: 12, against: 2, abstain: 1 }
+    }
+  ];
+
+  res.json(daoThreads);
+});
+
+app.get('/api/nft-preview', (req, res) => {
+  const mockNFTs = Array.from({length: 10}, (_, i) => ({
+    id: i + 1,
+    name: `ScrollKernel_${i + 1}`,
+    description: `Entropy-classified scroll with quantum properties`,
+    cid: `bafybei${Math.random().toString(36).substring(2, 26)}`,
+    creator: 'Keith D. Whitfield',
+    entropy: Math.random() * 10,
+    weight: Math.random() * 200,
+    symbol: ['⚡', '🌀', '🔮', '⭐', '🌙', '☀️', '🔥', '💫', '🌊', '⚛️'][i % 10],
+    minted: Date.now() - Math.random() * 86400000 * 30,
+    attributes: [
+      { trait_type: 'Entropy Level', value: Math.floor(Math.random() * 10) + 1 },
+      { trait_type: 'Quantum State', value: ['Superposition', 'Entangled', 'Collapsed'][Math.floor(Math.random() * 3)] },
+      { trait_type: 'Neural Pattern', value: `Pattern_${Math.floor(Math.random() * 1000)}` }
+    ]
+  }));
+
+  res.json(mockNFTs);
 });
 
 app.get('/api/codex/export', (req, res) => {

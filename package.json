@@ -8,14 +8,19 @@
     "dev": "nodemon src/dashboardServer.js"
   },
   "dependencies": {
-    "express": "^4.18.2",
     "cors": "^2.8.5",
-    "dotenv": "^16.3.1"
+    "dotenv": "^16.6.1",
+    "express": "^4.21.2"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
   },
-  "keywords": ["scrollchain", "dashboard", "web3", "sovereignty"],
+  "keywords": [
+    "scrollchain",
+    "dashboard",
+    "web3",
+    "sovereignty"
+  ],
   "author": "Keith D. Whitfield",
   "license": "MIT"
 }
