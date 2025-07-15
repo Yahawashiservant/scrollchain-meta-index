@@ -22,5 +22,9 @@
     "sovereignty"
   ],
   "author": "Keith D. Whitfield",
-  "license": "MIT"
+  "license": "MIT",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  }
 }
