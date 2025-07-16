@@ -1,120 +1,13 @@
-<!-- Full ScrollChain DivineKernel Interface HTML goes here -->
-<!-- Paste exact HTML content from previous response into this heredoc block -->
-<!-- Avoid any unescaped variables like $VAR unless you remove the single quotes in <<'EOF' -->
+<!-- ⚙️ ScrollChainOS Divine Interface · CID Memory · DAO Rituals · Trait Graphs · Mint UI -->
+<!-- This block contains all injected UI layers; paste clean HTML from convergence + upgrades here -->
+<!-- Make sure scripts for drawTimeline, drawResonance, drawAncestryGraph, and mintAndBind exist in <script> -->
 
-<!-- 📚 Trait Inheritance Canvas -->
-<section style="padding:30px;background:#090909;border-top:2px solid #FFD700;">
-  <h2 style="color:#FFD700;text-align:center;">📈 ScrollLineage · Trait Inheritance Graph</h2>
-  <canvas id="ancestryCanvas" style="width:100%;height:300px;background:#000;"></canvas>
-</section>
+<!-- Suggested separation: -->
+<!-- 🔁 Trait Viewer -->
+<!-- 🧬 Prophecy Stream -->
+<!-- 📈 ScrollLineage Graph -->
+<!-- 🔊 Glyph Resonance -->
+<!-- 🌀 Scroll Mint + ENS Binding -->
 
-<script>
-const acanvas = document.getElementById("ancestryCanvas");
-const actx = acanvas.getContext("2d");
-acanvas.width = window.innerWidth;
-acanvas.height = 300;
+<!-- 📜 Add your full HTML here or pipe in dynamically -->
 
-function drawAncestryGraph(cidArray) {
-  actx.clearRect(0, 0, acanvas.width, acanvas.height);
-  const spacing = acanvas.width / (cidArray.length + 1);
-  cidArray.forEach((cid, i) => {
-    const x = spacing * (i + 1);
-    const y = 50 + (i % 2 === 0 ? 80 : 160);
-
-    // Draw CID node
-    actx.beginPath();
-    actx.arc(x, y, 8, 0, 2 * Math.PI);
-    actx.fillStyle = "#FFD700";
-    actx.fill();
-    actx.fillText(cid.slice(0,6) + "...", x - 24, y + 20);
-
-    // Link to previous
-    if (i > 0) {
-      const prevX = spacing * i;
-      const prevY = 50 + ((i-1) % 2 === 0 ? 80 : 160);
-      actx.beginPath();
-      actx.moveTo(prevX, prevY);
-      actx.lineTo(x, y);
-      actx.strokeStyle = "#FFD700";
-      actx.stroke();
-    }
-  });
-}
-
-function renderCIDThreads() {
-  const cidList = document.getElementById("cidList").value.trim().split(",").map(c => c.trim()).filter(c => c);
-  if (cidList.length > 1) drawAncestryGraph(cidList);
-}
-document.getElementById("cidList").addEventListener("change", renderCIDThreads);
-</script>
-
-<!-- 🔮 Glyph Resonance Map -->
-<section style="padding:30px;background:#0a0a0a;border-top:2px solid #FFD700;">
-  <h2 style="color:#FFD700;text-align:center;">🔊 Glyph Resonance Map · Trait Frequency Pulse</h2>
-  <canvas id="resonanceCanvas" style="width:100%;height:250px;background:#000;"></canvas>
-</section>
-
-<script>
-const rcanvas = document.getElementById("resonanceCanvas");
-const rctx = rcanvas.getContext("2d");
-rcanvas.width = window.innerWidth;
-rcanvas.height = 250;
-
-function drawResonance(traits) {
-  rctx.clearRect(0, 0, rcanvas.width, rcanvas.height);
-  const counts = {};
-  traits.forEach(t => {
-    if (t.trait_type) counts[t.trait_type] = (counts[t.trait_type] || 0) + 1;
-  });
-  const keys = Object.keys(counts);
-  const barWidth = rcanvas.width / (keys.length + 1);
-  keys.forEach((k, i) => {
-    const x = barWidth * (i + 1);
-    const h = counts[k] * 15;
-    rctx.fillStyle = "#FFD700";
-    rctx.fillRect(x, rcanvas.height - h - 30, 20, h);
-    rctx.fillText(k, x - 10, rcanvas.height - 10);
-  });
-}
-
-function loadResonanceCID() {
-  const cid = document.getElementById("cidInput").value.trim();
-  fetch("https://dweb.link/ipfs/" + cid)
-    .then(res => res.json())
-    .then(data => {
-      const traits = data.attributes || [];
-      drawResonance(traits);
-    });
-}
-document.getElementById("cidInput").addEventListener("change", loadResonanceCID);
-window.onload = loadResonanceCID;
-</script>
-
-<!-- 🔐 Mint & Bind UI -->
-<section style="padding:30px;background:#111;border-top:2px solid #FFD700;">
-  <h2 style="color:#FFD700;text-align:center;">🔐 Mint & Bind Scroll · ENS Ritual</h2>
-  <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;">
-    <input id="mintName" placeholder="Scroll name"/>
-    <input id="ensHint" placeholder="ENS identity (e.g., keith.scrollchain.eth)"/>
-    <button onclick="mintAndBind()">🌀 Mint & Bind</button>
-  </div>
-  <div id="mintLog" style="color:#f0f0f0;margin-top:20px;text-align:center;">🧩 No mint yet.</div>
-</section>
-
-<script>
-function mintAndBind(){
-  const name = document.getElementById("mintName").value.trim();
-  const ens = document.getElementById("ensHint").value.trim();
-  const msg = `🌀 Minted scroll '${name}' bound to ENS '${ens}'`;
-  document.getElementById("mintLog").textContent = msg;
-
-  // Optionally simulate IPFS poster payload
-  const poster = {
-    title: name,
-    ens_hint: ens,
-    timestamp: new Date().toISOString(),
-    traits: window.scrollchainTraits || []
-  };
-  console.log("🧾 Scroll poster payload:", poster);
-}
-</script>
