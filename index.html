@@ -114,3 +114,46 @@ function loadCIDPhase(){
     });
 }
 </script>
+
+<!-- 🧾 ScrollPoster Archive · Visual Mint Grid -->
+<section data-phase="Sovereign" style="padding:30px;background:#101010;border-top:2px solid #FFD700;">
+  <h2 style="color:#FFD700;text-align:center;">🧾 ScrollPoster Archive · Sovereign Scrolls</h2>
+  <div id="posterGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;padding:20px;"></div>
+</section>
+
+<script>
+const scrollArchive = [];
+
+function addScrollPoster(name, ens, traits=[]){
+  const poster = {
+    name,
+    ens,
+    traits,
+    timestamp: new Date().toISOString()
+  };
+  scrollArchive.push(poster);
+  renderPosterGrid();
+}
+
+function renderPosterGrid(){
+  const grid = document.getElementById("posterGrid");
+  grid.innerHTML = "";
+  scrollArchive.forEach(p => {
+    const div = document.createElement("div");
+    div.style.border = "1px solid #FFD700";
+    div.style.padding = "10px";
+    div.style.borderRadius = "8px";
+    div.innerHTML = `
+      <strong>📜 ${p.name}</strong><br/>
+      ENS: <em>${p.ens}</em><br/>
+      Traits: ${p.traits.length}<br/>
+      🕰️ ${new Date(p.timestamp).toLocaleString()}
+    `;
+    grid.appendChild(div);
+  });
+}
+
+// Example poster injection
+addScrollPoster("Genesis Flame", "keith.scrollchain.eth", ["Phase:Origin", "Element:Fire"]);
+addScrollPoster("Echo Shard", "mirror.scrollchain.eth", ["Phase:Echo", "Resonance:High"]);
+</script>
