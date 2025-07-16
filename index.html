@@ -61,3 +61,28 @@ function drawAncestry(cids){
   ctx.clearRect(0,0,window.innerWidth,300);
 }
 </script>
+<!-- 🔐 Mint & Bind UI injected -->
+<section><input id="mintName" /><input id="ensHint" /><button onclick="mint()">Mint</button><div id="mintLog"></div></section>
+<script>
+function mint() {
+  const name = document.getElementById("mintName").value;
+  const ens = document.getElementById("ensHint").value;
+  document.getElementById("mintLog").textContent = `🌀 ${name} bound to ${ens}`;
+}
+</script>
+<!-- 🔊 Trait Resonance Map injected -->
+<canvas id="resonanceCanvas"></canvas>
+<script>
+function drawResonance(traits) {
+  const ctx = document.getElementById("resonanceCanvas").getContext("2d");
+  ctx.clearRect(0,0,window.innerWidth,250);
+}
+</script>
+<!-- 📈 Ancestry Graph injected -->
+<canvas id="ancestryCanvas"></canvas>
+<script>
+function drawAncestry(cids){
+  const ctx = document.getElementById("ancestryCanvas").getContext("2d");
+  ctx.clearRect(0,0,window.innerWidth,300);
+}
+</script>
