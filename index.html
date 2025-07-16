@@ -2,182 +2,160 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>ScrollChain Glyph Dashboard</title>
+  <title>ScrollChain DivineKernel · Prophecy Interface</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
   <style>
-    html, body {
-      margin: 0; padding: 0;
+    body {
+      margin: 0;
       font-family: 'Orbitron', sans-serif;
-      background: radial-gradient(ellipse at center, #0b0b0b, #111);
-      color: #f4f4f4;
+      background: linear-gradient(to bottom right, #0b0b0b, #181818);
+      color: #f5f5f5;
     }
-    header, nav, footer {
-      text-align: center;
-      padding: 15px;
-      background: linear-gradient(to right, #222, #333);
-    }
-    h1 { color: #FFD700; }
-    #controls, #dao-panel {
+    header {
       padding: 20px;
-      display: flex;
-      gap: 20px;
-      justify-content: center;
-      flex-wrap: wrap;
+      text-align: center;
+      background: #1c1c1c;
+      box-shadow: 0 0 10px #FFD700;
     }
-    button, select {
+    h1 { color: #FFD700; margin: 0; }
+    #controls, #dao-panel {
+      display: flex; flex-wrap: wrap;
+      justify-content: center; gap: 15px;
+      padding: 20px;
+    }
+    input, select, button {
       background: #222;
       color: #FFD700;
       border: 1px solid #FFD700;
-      padding: 8px 14px;
-      border-radius: 4px;
-      cursor: pointer;
+      padding: 10px;
+      border-radius: 6px;
     }
-    #glyphs {
+    #glyph-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 20px;
       padding: 30px;
     }
-    .glyph {
-      background: rgba(30,30,30,0.9);
+    .glyph-card {
+      background: #2a2a2a;
       border: 1px solid #FFD700;
-      padding: 15px;
-      border-radius: 8px;
-      box-shadow: 0 0 8px #FFD700;
+      border-radius: 10px;
+      padding: 16px;
       transition: transform 0.3s ease;
+      box-shadow: 0 0 8px #FFD700;
     }
-    .glyph:hover {
+    .glyph-card:hover {
       transform: scale(1.03);
       box-shadow: 0 0 16px #FFD700;
     }
-    canvas {
+    #entropyCanvas {
       width: 100%;
-      height: 240px;
+      height: 200px;
       background: #000;
-      display: block;
+    }
+    footer {
+      text-align: center;
+      padding: 15px;
+      color: #aaa;
     }
   </style>
 </head>
 <body>
-  <header><h1>📜 ScrollChainOS · DivineKernel Interface</h1></header>
+  <header><h1>📜 ScrollChain · DivineKernel Dashboard</h1></header>
 
-  <nav id="controls">
-    <label>🔁 CID Switch:</label>
+  <section id="controls">
     <input type="text" id="cidInput" value="QmWLyhqWDsWbcWE8vjmHkzGKLGgvHh84cLxM3ceLsojwrx" />
-    <button onclick="loadCID()">Load</button>
-
-    <label>🧬 Trait Filter:</label>
-    <select id="traitFilter">
-      <option value="all">All</option>
-    </select>
-  </nav>
-
-  <section id="glyphs">🔄 Loading traits...</section>
+    <button onclick="loadCID()">Load CID</button>
+    <select id="traitFilter"><option value="all">All Traits</option></select>
+  </section>
 
   <section id="dao-panel">
-    <div>
-      <h3>🗳️ DAO Action</h3>
-      <button onclick="alert('Vote cast for Prophecy Path A')">Path A</button>
-      <button onclick="alert('Vote cast for Entropy Sync B')">Path B</button>
-      <a href="https://earthhub.tv" target="_blank">🌎 Visit EarthHub.tv</a>
-    </div>
+    <button onclick="vote('Earth-Hub')">🌎 Earth-Hub</button>
+    <button onclick="vote('Custodians')">🧠 Kernel Custodians</button>
+    <button onclick="vote('Entropy')">🌌 Entropy Speakers</button>
+    <span id="voteLog">🗳️ No vote cast.</span>
   </section>
 
   <canvas id="entropyCanvas"></canvas>
 
-  <footer>🔐 ENS: <code>scrollchain.eth</code> mirror pending</footer>
+  <section id="glyph-grid">🔄 Loading trait glyphs...</section>
 
-  <script>
-    const canvas = document.getElementById("entropyCanvas");
-    const ctx = canvas.getContext("2d");
-    canvas.width = window.innerWidth;
-    canvas.height = 240;
-
-    let orbitals = Array.from({length: 50}, () => ({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      r: Math.random() * 3 + 1,
-      dx: Math.random() * 2 - 1,
-      dy: Math.random() * 2 - 1
-    }));
-
-    function animateEntropy() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      orbitals.forEach(o => {
-        ctx.beginPath();
-        ctx.arc(o.x, o.y, o.r, 0, 2 * Math.PI);
-        ctx.fillStyle = "#FFD700";
-        ctx.fill();
-        o.x += o.dx;
-        o.y += o.dy;
-        if (o.x < 0 || o.x > canvas.width) o.dx *= -1;
-        if (o.y < 0 || o.y > canvas.height) o.dy *= -1;
-      });
-      requestAnimationFrame(animateEntropy);
-    }
-    animateEntropy();
-
-    function loadCID() {
-      const cid = document.getElementById("cidInput").value.trim();
-      fetch(`https://dweb.link/ipfs/${cid}`)
-        .then(res => res.json())
-        .then(data => {
-          const glyphs = document.getElementById("glyphs");
-          glyphs.innerHTML = "";
-          const traits = data.attributes;
-          const filterSet = new Set();
-          traits.forEach(attr => filterSet.add(attr.trait_type));
-          const filterSelect = document.getElementById("traitFilter");
-          filterSelect.innerHTML = '<option value="all">All</option>';
-          filterSet.forEach(trait => {
-            const opt = document.createElement("option");
-            opt.value = trait;
-            opt.text = trait;
-            filterSelect.appendChild(opt);
-          });
-
-          filterSelect.onchange = () => {
-            renderTraits(traits, filterSelect.value);
-          };
-          renderTraits(traits, "all");
-        });
-    }
-
-    function renderTraits(traits, filter) {
-      const glyphs = document.getElementById("glyphs");
-      glyphs.innerHTML = "";
-      traits.filter(t => filter === "all" || t.trait_type === filter)
-        .forEach(t => {
-          const div = document.createElement("div");
-          div.className = "glyph";
-          div.innerHTML = `<strong>Trait:</strong> ${t.trait_type}<br/><strong>Value:</strong> ${t.value}`;
-          glyphs.appendChild(div);
-        });
-    }
-
-    window.onload = loadCID;
-  </script>
-</body>
-</html>
-
-<!-- 🔮 Governance Ritual Overlay -->
-<section id="ritual-overlay" style="padding:30px;background:#111;border-top:2px solid #FFD700;">
-  <h2 style="color:#FFD700;text-align:center;">🗳️ ScrollChain Governance · Party Channels</h2>
-  <div style="display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin-top:20px;">
-    <button onclick="castVote('EarthHub.tv')">🌎 Earth-Hub</button>
-    <button onclick="castVote('Kernel Custodians')">🧠 Kernel-Custodians</button>
-    <button onclick="castVote('Entropy Speakers')">🌌 Entropy-Speakers</button>
-    <button onclick="castVote('Guild of Foresight')">🔮 Guild of Foresight</button>
-    <button onclick="castVote('Party for the Planet')">🌿 Party for the Planet</button>
-  </div>
-  <p id="voteLog" style="text-align:center;color:#f0f0f0;margin-top:20px;">No vote cast yet.</p>
-</section>
+  <footer>
+    🔐 ENS Mirror Pending: <code>scrollchain.eth</code> · ⏳ Prophecy Layer v2 in staging
+  </footer>
 
 <script>
-function castVote(channel) {
-  document.getElementById("voteLog").innerText = "🗳️ Vote cast for " + channel + ". Scroll bonding initiated.";
-  console.log("ScrollChain vote:", channel);
+function vote(choice) {
+  document.getElementById("voteLog").textContent = "🗳️ Vote cast for " + choice + ".";
 }
-</script>
 
+function loadCID() {
+  const cid = document.getElementById("cidInput").value.trim();
+  fetch("https://dweb.link/ipfs/" + cid)
+    .then(res => res.json())
+    .then(data => {
+      const traits = data.attributes || [];
+      const grid = document.getElementById("glyph-grid");
+      const select = document.getElementById("traitFilter");
+      grid.innerHTML = "";
+      select.innerHTML = '<option value="all">All Traits</option>';
+      [...new Set(traits.map(t => t.trait_type))].forEach(trait => {
+        const opt = document.createElement("option");
+        opt.value = trait;
+        opt.textContent = trait;
+        select.appendChild(opt);
+      });
+      select.onchange = () => render(traits, select.value);
+      render(traits, "all");
+    });
+}
+
+function render(traits, filter) {
+  const grid = document.getElementById("glyph-grid");
+  grid.innerHTML = "";
+  traits
+    .filter(t => filter === "all" || t.trait_type === filter)
+    .forEach(t => {
+      const card = document.createElement("div");
+      card.className = "glyph-card";
+      card.innerHTML = "<strong>Trait:</strong> " + t.trait_type + "<br/><strong>Value:</strong> " + t.value;
+      grid.appendChild(card);
+    });
+}
+
+window.onload = loadCID;
+
+// Entropy orbitals
+const canvas = document.getElementById("entropyCanvas");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = 200;
+
+let orbitals = Array.from({length: 40}, () => ({
+  x: Math.random() * canvas.width,
+  y: Math.random() * canvas.height,
+  dx: Math.random() * 2 - 1,
+  dy: Math.random() * 2 - 1,
+  r: Math.random() * 2 + 1
+}));
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  orbitals.forEach(o => {
+    ctx.beginPath();
+    ctx.arc(o.x, o.y, o.r, 0, 2 * Math.PI);
+    ctx.fillStyle = "#FFD700";
+    ctx.fill();
+    o.x += o.dx;
+    o.y += o.dy;
+    if (o.x < 0 || o.x > canvas.width) o.dx *= -1;
+    if (o.y < 0 || o.y > canvas.height) o.dy *= -1;
+  });
+  requestAnimationFrame(animate);
+}
+animate();
+</script>
+</body>
+</html>
