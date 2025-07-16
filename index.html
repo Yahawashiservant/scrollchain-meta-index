@@ -1,3 +1,49 @@
 <!-- Full ScrollChain DivineKernel Interface HTML goes here -->
 <!-- Paste exact HTML content from previous response into this heredoc block -->
 <!-- Avoid any unescaped variables like $VAR unless you remove the single quotes in <<'EOF' -->
+
+<!-- 📚 Trait Inheritance Canvas -->
+<section style="padding:30px;background:#090909;border-top:2px solid #FFD700;">
+  <h2 style="color:#FFD700;text-align:center;">📈 ScrollLineage · Trait Inheritance Graph</h2>
+  <canvas id="ancestryCanvas" style="width:100%;height:300px;background:#000;"></canvas>
+</section>
+
+<script>
+const acanvas = document.getElementById("ancestryCanvas");
+const actx = acanvas.getContext("2d");
+acanvas.width = window.innerWidth;
+acanvas.height = 300;
+
+function drawAncestryGraph(cidArray) {
+  actx.clearRect(0, 0, acanvas.width, acanvas.height);
+  const spacing = acanvas.width / (cidArray.length + 1);
+  cidArray.forEach((cid, i) => {
+    const x = spacing * (i + 1);
+    const y = 50 + (i % 2 === 0 ? 80 : 160);
+
+    // Draw CID node
+    actx.beginPath();
+    actx.arc(x, y, 8, 0, 2 * Math.PI);
+    actx.fillStyle = "#FFD700";
+    actx.fill();
+    actx.fillText(cid.slice(0,6) + "...", x - 24, y + 20);
+
+    // Link to previous
+    if (i > 0) {
+      const prevX = spacing * i;
+      const prevY = 50 + ((i-1) % 2 === 0 ? 80 : 160);
+      actx.beginPath();
+      actx.moveTo(prevX, prevY);
+      actx.lineTo(x, y);
+      actx.strokeStyle = "#FFD700";
+      actx.stroke();
+    }
+  });
+}
+
+function renderCIDThreads() {
+  const cidList = document.getElementById("cidList").value.trim().split(",").map(c => c.trim()).filter(c => c);
+  if (cidList.length > 1) drawAncestryGraph(cidList);
+}
+document.getElementById("cidList").addEventListener("change", renderCIDThreads);
+</script>
