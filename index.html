@@ -52,3 +52,25 @@ function drawAncestryGraph(cids){
   });
 }
 </script>
+
+<!-- 🧭 ScrollPhase Router · Dynamic UI Control -->
+<section style="padding:30px;background:#111;border-top:2px solid #FFD700;">
+  <h2 style="color:#FFD700;text-align:center;">🧭 Phase Router</h2>
+  <div style="display:flex;justify-content:center;gap:10px;">
+    <button onclick="setPhase('Origin')">⚡ Origin</button>
+    <button onclick="setPhase('Echo')">🔁 Echo</button>
+    <button onclick="setPhase('Sovereign')">🔐 Sovereign</button>
+    <button onclick="setPhase('Entropy')">🌌 Entropy</button>
+  </div>
+  <p id="activePhase" style="color:#FFD700;margin-top:15px;">Active Phase: Origin</p>
+</section>
+
+<script>
+function setPhase(phase){
+  document.getElementById("activePhase").textContent = "Active Phase: " + phase;
+  document.querySelectorAll("[data-phase]").forEach(el => {
+    el.style.display = (el.dataset.phase === phase || el.dataset.phase === "all") ? "block" : "none";
+  });
+}
+window.onload = () => setPhase("Origin");
+</script>
