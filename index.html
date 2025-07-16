@@ -211,3 +211,49 @@ function renderStoryGrid(){
 addScrollLore("Genesis Flame", "keith.scrollchain.eth", ["Phase:Origin", "Element:Fire"], "Born of ignition and sovereign intent.");
 addScrollLore("Echo Shard", "mirror.scrollchain.eth", ["Phase:Echo", "Resonance:High"], "Memory splits like a crystal — reflecting generations.");
 </script>
+
+<!-- 🗳️ DAO Lore Thread · Scroll Story Voting Panel -->
+<section data-phase="Sovereign" style="padding:30px;background:#131313;border-top:2px solid #FFD700;">
+  <h2 style="color:#FFD700;text-align:center;">🗳️ Party DAO · Lore Thread Voting</h2>
+  <div id="loreVotePanel" style="display:flex;flex-direction:column;gap:15px;padding:10px;"></div>
+</section>
+
+<script>
+function renderLoreVotes(){
+  const panel = document.getElementById("loreVotePanel");
+  panel.innerHTML = "";
+  scrollLore.forEach((s, i) => {
+    const div = document.createElement("div");
+    div.style.border = "1px solid #FFD700";
+    div.style.padding = "10px";
+    div.style.borderRadius = "8px";
+    div.style.background = "#1a1a1a";
+
+    const voteLog = document.createElement("div");
+    voteLog.id = `voteLog_${i}`;
+    voteLog.textContent = s.votes ? `Votes: ${s.votes}` : "Votes: 0";
+
+    const voteBtn = document.createElement("button");
+    voteBtn.textContent = "🗳️ Vote for this story";
+    voteBtn.style.background = "#FFD700";
+    voteBtn.style.color = "#000";
+    voteBtn.style.padding = "5px";
+    voteBtn.style.border = "none";
+    voteBtn.style.borderRadius = "6px";
+    voteBtn.onclick = () => {
+      s.votes = (s.votes || 0) + 1;
+      voteLog.textContent = `Votes: ${s.votes}`;
+    };
+
+    div.innerHTML = `
+      <strong>${s.name}</strong><br/>
+      <em>${s.story || "No story yet."}</em><br/>
+      Phase Match: ${s.traits.find(t => t.includes("Phase")) || "—"}
+    `;
+    div.appendChild(voteBtn);
+    div.appendChild(voteLog);
+    panel.appendChild(div);
+  });
+}
+window.onload = renderLoreVotes;
+</script>
