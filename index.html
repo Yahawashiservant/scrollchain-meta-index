@@ -408,3 +408,56 @@ function drawGlyphLens(){
   });
 }
 </script>
+
+<!-- 🧮 Sovereign Glyph Index · Scroll Registry Table -->
+<section data-phase="Sovereign" style="padding:30px;background:#161616;border-top:2px solid #FFD700;">
+  <h2 style="color:#FFD700;text-align:center;">🧮 Sovereign Glyph Index · Scroll Manifest</h2>
+  <div style="margin-bottom:15px;text-align:center;">
+    <select id="indexPhaseFilter">
+      <option value="all">All Phases</option>
+      <option value="Origin">Origin</option>
+      <option value="Echo">Echo</option>
+      <option value="Entropy">Entropy</option>
+      <option value="Sovereign">Sovereign</option>
+    </select>
+    <button onclick="renderGlyphIndex()">🔍 Filter</button>
+  </div>
+
+  <table id="glyphIndexTable" style="width:100%;border-collapse:collapse;color:#FFD700;">
+    <thead>
+      <tr style="border-bottom:1px solid #FFD700;">
+        <th>📜 Scroll</th>
+        <th>🧠 ENS</th>
+        <th>🔣 Traits</th>
+        <th>📖 Story</th>
+        <th>🗳️ Votes</th>
+        <th>🕰️ Timestamp</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</section>
+
+<script>
+function renderGlyphIndex(){
+  const phase = document.getElementById("indexPhaseFilter").value;
+  const tbody = document.querySelector("#glyphIndexTable tbody");
+  tbody.innerHTML = "";
+  scrollLore.forEach(s => {
+    const match = (phase === "all") || s.traits.some(t => t.includes(phase));
+    if (!match) return;
+    const row = document.createElement("tr");
+    row.style.borderBottom = "1px solid #333";
+    row.innerHTML = `
+      <td>${s.name}</td>
+      <td>${s.ens}</td>
+      <td>${s.traits.join(", ")}</td>
+      <td>${s.story || "—"}</td>
+      <td>${s.votes || 0}</td>
+      <td>${new Date(s.timestamp).toLocaleString()}</td>
+    `;
+    tbody.appendChild(row);
+  });
+}
+window.onload = renderGlyphIndex;
+</script>
