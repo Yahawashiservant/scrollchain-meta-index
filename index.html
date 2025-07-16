@@ -490,3 +490,37 @@ fetch("exports/scrollglyph_registry.csv")
     if (typeof drawGlyphLens === "function") drawGlyphLens();
   });
 </script>
+
+<!-- 🌍 Planetary Lore Merge Panel · Eco-Narrative Scrolls -->
+<section data-phase="Entropy" style="padding:30px;background:#0e0e0e;border-top:2px solid #00ff88;">
+  <h2 style="color:#00ff88;text-align:center;">🌍 Planetary Lore Merge · Scrolls for the Earth</h2>
+  <div id="planetLoreGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;"></div>
+</section>
+
+<script>
+function renderPlanetLore(){
+  const grid = document.getElementById("planetLoreGrid");
+  grid.innerHTML = "";
+  scrollLore.forEach(s => {
+    const match = s.traits.some(t =>
+      t.includes("Planet") || t.includes("EarthHub") || t.includes("Custodian")
+    );
+    if (!match) return;
+    const div = document.createElement("div");
+    div.style.border = "1px solid #00ff88";
+    div.style.padding = "10px";
+    div.style.borderRadius = "8px";
+    div.style.background = "#1a1a1a";
+    div.innerHTML = `
+      <strong>📜 ${s.name}</strong><br/>
+      ENS: <em>${s.ens}</em><br/>
+      🕊️ ${s.story || "No story yet."}<br/>
+      🌱 Traits: ${s.traits.join(", ")}<br/>
+      🗳️ Votes: ${s.votes || 0}<br/>
+      🕰️ ${new Date(s.timestamp).toLocaleString()}
+    `;
+    grid.appendChild(div);
+  });
+}
+window.onload = renderPlanetLore;
+</script>
