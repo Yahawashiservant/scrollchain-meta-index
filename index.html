@@ -308,3 +308,53 @@ function drawMergePreview(){
 }
 window.onload = drawMergePreview;
 </script>
+
+<!-- 🔮 ScrollGlyph Ancestry Lens · Trait-Filtered Lineage Map -->
+<section data-phase="Echo" style="padding:30px;background:#141414;border-top:2px solid #FFD700;">
+  <h2 style="color:#FFD700;text-align:center;">🔮 ScrollGlyph Ancestry Lens · Trait Resonance Paths</h2>
+  <div style="display:flex;justify-content:center;gap:10px;">
+    <select id="glyphFilter">
+      <option value="all">All Traits</option>
+      <option value="Phase:Origin">Phase:Origin</option>
+      <option value="Phase:Echo">Phase:Echo</option>
+      <option value="Element:Fire">Element:Fire</option>
+      <option value="Resonance:High">Resonance:High</option>
+    </select>
+    <button onclick="drawGlyphLens()">🔍 Filter</button>
+  </div>
+  <canvas id="glyphCanvas" style="width:100%;height:300px;background:#000;margin-top:20px;"></canvas>
+</section>
+
+<script>
+function drawGlyphLens(){
+  const trait = document.getElementById("glyphFilter").value;
+  const canvas = document.getElementById("glyphCanvas");
+  const ctx = canvas.getContext("2d");
+  canvas.width = window.innerWidth;
+  canvas.height = 300;
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  const matches = scrollLore.filter(s =>
+    trait === "all" || s.traits.some(t => t === trait)
+  );
+
+  matches.forEach((s, i) => {
+    const x = 100 + i*150;
+    const y = 150 + Math.sin(i)*60;
+    ctx.beginPath();
+    ctx.arc(x, y, 10 + (s.votes || 0), 0, 2 * Math.PI);
+    ctx.fillStyle = "#FFD700";
+    ctx.fill();
+    ctx.fillText(s.name, x - 30, y + 25);
+    matches.forEach((s2, j) => {
+      if (i !== j && s.traits.some(t => s2.traits.includes(t))) {
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(100 + j*150, 150 + Math.sin(j)*60);
+        ctx.strokeStyle = "#FFD70044";
+        ctx.stroke();
+      }
+    });
+  });
+}
+</script>
