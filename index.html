@@ -74,3 +74,43 @@ function setPhase(phase){
 }
 window.onload = () => setPhase("Origin");
 </script>
+
+<!-- 🧬 CID-Phase Viewer · Prophecy Trait Filter -->
+<section data-phase="Echo" style="padding:30px;background:#0a0a0a;border-top:2px solid #FFD700;">
+  <h2 style="color:#FFD700;text-align:center;">🧬 CID Phase Viewer · Trait by Era</h2>
+  <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:15px;">
+    <input id="eraCID" placeholder="Enter CID"/>
+    <select id="prophecyTier">
+      <option value="All">All Tiers</option>
+      <option value="Genesis">Genesis</option>
+      <option value="Echo">Echo</option>
+      <option value="Entropy">Entropy</option>
+      <option value="Sovereign">Sovereign</option>
+    </select>
+    <button onclick="loadCIDPhase()">🔍 Load</button>
+  </div>
+  <div id="cidPhaseOutput" style="color:#FFD700;margin-top:20px;text-align:center;"></div>
+</section>
+
+<script>
+function loadCIDPhase(){
+  const cid = document.getElementById("eraCID").value.trim();
+  const tier = document.getElementById("prophecyTier").value;
+  const output = document.getElementById("cidPhaseOutput");
+  output.innerHTML = "⏳ Loading CID traits...";
+  fetch("https://dweb.link/ipfs/" + cid)
+    .then(res => res.json())
+    .then(data => {
+      const traits = data.attributes || [];
+      output.innerHTML = `<strong>🔗 CID:</strong> ${cid}<br/><br/>`;
+      traits.forEach(t => {
+        if (tier === "All" || (t.trait_type && t.trait_type.includes(tier))) {
+          output.innerHTML += `— <em>${t.trait_type}</em>: ${t.value}<br/>`;
+        }
+      });
+    })
+    .catch(() => {
+      output.innerHTML = `⚠️ Error retrieving CID ${cid}`;
+    });
+}
+</script>
