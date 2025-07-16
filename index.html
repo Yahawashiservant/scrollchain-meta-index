@@ -157,3 +157,57 @@ function renderPosterGrid(){
 addScrollPoster("Genesis Flame", "keith.scrollchain.eth", ["Phase:Origin", "Element:Fire"]);
 addScrollPoster("Echo Shard", "mirror.scrollchain.eth", ["Phase:Echo", "Resonance:High"]);
 </script>
+
+<!-- 📖 ScrollCast Dashboard · Story Editor Grid -->
+<section data-phase="Echo" style="padding:30px;background:#121212;border-top:2px solid #FFD700;">
+  <h2 style="color:#FFD700;text-align:center;">📖 ScrollCast · Sovereign Lore Grid</h2>
+
+  <div style="display:flex;justify-content:center;gap:10px;margin-bottom:15px;">
+    <select id="storyFilter">
+      <option value="all">All Scrolls</option>
+      <option value="Origin">Origin</option>
+      <option value="Echo">Echo</option>
+      <option value="Entropy">Entropy</option>
+      <option value="Sovereign">Sovereign</option>
+    </select>
+    <button onclick="renderStoryGrid()">🔍 Filter</button>
+  </div>
+
+  <div id="storyGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;"></div>
+</section>
+
+<script>
+const scrollLore = [];
+
+function addScrollLore(name, ens, traits=[], story=""){
+  scrollLore.push({ name, ens, traits, story, timestamp: new Date().toISOString() });
+  renderStoryGrid();
+}
+
+function renderStoryGrid(){
+  const phase = document.getElementById("storyFilter").value;
+  const grid = document.getElementById("storyGrid");
+  grid.innerHTML = "";
+  scrollLore.forEach((s, i) => {
+    const match = (phase === "all") || s.traits.some(t => t.includes(phase));
+    if (!match) return;
+    const div = document.createElement("div");
+    div.style.border = "1px solid #FFD700";
+    div.style.padding = "10px";
+    div.style.borderRadius = "8px";
+    div.style.background = "#1a1a1a";
+    div.innerHTML = `
+      <strong>📜 ${s.name}</strong><br/>
+      ENS: <em>${s.ens}</em><br/>
+      Traits: ${s.traits.length}<br/>
+      🕰️ ${new Date(s.timestamp).toLocaleString()}<br/><br/>
+      <textarea onchange="scrollLore[${i}].story = this.value" placeholder="Write scroll story..." style="width:100%;height:100px;background:#000;color:#FFD700;border:1px solid #FFD700;padding:5px;border-radius:6px;">${s.story}</textarea>
+    `;
+    grid.appendChild(div);
+  });
+}
+
+// 🧪 Example lore entries
+addScrollLore("Genesis Flame", "keith.scrollchain.eth", ["Phase:Origin", "Element:Fire"], "Born of ignition and sovereign intent.");
+addScrollLore("Echo Shard", "mirror.scrollchain.eth", ["Phase:Echo", "Resonance:High"], "Memory splits like a crystal — reflecting generations.");
+</script>
