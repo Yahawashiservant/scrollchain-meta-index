@@ -89,3 +89,32 @@ function loadResonanceCID() {
 document.getElementById("cidInput").addEventListener("change", loadResonanceCID);
 window.onload = loadResonanceCID;
 </script>
+
+<!-- 🔐 Mint & Bind UI -->
+<section style="padding:30px;background:#111;border-top:2px solid #FFD700;">
+  <h2 style="color:#FFD700;text-align:center;">🔐 Mint & Bind Scroll · ENS Ritual</h2>
+  <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;">
+    <input id="mintName" placeholder="Scroll name"/>
+    <input id="ensHint" placeholder="ENS identity (e.g., keith.scrollchain.eth)"/>
+    <button onclick="mintAndBind()">🌀 Mint & Bind</button>
+  </div>
+  <div id="mintLog" style="color:#f0f0f0;margin-top:20px;text-align:center;">🧩 No mint yet.</div>
+</section>
+
+<script>
+function mintAndBind(){
+  const name = document.getElementById("mintName").value.trim();
+  const ens = document.getElementById("ensHint").value.trim();
+  const msg = `🌀 Minted scroll '${name}' bound to ENS '${ens}'`;
+  document.getElementById("mintLog").textContent = msg;
+
+  // Optionally simulate IPFS poster payload
+  const poster = {
+    title: name,
+    ens_hint: ens,
+    timestamp: new Date().toISOString(),
+    traits: window.scrollchainTraits || []
+  };
+  console.log("🧾 Scroll poster payload:", poster);
+}
+</script>
