@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ScrollChain DivineKernel Viewer</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    body {
+      background-color: #0c0c0c;
+      font-family: system-ui, sans-serif;
+      color: #fdf6e3;
+      padding: 20px;
+    }
+    h1 {
+      color: #FFD700;
+      border-bottom: 2px solid #444;
+    }
+    .glyph-card {
+      background-color: #222;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 6px;
+      box-shadow: 0 0 4px #FFD700;
+    }
+  </style>
+</head>
+<body>
+  <h1>📜 ScrollChainOS · DivineKernel Trait Glyphs</h1>
+  <div id="glyph-container">🔄 Loading metadata from IPFS...</div>
+
+  <script>
+    const cid = "QmWLyhqWDsWbcWE8vjmHkzGKLGgvHh84cLxM3ceLsojwrx";
+    const ipfsURL = `https://ipfs.io/ipfs/${cid}`;
+
+    fetch(ipfsURL)
+      .then(response => response.json())
+      .then(data => {
+        const container = d3.select("#glyph-container");
+        container.html("");
+
+        container
+          .selectAll("div")
+          .data(data.attributes)
+          .enter()
+          .append("div")
+          .attr("class", "glyph-card")
+          .text(d => `🔹 ${d.trait_type}: ${d.value}`);
+      })
+      .catch(error => {
+        d3.select("#glyph-container").html("⚠️ Failed to load metadata from IPFS.");
+        console.error("IPFS Fetch Error:", error);
+      });
+  </script>
+</body>
+</html>
+
