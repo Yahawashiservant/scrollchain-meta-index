@@ -461,3 +461,32 @@ function renderGlyphIndex(){
 }
 window.onload = renderGlyphIndex;
 </script>
+
+<script>
+const scrollLore = [];
+
+fetch("exports/scrollglyph_registry.csv")
+  .then(res => res.text())
+  .then(text => {
+    const lines = text.trim().split("\n");
+    lines.forEach(line => {
+      const parts = line.split(",");
+      const [name, ens, traitsRaw, story, votes, timestamp] = parts;
+      const traits = traitsRaw ? traitsRaw.split(";").map(t => t.trim()) : [];
+      scrollLore.push({
+        name: name.trim(),
+        ens: ens.trim(),
+        traits,
+        story: story.trim(),
+        votes: parseInt(votes.trim()) || 0,
+        timestamp
+      });
+    });
+    // Optional: trigger viewer rerenders
+    if (typeof renderStoryGrid === "function") renderStoryGrid();
+    if (typeof renderLoreVotes === "function") renderLoreVotes();
+    if (typeof renderGlyphIndex === "function") renderGlyphIndex();
+    if (typeof drawMergePreview === "function") drawMergePreview();
+    if (typeof drawGlyphLens === "function") drawGlyphLens();
+  });
+</script>
