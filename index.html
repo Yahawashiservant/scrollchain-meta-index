@@ -257,3 +257,54 @@ function renderLoreVotes(){
 }
 window.onload = renderLoreVotes;
 </script>
+
+<!-- 📈 Ancestry Merge Preview · Lore Thread Lineage -->
+<section data-phase="Entropy" style="padding:30px;background:#0f0f0f;border-top:2px solid #FFD700;">
+  <h2 style="color:#FFD700;text-align:center;">📈 Ancestry Merge Preview · Lore Threads by Vote</h2>
+  <canvas id="mergeCanvas" style="width:100%;height:300px;background:#000;"></canvas>
+</section>
+
+<script>
+function drawMergePreview(){
+  const canvas = document.getElementById("mergeCanvas");
+  const ctx = canvas.getContext("2d");
+  canvas.width = window.innerWidth;
+  canvas.height = 300;
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  const nodes = [];
+  const links = [];
+  scrollLore.forEach((s, i) => {
+    const x = 100 + (i * 120);
+    const y = 150 + Math.sin(i)*40;
+    nodes.push({ x, y, name: s.name, votes: s.votes || 0 });
+    s.traits.forEach(t1 => {
+      scrollLore.forEach((s2, j) => {
+        if (i !== j && s2.traits.some(t2 => t2 === t1)) {
+          links.push({ from: i, to: j });
+        }
+      });
+    });
+  });
+
+  links.forEach(l => {
+    const a = nodes[l.from], b = nodes[l.to];
+    ctx.beginPath();
+    ctx.moveTo(a.x, a.y);
+    ctx.lineTo(b.x, b.y);
+    ctx.strokeStyle = "#FFD70066";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  });
+
+  nodes.forEach(n => {
+    ctx.beginPath();
+    ctx.arc(n.x, n.y, 10 + n.votes, 0, 2*Math.PI);
+    ctx.fillStyle = "#FFD700";
+    ctx.fill();
+    ctx.fillStyle = "#FFD700";
+    ctx.fillText(n.name, n.x - 30, n.y + 25);
+  });
+}
+window.onload = drawMergePreview;
+</script>
