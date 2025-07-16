@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>DivineKernel Trait Viewer</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    body { background: #111; font-family: system-ui; color: #fdf6e3; padding: 20px; }
+    h2 { color: #FFD700; border-bottom: 1px solid #444; }
+    .glyph { background: #222; padding: 10px; margin: 5px 0; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <h2>📜 DivineKernel Trait Glyphs</h2>
+  <div id="kernelGlyphs">🔄 Loading metadata from IPFS...</div>
+
+  <script>
+    // Replace with actual CID from IPFS upload
+    const cid = "QmYourDivineKernelCID";
+    const ipfsURL = `https://ipfs.io/ipfs/${cid}`;
+
+    fetch(ipfsURL)
+      .then(response => response.json())
+      .then(data => {
+        d3.select("#kernelGlyphs").html(""); // clear loading
+        d3.select("#kernelGlyphs")
+          .selectAll(".glyph")
+          .data(data.attributes)
+          .enter()
+          .append("div")
+          .attr("class", "glyph")
+          .text(d => `🔹 ${d.trait_type}: ${d.value}`);
+      })
+      .catch(() => {
+        d3.select("#kernelGlyphs").html("⚠️ Failed to load DivineKernel metadata.");
+      });
+  </script>
+</body>
+</html>
