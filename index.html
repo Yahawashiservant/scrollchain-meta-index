@@ -1,88 +1,54 @@
-<!-- ⚙️ ScrollChainOS Divine Interface · CID Memory · DAO Rituals · Trait Graphs · Mint UI -->
-<!-- This block contains all injected UI layers; paste clean HTML from convergence + upgrades here -->
-<!-- Make sure scripts for drawTimeline, drawResonance, drawAncestryGraph, and mintAndBind exist in <script> -->
+<!-- ScrollChain DivineKernel · Hybrid Ritual Merge -->
+<!-- ⚠️ Template not found. Skipped. -->
 
-<!-- Suggested separation: -->
-<!-- 🔁 Trait Viewer -->
-<!-- 🧬 Prophecy Stream -->
-<!-- 📈 ScrollLineage Graph -->
-<!-- 🔊 Glyph Resonance -->
-<!-- 🌀 Scroll Mint + ENS Binding -->
-
-<!-- 📜 Add your full HTML here or pipe in dynamically -->
-
-<!-- 🔐 Mint & Bind UI injected -->
-<section><input id="mintName" /><input id="ensHint" /><button onclick="mint()">Mint</button><div id="mintLog"></div></section>
+<section>
+  <h2 style="color:#FFD700;">🔐 Mint & Bind</h2>
+  <input id="mintName" placeholder="Scroll name"/>
+  <input id="ensHint" placeholder="ENS (e.g. keith.scrollchain.eth)"/>
+  <button onclick="mint()">Mint</button>
+  <div id="mintLog">🧩 Awaiting scroll...</div>
+</section>
 <script>
 function mint() {
-  const name = document.getElementById("mintName").value;
-  const ens = document.getElementById("ensHint").value;
-  document.getElementById("mintLog").textContent = `🌀 ${name} bound to ${ens}`;
+  const name = document.getElementById("mintName").value.trim();
+  const ens = document.getElementById("ensHint").value.trim();
+  document.getElementById("mintLog").textContent = `🌀 Scroll '${name}' bound to '${ens}'`;
 }
 </script>
-<!-- 🔊 Trait Resonance Map injected -->
-<canvas id="resonanceCanvas"></canvas>
+
+<section>
+  <h2 style="color:#FFD700;">🔊 Glyph Resonance</h2>
+  <canvas id="resonanceCanvas" style="width:100%;height:250px;"></canvas>
+</section>
 <script>
-function drawResonance(traits) {
+function drawResonance(traits){
   const ctx = document.getElementById("resonanceCanvas").getContext("2d");
+  const freq = {};
+  traits.forEach(t=>{freq[t.trait_type]=(freq[t.trait_type]||0)+1});
+  const keys = Object.keys(freq);
   ctx.clearRect(0,0,window.innerWidth,250);
+  keys.forEach((k,i)=>{
+    const x = 50 + i*60, h = freq[k]*15;
+    ctx.fillStyle = "#FFD700";
+    ctx.fillRect(x, 250-h-30, 30, h);
+    ctx.fillText(k, x-10, 240);
+  });
 }
 </script>
-<!-- 📈 Ancestry Graph injected -->
-<canvas id="ancestryCanvas"></canvas>
+
+<section>
+  <h2 style="color:#FFD700;">📈 ScrollLineage</h2>
+  <canvas id="ancestryCanvas" style="width:100%;height:300px;"></canvas>
+</section>
 <script>
-function drawAncestry(cids){
+function drawAncestryGraph(cids){
   const ctx = document.getElementById("ancestryCanvas").getContext("2d");
   ctx.clearRect(0,0,window.innerWidth,300);
-}
-</script>
-<!-- 🔐 Mint & Bind UI injected -->
-<section><input id="mintName" /><input id="ensHint" /><button onclick="mint()">Mint</button><div id="mintLog"></div></section>
-<script>
-function mint() {
-  const name = document.getElementById("mintName").value;
-  const ens = document.getElementById("ensHint").value;
-  document.getElementById("mintLog").textContent = `🌀 ${name} bound to ${ens}`;
-}
-</script>
-<!-- 🔊 Trait Resonance Map injected -->
-<canvas id="resonanceCanvas"></canvas>
-<script>
-function drawResonance(traits) {
-  const ctx = document.getElementById("resonanceCanvas").getContext("2d");
-  ctx.clearRect(0,0,window.innerWidth,250);
-}
-</script>
-<!-- 📈 Ancestry Graph injected -->
-<canvas id="ancestryCanvas"></canvas>
-<script>
-function drawAncestry(cids){
-  const ctx = document.getElementById("ancestryCanvas").getContext("2d");
-  ctx.clearRect(0,0,window.innerWidth,300);
-}
-</script>
-<!-- 🔐 Mint & Bind UI injected -->
-<section><input id="mintName" /><input id="ensHint" /><button onclick="mint()">Mint</button><div id="mintLog"></div></section>
-<script>
-function mint() {
-  const name = document.getElementById("mintName").value;
-  const ens = document.getElementById("ensHint").value;
-  document.getElementById("mintLog").textContent = `🌀 ${name} bound to ${ens}`;
-}
-</script>
-<!-- 🔊 Trait Resonance Map injected -->
-<canvas id="resonanceCanvas"></canvas>
-<script>
-function drawResonance(traits) {
-  const ctx = document.getElementById("resonanceCanvas").getContext("2d");
-  ctx.clearRect(0,0,window.innerWidth,250);
-}
-</script>
-<!-- 📈 Ancestry Graph injected -->
-<canvas id="ancestryCanvas"></canvas>
-<script>
-function drawAncestry(cids){
-  const ctx = document.getElementById("ancestryCanvas").getContext("2d");
-  ctx.clearRect(0,0,window.innerWidth,300);
+  cids.forEach((cid,i)=>{
+    const x = 100 + i*120, y = 150;
+    ctx.beginPath(); ctx.arc(x,y,8,0,2*Math.PI); ctx.fillStyle="#FFD700"; ctx.fill();
+    ctx.fillText(cid.slice(0,6)+"...", x-24, y+20);
+    if (i>0) {ctx.beginPath(); ctx.moveTo(x-120,y); ctx.lineTo(x,y); ctx.strokeStyle="#FFD700"; ctx.stroke();}
+  });
 }
 </script>
