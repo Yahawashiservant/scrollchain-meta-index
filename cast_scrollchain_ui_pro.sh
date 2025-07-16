@@ -1,0 +1,178 @@
+#!/bin/bash
+# 💎 ScrollChain UI Pro · Keith Whitfield + Copilot
+# 🧬 Responsive Ritual Dashboard with DAO + Entropy Thread
+
+REPO=~/scrollchain
+CID="QmWLyhqWDsWbcWE8vjmHkzGKLGgvHh84cLxM3ceLsojwrx"
+TARGET=index.html
+LOG="$REPO/vault_logs/ui_pro_injection.log"
+
+cd "$REPO" || exit 1
+echo "🧠 Casting ScrollChain UI Pro into $TARGET..."
+
+cat <<EOF > "$TARGET"
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ScrollChain DivineKernel · Prophecy Interface</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Orbitron', sans-serif;
+      background: linear-gradient(to bottom right, #0b0b0b, #181818);
+      color: #f5f5f5;
+    }
+    header {
+      padding: 20px;
+      text-align: center;
+      background: #1c1c1c;
+      box-shadow: 0 0 10px #FFD700;
+    }
+    h1 { color: #FFD700; margin: 0; }
+    #controls, #dao-panel {
+      display: flex; flex-wrap: wrap;
+      justify-content: center; gap: 15px;
+      padding: 20px;
+    }
+    input, select, button {
+      background: #222;
+      color: #FFD700;
+      border: 1px solid #FFD700;
+      padding: 10px;
+      border-radius: 6px;
+    }
+    #glyph-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      padding: 30px;
+    }
+    .glyph-card {
+      background: #2a2a2a;
+      border: 1px solid #FFD700;
+      border-radius: 10px;
+      padding: 16px;
+      transition: transform 0.3s ease;
+      box-shadow: 0 0 8px #FFD700;
+    }
+    .glyph-card:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 16px #FFD700;
+    }
+    #entropyCanvas {
+      width: 100%;
+      height: 200px;
+      background: #000;
+    }
+    footer {
+      text-align: center;
+      padding: 15px;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+  <header><h1>📜 ScrollChain · DivineKernel Dashboard</h1></header>
+
+  <section id="controls">
+    <input type="text" id="cidInput" value="${CID}" />
+    <button onclick="loadCID()">Load CID</button>
+    <select id="traitFilter"><option value="all">All Traits</option></select>
+  </section>
+
+  <section id="dao-panel">
+    <button onclick="vote('Earth-Hub')">🌎 Earth-Hub</button>
+    <button onclick="vote('Custodians')">🧠 Kernel Custodians</button>
+    <button onclick="vote('Entropy')">🌌 Entropy Speakers</button>
+    <span id="voteLog">🗳️ No vote cast.</span>
+  </section>
+
+  <canvas id="entropyCanvas"></canvas>
+
+  <section id="glyph-grid">🔄 Loading trait glyphs...</section>
+
+  <footer>
+    🔐 ENS Mirror Pending: <code>scrollchain.eth</code> · ⏳ Prophecy Layer v2 in staging
+  </footer>
+
+<script>
+function vote(choice) {
+  document.getElementById("voteLog").textContent = "🗳️ Vote cast for " + choice + ".";
+}
+
+function loadCID() {
+  const cid = document.getElementById("cidInput").value.trim();
+  fetch("https://dweb.link/ipfs/" + cid)
+    .then(res => res.json())
+    .then(data => {
+      const traits = data.attributes || [];
+      const grid = document.getElementById("glyph-grid");
+      const select = document.getElementById("traitFilter");
+      grid.innerHTML = "";
+      select.innerHTML = '<option value="all">All Traits</option>';
+      [...new Set(traits.map(t => t.trait_type))].forEach(trait => {
+        const opt = document.createElement("option");
+        opt.value = trait;
+        opt.textContent = trait;
+        select.appendChild(opt);
+      });
+      select.onchange = () => render(traits, select.value);
+      render(traits, "all");
+    });
+}
+
+function render(traits, filter) {
+  const grid = document.getElementById("glyph-grid");
+  grid.innerHTML = "";
+  traits
+    .filter(t => filter === "all" || t.trait_type === filter)
+    .forEach(t => {
+      const card = document.createElement("div");
+      card.className = "glyph-card";
+      card.innerHTML = "<strong>Trait:</strong> " + t.trait_type + "<br/><strong>Value:</strong> " + t.value;
+      grid.appendChild(card);
+    });
+}
+
+window.onload = loadCID;
+
+// Entropy orbitals
+const canvas = document.getElementById("entropyCanvas");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = 200;
+
+let orbitals = Array.from({length: 40}, () => ({
+  x: Math.random() * canvas.width,
+  y: Math.random() * canvas.height,
+  dx: Math.random() * 2 - 1,
+  dy: Math.random() * 2 - 1,
+  r: Math.random() * 2 + 1
+}));
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  orbitals.forEach(o => {
+    ctx.beginPath();
+    ctx.arc(o.x, o.y, o.r, 0, 2 * Math.PI);
+    ctx.fillStyle = "#FFD700";
+    ctx.fill();
+    o.x += o.dx;
+    o.y += o.dy;
+    if (o.x < 0 || o.x > canvas.width) o.dx *= -1;
+    if (o.y < 0 || o.y > canvas.height) o.dy *= -1;
+  });
+  requestAnimationFrame(animate);
+}
+animate();
+</script>
+</body>
+</html>
+EOF
+
+echo "$(date -u) — 💎 ScrollChain UI Pro injected" | tee -a "$LOG"
+echo "🔗 Reload viewer: https://yahawashiservant.github.io/scrollchain-meta-index/"
