@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ScrollProtectorBot Dashboard</title>
+  <meta charset="UTF-8" />
+  <style>
+    body { font-family: monospace; background: #111; color: #0f0; padding: 2em; }
+    h1, h2 { color: #fff; }
+    .bot { margin-bottom: 1em; background: #222; padding: 1em; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <h1>🛡️ ScrollProtectorBot Dashboard</h1>
+  <div id="bots"></div>
+
+  <script>
+    const bots = Array.from({ length: 20 }, (_, i) => `ScrollProtectorBot-${String(i + 1).padStart(2, '0')}.sh`);
+    const container = document.getElementById('bots');
+
+    bots.forEach(bot => {
+      const div = document.createElement('div');
+      div.className = 'bot';
+      div.textContent = `🛡️ ${bot} — Ready`;
+      container.appendChild(div);
+    });
+  </script>
+</body>
+</html>

@@ -427,8 +427,9 @@ class ScrollBiosystemCore extends EventEmitter {
     };
   }
 }
+ScrollBiosystemCore.sigil = 'hi-RaWaChaaQadash';
+module.exports = ScrollBiosystemCore;
 
-module.exports = ScrollBiosystemCore;hi-RaWaChaaQadash'
     };
   }
 }
@@ -488,4 +489,6 @@ class CognitiveIntentMapper {
   }
 }
 
+ScrollBiosystemCore.sigil = 'hi-RaWaChaaQadash';
 module.exports = ScrollBiosystemCore;
+

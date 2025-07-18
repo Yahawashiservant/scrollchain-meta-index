@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ScrollKernel Brain Viewer</title>
+  <meta charset="UTF-8" />
+  <style>
+    body { font-family: monospace; background: #111; color: #0f0; padding: 2em; }
+    h1, h2 { color: #fff; }
+    .scroll { margin-bottom: 2em; background: #222; padding: 1em; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <h1>🧬 ScrollKernel Brain Viewer</h1>
+  <div id="scrolls"></div>
+
+  <script>
+    const scrolls = [
+      'brainkernel-NeuralForge.scroll',
+      'brainkernel-TokenDaoIntelligence.scroll',
+      'ScrollKernel-AI.scroll'
+    ];
+
+    const container = document.getElementById('scrolls');
+    scrolls.forEach(name => {
+      const div = document.createElement('div');
+      div.className = 'scroll';
+      div.textContent = `🧠 ${name} — Activated`;
+      container.appendChild(div);
+    });
+  </script>
+</body>
+</html>

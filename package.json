@@ -1,65 +1,23 @@
 {
-  "name": "scrollchain-dashboard",
+  "name": "scrollchain-meta-index",
   "version": "1.0.0",
-  "description": "ScrollChain Sovereign Dashboard - A beautiful complex web application",
-  "main": "src/dashboardServer.js",
-  "scripts": {
-    "start": "node src/dashboardServer.js",
-    "dev": "nodemon src/dashboardServer.js"
-  },
-  "dependencies": {
-    "@ensdomains/ensjs": "^4.0.2",
-    "@ensdomains/eth-ens-namehash": "^2.0.15",
-    "@vitejs/plugin-react": "^4.6.0",
-    "@web3-storage/w3up-client": "^17.3.0",
-    "cors": "^2.8.5",
-    "dotenv": "^16.6.1",
-    "ethers": "^6.15.0",
-    "express": "^4.21.2",
-    "files-from-path": "^1.1.4",
-    "vite": "^6.3.5",
-    "web3.storage": "^4.5.5"
-  },
-  "devDependencies": {
-    "nodemon": "^3.0.1"
-  },
-  "keywords": [
-    "scrollchain",
-    "dashboard",
-    "web3",
-    "sovereignty"
-  ],
-  "author": "Keith D. Whitfield",
-  "license": "MIT",
-  "directories": {
-    "doc": "docs",
-    "test": "tests"
-  }
-}
-{
-  "name": "scrollchain-biosystem",
-  "version": "1.0.0",
-  "description": "ScrollChain Biosystem - Sovereign Cognitive Infrastructure",
+  "description": "Sovereign kernel minting and dashboard deployment for ScrollChainOS",
   "main": "server/deployment-ready.js",
   "scripts": {
-    "start": "node server/deployment-ready.js",
-    "dev": "node src/dashboardServer.js",
-    "biosystem": "node server/deployment-ready.js"
+    "start": "node server/deployment-ready.js"
   },
-  "keywords": [
-    "scrollchain",
-    "biosystem",
-    "nft",
-    "blockchain",
-    "ai"
-  ],
-  "author": "Keith D. Whitfield",
-  "license": "MIT",
   "dependencies": {
     "express": "^4.18.2",
     "cors": "^2.8.5"
   },
-  "engines": {
-    "node": ">=18.0.0"
-  }
+  "keywords": [
+    "scrollchain",
+    "sovereignty",
+    "ritual",
+    "biosystem",
+    "dashboard"
+  ],
+  "author": "Keith D. Whitfield",
+  "license": "MIT"
 }
+
