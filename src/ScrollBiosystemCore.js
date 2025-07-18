@@ -428,6 +428,11 @@ class ScrollBiosystemCore extends EventEmitter {
   }
 }
 
+module.exports = ScrollBiosystemCore;hi-RaWaChaaQadash'
+    };
+  }
+}
+
 // Supporting classes
 class BrainKernelLogicTree {
   constructor() {

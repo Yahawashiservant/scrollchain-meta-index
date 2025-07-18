@@ -355,3 +355,47 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`📊 Real-time entropy visualization active`);
   console.log(`🧬 Codex backend bridge initialized`);
 });
+// 🧠 ScrollChain Dashboard Server
+// Author: Keith D. Whitfield — ScrollChain Architect
+
+const express = require('express');
+const cors = require('cors');
+const path = require('path');
+
+const app = express();
+const PORT = process.env.PORT || 5000;
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+app.use(express.static('public'));
+
+// Serve static files
+app.use('/viewer', express.static(path.join(__dirname, '../viewer')));
+app.use('/public', express.static(path.join(__dirname, '../public')));
+
+// Main dashboard route
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../ScrollChain-Viewer.html'));
+});
+
+// Biosystem dashboard route
+app.get('/biosystem', (req, res) => {
+  res.sendFile(path.join(__dirname, '../ScrollBiosystem-Dashboard.html'));
+});
+
+// Health check
+app.get('/health', (req, res) => {
+  res.json({ 
+    status: 'ScrollChain Dashboard Server is running',
+    timestamp: new Date().toISOString(),
+    port: PORT
+  });
+});
+
+// Start server
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🧠 ScrollChain Dashboard Server running on port ${PORT}`);
+  console.log(`📊 Dashboard: http://0.0.0.0:${PORT}`);
+  console.log(`🌀 Biosystem: http://0.0.0.0:${PORT}/biosystem`);
+});

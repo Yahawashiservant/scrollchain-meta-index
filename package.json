@@ -36,3 +36,30 @@
     "test": "tests"
   }
 }
+{
+  "name": "scrollchain-biosystem",
+  "version": "1.0.0",
+  "description": "ScrollChain Biosystem - Sovereign Cognitive Infrastructure",
+  "main": "server/deployment-ready.js",
+  "scripts": {
+    "start": "node server/deployment-ready.js",
+    "dev": "node src/dashboardServer.js",
+    "biosystem": "node server/deployment-ready.js"
+  },
+  "keywords": [
+    "scrollchain",
+    "biosystem",
+    "nft",
+    "blockchain",
+    "ai"
+  ],
+  "author": "Keith D. Whitfield",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
