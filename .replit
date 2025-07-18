@@ -71,7 +71,7 @@ localPort = 5182
 externalPort = 8080
 
 [workflows]
-runButton = "Dashboard Server"
+runButton = "ScrollEntropy Production"
 
 [[workflows.workflow]]
 name = "Dashboard Server"
@@ -85,3 +85,16 @@ args = "npm install"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "node src/dashboardServer.js"
+
+[[workflows.workflow]]
+name = "ScrollEntropy Production"
+author = 42343702
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "chmod +x launch-scrollentropy-production.sh"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "./launch-scrollentropy-production.sh"
