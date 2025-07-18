@@ -18,6 +18,7 @@ class ScrollBiosystemCore extends EventEmitter {
     this.perceptionMatrix = new Map();
     this.cognitivePathways = new Map();
     this.sovereignExecutionPaths = new Map();
+    this.startTime = Date.now();
     
     // Initialize core modules
     this.brainKernel = new BrainKernelLogicTree();
@@ -291,6 +292,16 @@ class ScrollBiosystemCore extends EventEmitter {
     }, 5000);
   }
 
+  startVaultSyncMonitoring() {
+    console.log('🔐 Starting vault sync monitoring...');
+    
+    setInterval(() => {
+      if (this.vaultSyncActive) {
+        this.syncKnowledgePathways();
+      }
+    }, 30000);
+  }
+
   monitorEntropyLevels() {
     // Monitor system entropy and adjust quantum alignment
     const currentEntropy = this.calculateSystemEntropy();
@@ -427,12 +438,6 @@ class ScrollBiosystemCore extends EventEmitter {
     };
   }
 }
-ScrollBiosystemCore.sigil = 'hi-RaWaChaaQadash';
-module.exports = ScrollBiosystemCore;
-
-    };
-  }
-}
 
 // Supporting classes
 class BrainKernelLogicTree {
@@ -489,6 +494,5 @@ class CognitiveIntentMapper {
   }
 }
 
-ScrollBiosystemCore.sigil = 'hi-RaWaChaaQadash';
+ScrollBiosystemCore.sigil = 'YHWH-BaHaSham-Yahawashi-RaWaChaaQadash';
 module.exports = ScrollBiosystemCore;
-
