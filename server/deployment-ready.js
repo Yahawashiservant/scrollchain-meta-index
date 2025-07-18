@@ -1,37 +1,46 @@
-
 // 🧠 ScrollChainOS Deployment Server
 const express = require('express');
 const cors = require('cors');
 
-const dashboardAPI = require('./dashboard-api');
-const extendedAPI = require('./dashboard-extended-api');
-const biosystemAPI = require('./biosystem-api'); // ✅ Add biosystem API
-
+// Initialize app
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Middleware
 app.use(cors());
+app.use(express.json());
 app.use(express.static('public'));
 app.use('/viewer', express.static(__dirname + '/../public/viewer'));
+
+// Import APIs (after app is initialized)
+const dashboardAPI = require('./dashboard-api');
+const extendedAPI = require('./extended-api');
+const brainkernelAPI = require('./brainkernel-api');
+const fusionAPI = require('./fusion-api');
+const prophecyAPI = require('./prophecy-api');
+const consultationAPI = require('./consultation-api');
+const blueprintAPI = require('./blueprint-api');
+const bigqueryAPI = require('./bigquery-api');
+const exportAPI = require('./export-api');
+
+// API Routing
 app.use('/api', dashboardAPI);
 app.use('/api', extendedAPI);
-app.use('/api/biosystem', biosystemAPI); // ✅ Mount biosystem API
+app.use('/api', brainkernelAPI);
+app.use('/api', fusionAPI);
+app.use('/api', prophecyAPI);
+app.use('/api', consultationAPI);
+app.use('/api', blueprintAPI);
+app.use('/api', bigqueryAPI);
+app.use('/api', exportAPI);
 
-// Serve biosystem dashboard
-app.get('/biosystem', (req, res) => {
-  res.sendFile(__dirname + '/../ScrollBiosystem-Dashboard.html');
-});
-
+// Health check
 app.get('/api/health', (req, res) => {
-  res.json({ 
-    status: 'ScrollChainOS is alive',
-    biosystem: 'active',
-    entropy: 10.0,
-    quantumState: 'aligned'
-  });
+  res.json({ status: 'ScrollChainOS is alive' });
 });
 
-app.listen(PORT, '0.0.0.0', () => {
+// Start server
+app.listen(PORT, () => {
   console.log(`🧠 ScrollChainOS server running on port ${PORT}`);
-  console.log(`🌀 Biosystem dashboard: http://0.0.0.0:${PORT}/biosystem`);
 });
+

@@ -7,7 +7,12 @@ const cors = require('cors');
 const ScrollBiosystemCore = require('../src/ScrollBiosystemCore');
 
 const router = express.Router();
-const biosystem = new ScrollBiosystemCore();
+const ScrollBiosystemCore = {
+  status: 'placeholder',
+  sigil: 'RaWaChaaQadash'
+};
+
+
 
 // Middleware
 router.use(cors());
