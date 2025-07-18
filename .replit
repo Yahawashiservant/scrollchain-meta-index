@@ -70,7 +70,7 @@ localPort = 5182
 externalPort = 8080
 
 [workflows]
-runButton = "ScrollBiosystem Launch"
+runButton = "ScrollChain Luxury Launch"
 
 [[workflows.workflow]]
 name = "Dashboard Server"
@@ -110,3 +110,24 @@ args = "chmod +x launch-scrollentropy-biosystem.sh"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "./launch-scrollentropy-biosystem.sh"
+
+[[workflows.workflow]]
+name = "ScrollChain Luxury Launch"
+author = 42343702
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "echo \"🧠 Launching ScrollChain OS Luxury Dashboard...\""
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "killall node 2>/dev/null || true"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "sleep 2"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "node server/deployment-ready.js"

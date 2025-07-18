@@ -10,7 +10,14 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
-app.use('/viewer', express.static(__dirname + '/../public/viewer'));
+app.use('/viewer', express.static(__dirname + '/../viewer'));
+app.use('/public/viewer', express.static(__dirname + '/../public/viewer'));
+app.use('/brainkernels', express.static(__dirname + '/../brainkernels'));
+app.use('/cli_exports', express.static(__dirname + '/../cli_exports'));
+app.use('/governance', express.static(__dirname + '/../governance'));
+app.use('/licenses', express.static(__dirname + '/../licenses'));
+app.use('/sigils', express.static(__dirname + '/../sigils'));
+app.use('/agents', express.static(__dirname + '/../agents'));
 
 // Import APIs (after app is initialized)
 const dashboardAPI = require('./dashboard-api');
@@ -39,8 +46,22 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ScrollChainOS is alive' });
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`🧠 ScrollChainOS server running on port ${PORT}`);
-});
+// Start server with fallback ports
+const startServer = (port) => {
+  const server = app.listen(port, '0.0.0.0', () => {
+    console.log(`🧠 ScrollChainOS server running on port ${port}`);
+    console.log(`🌐 Access your luxury dashboard at: http://0.0.0.0:${port}`);
+  });
+
+  server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+      console.log(`Port ${port} is busy, trying ${port + 1}...`);
+      startServer(port + 1);
+    } else {
+      console.error('Server error:', err);
+    }
+  });
+};
+
+startServer(PORT);
 
