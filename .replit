@@ -4,14 +4,13 @@ hidden = [".config", "tsconfig.json", "tsconfig.node.json", "vite.config.js", ".
 
 [nix]
 channel = "stable-24_05"
-packages = ["gh", "age", "zip", "nano", "kubo", "try", "zulu11", "postgresql_12", "lsof", "rustup", "sigil"]
+packages = ["gh", "age", "zip", "nano", "kubo", "try", "zulu11", "postgresql_12", "lsof", "rustup", "sigil", "psmisc"]
 
 [unitTest]
 language = "nodejs"
 
 [deployment]
-deploymentTarget = "static"
-publicDir = "dist"
+deploymentTarget = "cloudrun"
 run = ["sh", "-c", "npm run start"]
 
 [[ports]]

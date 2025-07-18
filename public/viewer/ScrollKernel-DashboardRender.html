@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ScrollKernel Visual Dashboard</title>
+  <meta charset="UTF-8" />
+  <style>
+    body { font-family: monospace; background: #111; color: #0f0; padding: 2em; }
+    h1, h2 { color: #fff; }
+    .section { margin-bottom: 2em; }
+    pre { background: #222; padding: 1em; border-radius: 8px; white-space: pre-wrap; word-wrap: break-word; }
+  </style>
+</head>
+<body>
+  <h1>🌀 ScrollKernel Visual Dashboard</h1>
+
+  <div class="section">
+    <h2>🧠 Entropy Patterns</h2>
+    <pre id="entropy">Loading...</pre>
+  </div>
+
+  <div class="section">
+    <h2>🆔 DID Resolver</h2>
+    <pre id="did">Loading...</pre>
+  </div>
+
+  <div class="section">
+    <h2>📤 Export Log</h2>
+    <button onclick="downloadLog()">Download Mint Log</button>
+  </div>
+
+  <script>
+    fetch('/api/entropy')
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('entropy').textContent = JSON.stringify(data, null, 2);
+      });
+
+    fetch('/api/did')
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('did').textContent = JSON.stringify(data, null, 2);
+      });
+
+    function downloadLog() {
+      window.location.href = '/api/export';
+    }
+  </script>
+</body>
+</html>
