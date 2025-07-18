@@ -70,7 +70,7 @@ localPort = 5182
 externalPort = 8080
 
 [workflows]
-runButton = "ScrollEntropy Production"
+runButton = "ScrollBiosystem Launch"
 
 [[workflows.workflow]]
 name = "Dashboard Server"
@@ -97,3 +97,16 @@ args = "chmod +x launch-scrollentropy-production.sh"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "./launch-scrollentropy-production.sh"
+
+[[workflows.workflow]]
+name = "ScrollBiosystem Launch"
+author = 42343702
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "chmod +x launch-scrollentropy-biosystem.sh"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "./launch-scrollentropy-biosystem.sh"

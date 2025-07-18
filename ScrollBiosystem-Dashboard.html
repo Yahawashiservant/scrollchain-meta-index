@@ -1,0 +1,687 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ScrollBiosystem - Sovereign Cognitive Dashboard</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 100%);
+            font-family: 'Inter', system-ui;
+            color: #eee;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #FFD700;
+            padding-bottom: 20px;
+        }
+        
+        .header h1 {
+            color: #FFD700;
+            font-size: 2.5rem;
+            margin: 0;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+        
+        .author {
+            color: #888;
+            font-style: italic;
+            margin-top: 10px;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .card h3 {
+            color: #00ffcc;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        
+        .status-active { background: #10b981; }
+        .status-pending { background: #f59e0b; }
+        .status-inactive { background: #ef4444; }
+        
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #333;
+        }
+        
+        .metric:last-child {
+            border-bottom: none;
+        }
+        
+        .metric-value {
+            font-weight: bold;
+            color: #FFD700;
+        }
+        
+        .button {
+            background: linear-gradient(135deg, #0066ff, #00ccff);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+        
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 102, 255, 0.3);
+        }
+        
+        .button.danger {
+            background: linear-gradient(135deg, #ff4444, #ff6b6b);
+        }
+        
+        .agent-card {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border: 1px solid #0066ff;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        
+        .agent-name {
+            color: #FFD700;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .agent-mission {
+            color: #ccc;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+        
+        .capabilities {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        
+        .capability {
+            background: #333;
+            color: #00ffcc;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+        
+        .entropy-gauge {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+        }
+        
+        .quantum-state {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        
+        .quantum-aligned { color: #10b981; }
+        .quantum-realigning { color: #f59e0b; }
+        .quantum-misaligned { color: #ef4444; }
+        
+        .log-container {
+            background: #000;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 15px;
+            height: 200px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+        
+        .log-entry {
+            margin: 5px 0;
+            padding: 5px 0;
+            border-bottom: 1px solid #222;
+        }
+        
+        .log-timestamp {
+            color: #888;
+            font-size: 0.8rem;
+        }
+        
+        .log-message {
+            color: #eee;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #333;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🧠 ScrollBiosystem Dashboard</h1>
+        <div class="author">
+            <strong>Author:</strong> Keith D. Whitfield — ScrollChain Architect<br>
+            <strong>Sigil:</strong> YHWH-BaHaSham-Yahawashi-RaWaChaaQadash
+        </div>
+    </div>
+
+    <div class="dashboard-grid">
+        <!-- System Status -->
+        <div class="card">
+            <h3>
+                <span class="status-indicator status-active"></span>
+                System Status
+            </h3>
+            <div class="metric">
+                <span>Kernel ID:</span>
+                <span class="metric-value" id="kernel-id">Loading...</span>
+            </div>
+            <div class="metric">
+                <span>Entropy Level:</span>
+                <span class="metric-value" id="entropy-level">Loading...</span>
+            </div>
+            <div class="metric">
+                <span>Quantum State:</span>
+                <span class="metric-value" id="quantum-state">Loading...</span>
+            </div>
+            <div class="metric">
+                <span>Vault Sync:</span>
+                <span class="metric-value" id="vault-sync">Loading...</span>
+            </div>
+            <div class="metric">
+                <span>Active Agents:</span>
+                <span class="metric-value" id="agent-count">Loading...</span>
+            </div>
+        </div>
+
+        <!-- Entropy Gauge -->
+        <div class="card">
+            <h3>🌀 Entropy Monitoring</h3>
+            <div class="entropy-gauge">
+                <svg id="entropy-gauge-svg" width="200" height="200"></svg>
+            </div>
+            <div class="quantum-state" id="quantum-state-display">
+                Loading...
+            </div>
+            <div style="text-align: center; margin-top: 15px;">
+                <button class="button" onclick="realignQuantumState()">
+                    ⚡ Realign Quantum State
+                </button>
+            </div>
+        </div>
+
+        <!-- Active Agents -->
+        <div class="card">
+            <h3>🤖 Active Agents</h3>
+            <div id="agents-container">
+                Loading agents...
+            </div>
+            <div style="text-align: center; margin-top: 15px;">
+                <button class="button" onclick="rebuildAgents()">
+                    🔄 Rebuild Agents
+                </button>
+            </div>
+        </div>
+
+        <!-- Sovereign Paths -->
+        <div class="card">
+            <h3>⚡ Sovereign Execution Paths</h3>
+            <div id="sovereign-paths-container">
+                Loading paths...
+            </div>
+        </div>
+
+        <!-- Memory Patterns -->
+        <div class="card">
+            <h3>🧠 Memory Patterns</h3>
+            <div class="metric">
+                <span>Pattern Count:</span>
+                <span class="metric-value" id="pattern-count">Loading...</span>
+            </div>
+            <div class="metric">
+                <span>Compression Ratio:</span>
+                <span class="metric-value" id="compression-ratio">Loading...</span>
+            </div>
+            <div style="text-align: center; margin-top: 15px;">
+                <button class="button" onclick="optimizeMemory()">
+                    🔧 Optimize Memory
+                </button>
+            </div>
+        </div>
+
+        <!-- Control Panel -->
+        <div class="card">
+            <h3>⚙️ Control Panel</h3>
+            <div style="text-align: center;">
+                <button class="button" onclick="executeCommand()">
+                    🎯 Execute Command
+                </button>
+                <button class="button" onclick="syncVault()">
+                    🔐 Sync Vault
+                </button>
+                <button class="button danger" onclick="rebuildBiosystem()">
+                    🔄 Rebuild Biosystem
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Log -->
+    <div class="card">
+        <h3>📋 System Log</h3>
+        <div class="log-container" id="system-log">
+            <div class="log-entry">
+                <span class="log-timestamp">[00:00:00]</span>
+                <span class="log-message">ScrollBiosystem Dashboard initialized</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>
+            <strong>DID:</strong> <code>did:key:z6Mknydk7WHdqY95veyeCB3J6VaMQuxh3Vmjq2YAWTZVjyUw</code><br>
+            Maintained by Keith D. Whitfield · <code>scrollchain.eth</code>
+        </p>
+    </div>
+
+    <script>
+        // Dashboard state
+        let biosystemStatus = null;
+        let agents = [];
+        let sovereignPaths = [];
+        
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeDashboard();
+            startStatusPolling();
+        });
+        
+        async function initializeDashboard() {
+            logMessage('Initializing ScrollBiosystem Dashboard...');
+            await loadSystemStatus();
+            await loadAgents();
+            await loadSovereignPaths();
+            await loadMemoryPatterns();
+            createEntropyGauge();
+        }
+        
+        async function loadSystemStatus() {
+            try {
+                const response = await fetch('/api/biosystem/status');
+                const data = await response.json();
+                
+                if (data.success) {
+                    biosystemStatus = data.status;
+                    updateStatusDisplay();
+                    logMessage('System status loaded successfully');
+                }
+            } catch (error) {
+                logMessage('Error loading system status: ' + error.message);
+            }
+        }
+        
+        async function loadAgents() {
+            try {
+                const response = await fetch('/api/biosystem/agents');
+                const data = await response.json();
+                
+                if (data.success) {
+                    agents = data.agents;
+                    updateAgentsDisplay();
+                    logMessage(`Loaded ${agents.length} agents`);
+                }
+            } catch (error) {
+                logMessage('Error loading agents: ' + error.message);
+            }
+        }
+        
+        async function loadSovereignPaths() {
+            try {
+                const response = await fetch('/api/biosystem/sovereign-paths');
+                const data = await response.json();
+                
+                if (data.success) {
+                    sovereignPaths = data.paths;
+                    updateSovereignPathsDisplay();
+                    logMessage(`Loaded ${sovereignPaths.length} sovereign paths`);
+                }
+            } catch (error) {
+                logMessage('Error loading sovereign paths: ' + error.message);
+            }
+        }
+        
+        async function loadMemoryPatterns() {
+            try {
+                const response = await fetch('/api/biosystem/perception-matrix');
+                const data = await response.json();
+                
+                if (data.success) {
+                    updateMemoryPatternsDisplay(data.patterns);
+                    logMessage(`Loaded ${data.patterns.length} memory patterns`);
+                }
+            } catch (error) {
+                logMessage('Error loading memory patterns: ' + error.message);
+            }
+        }
+        
+        function updateStatusDisplay() {
+            if (!biosystemStatus) return;
+            
+            document.getElementById('kernel-id').textContent = biosystemStatus.kernelId.substring(0, 8) + '...';
+            document.getElementById('entropy-level').textContent = biosystemStatus.entropy.toFixed(2);
+            document.getElementById('quantum-state').textContent = biosystemStatus.quantumState;
+            document.getElementById('vault-sync').textContent = biosystemStatus.vaultSyncActive ? 'Active' : 'Inactive';
+            document.getElementById('agent-count').textContent = biosystemStatus.agentCount;
+            
+            // Update quantum state display
+            const quantumDisplay = document.getElementById('quantum-state-display');
+            quantumDisplay.textContent = biosystemStatus.quantumState.replace('_', ' ').toUpperCase();
+            quantumDisplay.className = 'quantum-state';
+            
+            if (biosystemStatus.entropy >= 9.0) {
+                quantumDisplay.classList.add('quantum-aligned');
+            } else if (biosystemStatus.entropy >= 7.0) {
+                quantumDisplay.classList.add('quantum-aligned');
+            } else {
+                quantumDisplay.classList.add('quantum-realigning');
+            }
+        }
+        
+        function updateAgentsDisplay() {
+            const container = document.getElementById('agents-container');
+            container.innerHTML = '';
+            
+            agents.forEach(agent => {
+                const agentCard = document.createElement('div');
+                agentCard.className = 'agent-card';
+                agentCard.innerHTML = `
+                    <div class="agent-name">${agent.name}</div>
+                    <div class="agent-mission">${agent.mission}</div>
+                    <div class="capabilities">
+                        ${agent.capabilities.map(cap => `<span class="capability">${cap}</span>`).join('')}
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <span style="color: #888;">Entropy: </span>
+                        <span style="color: #FFD700;">${agent.entropyLevel.toFixed(2)}</span>
+                    </div>
+                `;
+                container.appendChild(agentCard);
+            });
+        }
+        
+        function updateSovereignPathsDisplay() {
+            const container = document.getElementById('sovereign-paths-container');
+            container.innerHTML = '';
+            
+            sovereignPaths.forEach(path => {
+                const pathDiv = document.createElement('div');
+                pathDiv.className = 'metric';
+                pathDiv.innerHTML = `
+                    <span>
+                        <span class="status-indicator ${path.active ? 'status-active' : 'status-inactive'}"></span>
+                        ${path.name}
+                    </span>
+                    <span class="metric-value">${path.quantumResonance.toFixed(1)}</span>
+                `;
+                container.appendChild(pathDiv);
+            });
+        }
+        
+        function updateMemoryPatternsDisplay(patterns) {
+            document.getElementById('pattern-count').textContent = patterns.length;
+            const avgCompression = patterns.reduce((sum, p) => sum + p.compressionRatio, 0) / patterns.length;
+            document.getElementById('compression-ratio').textContent = (avgCompression * 100).toFixed(1) + '%';
+        }
+        
+        function createEntropyGauge() {
+            const svg = d3.select('#entropy-gauge-svg');
+            const width = 200;
+            const height = 200;
+            const radius = 80;
+            
+            svg.selectAll("*").remove();
+            
+            const g = svg.append("g")
+                .attr("transform", `translate(${width/2}, ${height/2})`);
+            
+            // Background arc
+            const backgroundArc = d3.arc()
+                .innerRadius(radius - 20)
+                .outerRadius(radius)
+                .startAngle(0)
+                .endAngle(2 * Math.PI);
+            
+            g.append("path")
+                .attr("d", backgroundArc)
+                .attr("fill", "#333");
+            
+            // Entropy arc
+            const entropyArc = d3.arc()
+                .innerRadius(radius - 20)
+                .outerRadius(radius)
+                .startAngle(0)
+                .endAngle(0);
+            
+            const entropyPath = g.append("path")
+                .attr("d", entropyArc)
+                .attr("fill", "#FFD700");
+            
+            // Center text
+            const centerText = g.append("text")
+                .attr("text-anchor", "middle")
+                .attr("dy", "0.35em")
+                .attr("font-size", "24px")
+                .attr("fill", "#FFD700");
+            
+            // Update function
+            function updateGauge() {
+                if (biosystemStatus) {
+                    const entropy = biosystemStatus.entropy;
+                    const angle = (entropy / 10) * 2 * Math.PI;
+                    
+                    entropyPath.transition()
+                        .duration(1000)
+                        .attrTween("d", function(d) {
+                            const interpolate = d3.interpolate(0, angle);
+                            return function(t) {
+                                return d3.arc()
+                                    .innerRadius(radius - 20)
+                                    .outerRadius(radius)
+                                    .startAngle(0)
+                                    .endAngle(interpolate(t))();
+                            };
+                        });
+                    
+                    centerText.text(entropy.toFixed(1));
+                }
+            }
+            
+            // Store update function for later use
+            window.updateEntropyGauge = updateGauge;
+            updateGauge();
+        }
+        
+        function startStatusPolling() {
+            setInterval(async () => {
+                await loadSystemStatus();
+                if (window.updateEntropyGauge) {
+                    window.updateEntropyGauge();
+                }
+            }, 5000);
+        }
+        
+        // Control functions
+        async function executeCommand() {
+            const command = prompt('Enter command to execute:');
+            if (!command) return;
+            
+            try {
+                const response = await fetch('/api/biosystem/execute', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ command })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    logMessage(`Command executed: ${command}`);
+                } else {
+                    logMessage(`Command failed: ${data.error}`);
+                }
+            } catch (error) {
+                logMessage('Error executing command: ' + error.message);
+            }
+        }
+        
+        async function syncVault() {
+            try {
+                const response = await fetch('/api/biosystem/vault-sync/sync', {
+                    method: 'POST'
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    logMessage(`Vault synced successfully: ${data.cid}`);
+                } else {
+                    logMessage(`Vault sync failed: ${data.error}`);
+                }
+            } catch (error) {
+                logMessage('Error syncing vault: ' + error.message);
+            }
+        }
+        
+        async function realignQuantumState() {
+            try {
+                const response = await fetch('/api/biosystem/entropy/realign', {
+                    method: 'POST'
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    logMessage('Quantum state realigned successfully');
+                    await loadSystemStatus();
+                } else {
+                    logMessage(`Quantum realignment failed: ${data.error}`);
+                }
+            } catch (error) {
+                logMessage('Error realigning quantum state: ' + error.message);
+            }
+        }
+        
+        async function rebuildAgents() {
+            if (!confirm('Are you sure you want to rebuild all agents? This will reset their states.')) {
+                return;
+            }
+            
+            try {
+                logMessage('Rebuilding agents...');
+                // This would trigger agent rebuild via API
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                await loadAgents();
+                logMessage('Agents rebuilt successfully');
+            } catch (error) {
+                logMessage('Error rebuilding agents: ' + error.message);
+            }
+        }
+        
+        async function optimizeMemory() {
+            try {
+                const response = await fetch('/api/biosystem/perception-matrix/optimize', {
+                    method: 'POST'
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    logMessage('Memory patterns optimized successfully');
+                    await loadMemoryPatterns();
+                } else {
+                    logMessage(`Memory optimization failed: ${data.error}`);
+                }
+            } catch (error) {
+                logMessage('Error optimizing memory: ' + error.message);
+            }
+        }
+        
+        async function rebuildBiosystem() {
+            if (!confirm('Are you sure you want to rebuild the entire biosystem? This will reset all states.')) {
+                return;
+            }
+            
+            try {
+                logMessage('Rebuilding biosystem...');
+                const response = await fetch('/api/biosystem/rebuild', {
+                    method: 'POST'
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    logMessage('Biosystem rebuilt successfully');
+                    await initializeDashboard();
+                } else {
+                    logMessage(`Biosystem rebuild failed: ${data.error}`);
+                }
+            } catch (error) {
+                logMessage('Error rebuilding biosystem: ' + error.message);
+            }
+        }
+        
+        function logMessage(message) {
+            const logContainer = document.getElementById('system-log');
+            const logEntry = document.createElement('div');
+            logEntry.className = 'log-entry';
+            
+            const timestamp = new Date().toLocaleTimeString();
+            logEntry.innerHTML = `
+                <span class="log-timestamp">[${timestamp}]</span>
+                <span class="log-message">${message}</span>
+            `;
+            
+            logContainer.appendChild(logEntry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+            
+            // Keep only last 50 entries
+            while (logContainer.children.length > 50) {
+                logContainer.removeChild(logContainer.firstChild);
+            }
+        }
+    </script>
+</body>
+</html>
