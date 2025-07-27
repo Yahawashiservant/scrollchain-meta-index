@@ -70,7 +70,7 @@ localPort = 5182
 externalPort = 8080
 
 [workflows]
-runButton = "ScrollChain Luxury Launch"
+runButton = "ScrollChain 100x Launch"
 
 [[workflows.workflow]]
 name = "Dashboard Server"
@@ -131,3 +131,24 @@ args = "sleep 2"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "node server/deployment-ready.js"
+
+[[workflows.workflow]]
+name = "ScrollChain 100x Launch"
+author = 42343702
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "chmod +x ScrollChain-Continue100x.sh"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "./ScrollChain-Continue100x.sh"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "chmod +x launch-scrollchain-100x.sh"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "./launch-scrollchain-100x.sh"
