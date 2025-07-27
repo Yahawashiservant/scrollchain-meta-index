@@ -70,7 +70,7 @@ localPort = 5182
 externalPort = 8080
 
 [workflows]
-runButton = "ScrollChain 100x Launch"
+runButton = "ScrollChain Live Network"
 
 [[workflows.workflow]]
 name = "Dashboard Server"
@@ -152,3 +152,24 @@ args = "chmod +x launch-scrollchain-100x.sh"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "./launch-scrollchain-100x.sh"
+
+[[workflows.workflow]]
+name = "ScrollChain Live Network"
+author = 42343702
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "echo \"🚀 Launching ScrollChain OS Live Network...\""
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "killall node 2>/dev/null || true"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "sleep 2"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "node server/master-router.js"
