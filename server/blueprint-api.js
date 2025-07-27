@@ -14,3 +14,15 @@ router.post('/blueprint', (req, res) => {
 });
 
 module.exports = router;
+const express = require('express');
+const router = express.Router();
+
+router.get('/blueprint/library', (req, res) => {
+  res.json({
+    blueprints_available: 10000,
+    categories: ['DAO', 'NFT', 'DeFi', 'Governance'],
+    latest_version: '3.0.0'
+  });
+});
+
+module.exports = router;

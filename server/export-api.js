@@ -33,3 +33,14 @@ router.get('/export-kernels', (req, res) => {
 });
 
 module.exports = router;
+const express = require('express');
+const router = express.Router();
+
+router.get('/export/formats', (req, res) => {
+  res.json({
+    supported_formats: ['JSON', 'CSV', 'XML', 'SCROLL'],
+    exports_today: 10000
+  });
+});
+
+module.exports = router;

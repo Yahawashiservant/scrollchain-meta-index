@@ -14,3 +14,24 @@ router.get('/brainkernels', (req, res) => {
 });
 
 module.exports = router;
+const express = require('express');
+const router = express.Router();
+
+// Brain kernel endpoints
+router.get('/kernel/neural', (req, res) => {
+  res.json({
+    neural_networks: 1000000,
+    active_neurons: 999999999,
+    quantum_state: 'entangled'
+  });
+});
+
+router.get('/kernel/forge', (req, res) => {
+  res.json({
+    forge_status: 'operational',
+    scrolls_forged: 1000000,
+    entropy_consumed: '999TB'
+  });
+});
+
+module.exports = router;

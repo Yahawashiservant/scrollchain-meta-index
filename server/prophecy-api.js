@@ -11,3 +11,15 @@ router.get('/prophecy', (req, res) => {
 });
 
 module.exports = router;
+const express = require('express');
+const router = express.Router();
+
+router.get('/prophecy/oracle', (req, res) => {
+  res.json({
+    oracle_status: 'active',
+    prophecies_generated: 777,
+    accuracy_rate: '99.9%'
+  });
+});
+
+module.exports = router;

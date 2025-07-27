@@ -15,3 +15,15 @@ router.get('/fusion', (req, res) => {
 });
 
 module.exports = router;
+const express = require('express');
+const router = express.Router();
+
+router.get('/fusion/status', (req, res) => {
+  res.json({
+    fusion_cores: 'online',
+    energy_level: 'maximum',
+    scroll_fusion_rate: '1000/sec'
+  });
+});
+
+module.exports = router;

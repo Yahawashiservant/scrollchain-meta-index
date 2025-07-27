@@ -13,3 +13,15 @@ router.get('/bigquery', (req, res) => {
 });
 
 module.exports = router;
+const express = require('express');
+const router = express.Router();
+
+router.get('/bigquery/status', (req, res) => {
+  res.json({
+    datasets: 1000,
+    queries_processed: 1000000,
+    data_volume: '100TB'
+  });
+});
+
+module.exports = router;

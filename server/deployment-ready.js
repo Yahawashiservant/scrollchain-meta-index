@@ -51,6 +51,10 @@ const startServer = (port) => {
   const server = app.listen(port, '0.0.0.0', () => {
     console.log(`🧠 ScrollChainOS server running on port ${port}`);
     console.log(`🌐 Access your luxury dashboard at: http://0.0.0.0:${port}`);
+    console.log(`📡 API Health Check: http://0.0.0.0:${port}/api/health`);
+    console.log(`🧬 Kernel Status: http://0.0.0.0:${port}/api/kernel/status`);
+    console.log(`🤖 Agents: http://0.0.0.0:${port}/api/agents`);
+    console.log(`📜 Scrolls: http://0.0.0.0:${port}/api/scrolls`);
   });
 
   server.on('error', (err) => {
