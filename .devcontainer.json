@@ -1,0 +1,9 @@
+{
+  "name": "ScrollChain Meta Dev",
+  "image": "ubuntu:latest",
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/node:1": {},
+    "ghcr.io/devcontainers/features/docker-in-docker:1": {}
+  }
+}
