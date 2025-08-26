@@ -14,8 +14,6 @@ router.post('/blueprint', (req, res) => {
 });
 
 module.exports = router;
-const express = require('express');
-const router = express.Router();
 
 router.get('/blueprint/library', (req, res) => {
   res.json({
@@ -25,4 +23,3 @@ router.get('/blueprint/library', (req, res) => {
   });
 });
 
-module.exports = router;

@@ -14,8 +14,6 @@ router.get('/brainkernels', (req, res) => {
 });
 
 module.exports = router;
-const express = require('express');
-const router = express.Router();
 
 // Brain kernel endpoints
 router.get('/kernel/neural', (req, res) => {
@@ -34,4 +32,3 @@ router.get('/kernel/forge', (req, res) => {
   });
 });
 
-module.exports = router;

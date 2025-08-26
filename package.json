@@ -4,7 +4,13 @@
   "description": "Sovereign kernel minting and dashboard deployment for ScrollChainOS",
   "main": "server/deployment-ready.js",
   "scripts": {
-    "start": "node server/deployment-ready.js"
+    "start": "node server/deployment-ready.js",
+    "dev": "NODE_ENV=development node server/deployment-ready.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "health": "curl -s http://localhost:5000/api/health || echo 'Server not running'",
+    "install-all": "npm install && cd sovereign-annuity-dapp && npm install && cd ../my-smart-wallets-app && npm install && cd ../scroll-prophecy && npm install && cd ..",
+    "start-dashboard": "./launch-scrollchain-dashboard.sh",
+    "fix-and-launch": "./FixAndLaunch.sh"
   },
   "dependencies": {
     "@ensdomains/ensjs": "^4.0.2",
