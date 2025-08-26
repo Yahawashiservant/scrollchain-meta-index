@@ -13,8 +13,6 @@ router.get('/bigquery', (req, res) => {
 });
 
 module.exports = router;
-const express = require('express');
-const router = express.Router();
 
 router.get('/bigquery/status', (req, res) => {
   res.json({
@@ -24,4 +22,3 @@ router.get('/bigquery/status', (req, res) => {
   });
 });
 
-module.exports = router;

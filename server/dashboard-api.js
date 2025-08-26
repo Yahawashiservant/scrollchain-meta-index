@@ -5,17 +5,27 @@ const path = require('path');
 
 // 🧠 Kernel Scrolls
 router.get('/scrolls', (req, res) => {
+  // Try to serve the file if it exists, otherwise return JSON data
   const file = path.join(__dirname, '../minted_kernels/kernel_registry.csv');
-  res.sendFile(file);
+  if (fs.existsSync(file)) {
+    res.sendFile(file);
+  } else {
+    res.json({
+      total_scrolls: 1000000,
+      active_scrolls: 999999,
+      entropy_level: 'maximum',
+      note: 'Kernel registry file not found, serving default data'
+    });
+  }
 });
 
 // 🎴 Agents
 router.get('/agents', (req, res) => {
   const agents = [
-    { name: 'WealthAgent', id: 'WA-001' },
-    { name: 'QuantumTrader', id: 'QT-002' },
-    { name: 'ComplianceBot', id: 'CB-003' },
-    { name: 'GovernanceOracle', id: 'GO-004' }
+    { name: 'WealthAgent', id: 'WA-001', status: 'active' },
+    { name: 'QuantumTrader', id: 'QT-002', status: 'active' },
+    { name: 'ComplianceBot', id: 'CB-003', status: 'active' },
+    { name: 'GovernanceOracle', id: 'GO-004', status: 'active' }
   ];
   res.json(agents);
 });
@@ -23,14 +33,16 @@ router.get('/agents', (req, res) => {
 // 📜 Registry
 router.get('/registry', (req, res) => {
   const file = path.join(__dirname, '../ScrollChain-MintLog.md');
-  res.sendFile(file);
+  if (fs.existsSync(file)) {
+    res.sendFile(file);
+  } else {
+    res.json({
+      message: 'ScrollChain Registry',
+      status: 'active',
+      note: 'MintLog file not found, serving default data'
+    });
+  }
 });
-
-module.exports = router;
-const express = require('express');
-const router = express.Router();
-const path = require('path');
-const fs = require('fs');
 
 // Health check endpoint
 router.get('/health', (req, res) => {
@@ -47,26 +59,6 @@ router.get('/kernel/status', (req, res) => {
     status: 'active',
     kernels: ['NeuralKernel', 'ScrollKernel', 'BrainKernel'],
     entropy_level: 'optimal'
-  });
-});
-
-// Agent registry
-router.get('/agents', (req, res) => {
-  const agents = [
-    { name: 'WealthAgent', id: 'WA-001', status: 'active' },
-    { name: 'QuantumTrader', id: 'QT-002', status: 'active' },
-    { name: 'ComplianceBot', id: 'CB-003', status: 'active' },
-    { name: 'GovernanceOracle', id: 'GO-004', status: 'active' }
-  ];
-  res.json(agents);
-});
-
-// Scroll registry
-router.get('/scrolls', (req, res) => {
-  res.json({
-    total_scrolls: 1000000,
-    active_scrolls: 999999,
-    entropy_level: 'maximum'
   });
 });
 

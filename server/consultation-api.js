@@ -8,8 +8,6 @@ router.post('/consultation', (req, res) => {
 });
 
 module.exports = router;
-const express = require('express');
-const router = express.Router();
 
 router.get('/consultation/status', (req, res) => {
   res.json({
@@ -19,4 +17,3 @@ router.get('/consultation/status', (req, res) => {
   });
 });
 
-module.exports = router;

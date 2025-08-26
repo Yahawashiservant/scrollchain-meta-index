@@ -33,8 +33,6 @@ router.get('/export-kernels', (req, res) => {
 });
 
 module.exports = router;
-const express = require('express');
-const router = express.Router();
 
 router.get('/export/formats', (req, res) => {
   res.json({
@@ -43,4 +41,3 @@ router.get('/export/formats', (req, res) => {
   });
 });
 
-module.exports = router;

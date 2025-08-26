@@ -5,10 +5,6 @@ router.get('/extended', (req, res) => {
   res.json({ status: 'Extended API placeholder active.' });
 });
 
-module.exports = router;
-const express = require('express');
-const router = express.Router();
-
 // Extended entropy endpoints
 router.get('/entropy/stream', (req, res) => {
   res.json({

@@ -11,8 +11,6 @@ router.get('/prophecy', (req, res) => {
 });
 
 module.exports = router;
-const express = require('express');
-const router = express.Router();
 
 router.get('/prophecy/oracle', (req, res) => {
   res.json({
@@ -22,4 +20,3 @@ router.get('/prophecy/oracle', (req, res) => {
   });
 });
 
-module.exports = router;
