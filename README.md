@@ -24,17 +24,69 @@ Sovereign publishing layer for scroll-authored governance, DAO-native infrastruc
    ```
    *Make sure you're inside the repository directory before running npm commands!*
 
-3. **Install Dependencies**
+3. **Quick Setup (Recommended)**
+   ```bash
+   npm run quick-setup
+   ```
+   This will install all dependencies and set up the smart wallets app automatically.
+
+4. **Start the Smart Wallets App**
+   ```bash
+   npm run dev-smart-wallets
+   ```
+   The smart wallets app will be available at: **http://localhost:3000**
+
+5. **Start the ScrollChain Dashboard** (Optional)
+   ```bash
+   npm start
+   ```
+   The dashboard will be available at: **http://localhost:5000**
+
+### Alternative Manual Setup
+
+If you prefer to set up components individually:
+
+1. **Install Main Dependencies**
    ```bash
    npm install
    ```
 
-4. **Start the ScrollChain Dashboard**
+2. **Set up Smart Wallets App**
    ```bash
-   npm start
+   npm run setup-smart-wallets
    ```
 
-The dashboard will be available at: **http://localhost:5000**
+3. **Configure Environment Variables**
+   Edit `my-smart-wallets-app/.env.local` and add your Alchemy API credentials:
+   ```env
+   NEXT_PUBLIC_ALCHEMY_API_KEY=your-api-key-here
+   NEXT_PUBLIC_ALCHEMY_POLICY_ID=your-policy-id-here
+   ```
+
+4. **Start Development Server**
+   ```bash
+   npm run dev-smart-wallets
+   ```
+
+### 🖥️ PowerShell Users
+
+For Windows PowerShell users, use these commands with proper spacing:
+
+```powershell
+# Navigate to the smart wallets app directory
+cd my-smart-wallets-app
+
+# Copy environment file (separate commands)
+copy .env.example .env.local
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+```
+
+**Note:** Avoid putting comments directly after commands in PowerShell. Use separate lines instead.
 
 ## 📊 API Endpoints
 
@@ -66,34 +118,62 @@ scrollchain-meta-index/
 
 ## 🛠️ Development Scripts
 
+### Main Project Scripts
+
+```bash
+npm start                    # Start ScrollChain dashboard (port 5000)
+npm run dev                  # Start ScrollChain dashboard in development mode
+npm run quick-setup          # Quick setup: install all dependencies and configure smart wallets
+npm run setup-smart-wallets  # Set up just the smart wallets app
+npm run dev-smart-wallets    # Start smart wallets app (port 3000)
+npm run install-all          # Install dependencies for all sub-projects
+npm run health               # Check if ScrollChain dashboard is running
+```
+
 ### Sub-Projects
 
 The repository contains several sub-applications with their own dependencies:
+
+#### Smart Wallets App (Next.js) - **RECOMMENDED STARTING POINT**
+```bash
+cd my-smart-wallets-app
+npm install
+cp .env.example .env.local   # Configure your API keys in this file
+npm run dev                  # Runs on port 3000
+```
 
 #### Sovereign Annuity DApp (React)
 ```bash
 cd sovereign-annuity-dapp
 npm install
-npm start                # Runs on port 3000
-```
-
-#### Smart Wallets App (Next.js)  
-```bash
-cd my-smart-wallets-app
-npm install
-npm run dev              # Runs on port 3000
+npm start                    # Runs on port 3000
 ```
 
 #### Scroll Prophecy Module
 ```bash
 cd scroll-prophecy
 npm install
-npx hardhat compile      # Compile smart contracts
+npx hardhat compile          # Compile smart contracts
 ```
 
 ## 🐛 Troubleshooting
 
 ### Common Issues
+
+**❌ PowerShell Command Parsing Errors**
+```
+cd my-smart-wallets-app# Create a .env file
+Set-Location : A positional parameter cannot be found that accepts argument 'Create'.
+```
+**Solution:** Separate commands and comments. Use separate lines:
+```powershell
+# Navigate to the smart wallets app directory
+cd my-smart-wallets-app
+# Copy environment file
+copy .env.example .env.local
+# Install dependencies
+npm install
+```
 
 **❌ "Could not read package.json" Error**
 ```
@@ -103,6 +183,14 @@ npm error enoent Could not read package.json
 ```bash
 cd scrollchain-meta-index  # Then run npm install
 ```
+
+**❌ "Missing script: dev" Error**
+```
+npm error Missing script: "dev"
+```
+**Solution:** Use the correct scripts for different components:
+- For smart wallets app: `npm run dev-smart-wallets` (from root) or `cd my-smart-wallets-app && npm run dev`
+- For main dashboard: `npm start` or `npm run dev`
 
 **❌ "Module not found" Errors**
 **Solution:** Install dependencies in the main directory first:

@@ -10,7 +10,10 @@
     "health": "curl -s http://localhost:5000/api/health || echo 'Server not running'",
     "install-all": "npm install && cd sovereign-annuity-dapp && npm install && cd ../my-smart-wallets-app && npm install && cd ../scroll-prophecy && npm install && cd ..",
     "start-dashboard": "./launch-scrollchain-dashboard.sh",
-    "fix-and-launch": "./FixAndLaunch.sh"
+    "fix-and-launch": "./FixAndLaunch.sh",
+    "setup-smart-wallets": "cd my-smart-wallets-app && npm install && cp .env.example .env.local && echo '✅ Smart wallets app setup complete! Edit my-smart-wallets-app/.env.local with your API keys.'",
+    "dev-smart-wallets": "cd my-smart-wallets-app && npm run dev",
+    "quick-setup": "npm install && npm run setup-smart-wallets && echo '🚀 Quick setup complete! Run \"npm run dev-smart-wallets\" to start the smart wallets app.'"
   },
   "dependencies": {
     "@ensdomains/ensjs": "^4.0.2",
