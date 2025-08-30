@@ -10,7 +10,9 @@
     "health": "curl -s http://localhost:5000/api/health || echo 'Server not running'",
     "install-all": "npm install && cd sovereign-annuity-dapp && npm install && cd ../my-smart-wallets-app && npm install && cd ../scroll-prophecy && npm install && cd ..",
     "start-dashboard": "./launch-scrollchain-dashboard.sh",
-    "fix-and-launch": "./FixAndLaunch.sh"
+    "fix-and-launch": "./FixAndLaunch.sh",
+    "local-dev": "./start-local-dev.sh",
+    "stop-local-dev": "./stop-local-dev.sh"
   },
   "dependencies": {
     "@ensdomains/ensjs": "^4.0.2",
