@@ -7,6 +7,8 @@
     "start": "node server/deployment-ready.js",
     "dev": "NODE_ENV=development node server/deployment-ready.js",
     "orchestrator": "node src/orchestrator/fieldOrchestrator.js",
+    "check-sh": "node scripts/check-sh.js",
+    "run-sh": "node scripts/check-sh.js --run --yes --continue-on-error",
     "test": "echo \"Error: no test specified\" && exit 1",
     "health": "curl -s http://localhost:5000/api/health || echo 'Server not running'",
     "install-all": "npm install && cd sovereign-annuity-dapp && npm install && cd ../my-smart-wallets-app && npm install && cd ../scroll-prophecy && npm install && cd ..",

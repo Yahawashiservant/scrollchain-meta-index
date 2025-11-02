@@ -64,6 +64,17 @@ node src/orchestrator/agentLauncher.js --agent scroll-audit-agent
 > Copy `agents/.env.agent.example` to `.env` (or point `AGENT_ENV` at a custom file) to supply the required `NATS_URL`, Supabase credentials, and Hugging Face token before starting.
 > Agents launched without the `nats` package available will fail fast with a clear "install dependencies" message so you can recover quickly.
 
+### Shell Script Linting & Execution
+
+Use the automated helpers to review every tracked shell script before invoking them manually:
+
+```bash
+npm run check-sh    # Syntax-check every *.sh file with bash -n
+npm run run-sh      # Execute each script sequentially (opt-in, continues after failures)
+```
+
+Both commands skip heavy vendor directories (such as `node_modules/`) and surface the exact script that fails so you can inspect it in isolation.
+
 ## 📊 API Endpoints
 
 Once the server is running, you can access these endpoints:
