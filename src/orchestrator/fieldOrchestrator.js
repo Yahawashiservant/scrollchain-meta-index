@@ -211,7 +211,8 @@ class FieldOrchestrator extends EventEmitter {
         ...process.env,
         AGENT_ID: definition.id,
         SUPABASE_TABLE: definition.supabaseTable || '',
-        HF_MODEL: definition.huggingFaceModel || ''
+        HF_MODEL: definition.huggingFaceModel || '',
+        AGENT_CONFIG_PATH: this.agentConfigPath
       }
     });
 

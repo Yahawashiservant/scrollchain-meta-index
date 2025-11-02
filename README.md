@@ -49,6 +49,16 @@ The orchestrator supervises ScrollChain agent processes, streams status updates 
 
 The orchestrator will automatically reconcile the agent mesh definition in `config/agent-mesh.json`, publish lineage to `mesh.status.*`, and forward receipts to the configured Supabase tables.
 
+### Launch a Standalone Agent
+
+Every agent definition in `config/agent-mesh.json` now references a reversible Node.js runtime that can be bootstrapped without the orchestrator. Use the shared launcher to run an agent locally:
+
+```bash
+node src/orchestrator/agentLauncher.js --agent scroll-audit-agent
+```
+
+> Copy `agents/.env.agent.example` to `.env` (or point `AGENT_ENV` at a custom file) to supply the required `NATS_URL`, Supabase credentials, and Hugging Face token before starting.
+
 ## 📊 API Endpoints
 
 Once the server is running, you can access these endpoints:

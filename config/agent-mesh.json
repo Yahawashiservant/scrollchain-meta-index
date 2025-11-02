@@ -15,9 +15,21 @@
         "http://localhost:4040/hooks/audit"
       ],
       "spawn": {
-        "command": "./agents/ScrollAgentService.sh",
-        "args": [],
+        "command": "node",
+        "args": [
+          "src/orchestrator/agentLauncher.js",
+          "--agent",
+          "scroll-audit-agent"
+        ],
         "cwd": "${PROJECT_ROOT}"
+      },
+      "runtime": {
+        "module": "src/orchestrator/agents/auditAgent.js",
+        "export": "AuditAgent",
+        "options": {
+          "auditChannel": "mesh.audit",
+          "supabaseTable": "agent_receipts"
+        }
       },
       "autoscale": {
         "min": 1,
@@ -37,9 +49,22 @@
         "http://localhost:4040/hooks/entropy"
       ],
       "spawn": {
-        "command": "./agents/ScrollEntropyAgent.sh",
-        "args": [],
+        "command": "node",
+        "args": [
+          "src/orchestrator/agentLauncher.js",
+          "--agent",
+          "scroll-entropy-relay"
+        ],
         "cwd": "${PROJECT_ROOT}"
+      },
+      "runtime": {
+        "module": "src/orchestrator/agents/entropyRelayAgent.js",
+        "export": "EntropyRelayAgent",
+        "options": {
+          "streamSubject": "mesh.stream.entropy",
+          "forwardSubject": "mesh.status.entropy",
+          "supabaseTable": "agent_status"
+        }
       },
       "autoscale": {
         "min": 1,
