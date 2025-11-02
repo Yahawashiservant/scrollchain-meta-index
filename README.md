@@ -10,6 +10,7 @@ Sovereign publishing layer for scroll-authored governance, DAO-native infrastruc
 ### Prerequisites
 - Node.js (v18 or later)
 - npm (v8 or later)
+- Optional: Local NATS server (for agent mesh orchestration)
 
 ### Installation & Setup
 
@@ -35,6 +36,18 @@ Sovereign publishing layer for scroll-authored governance, DAO-native infrastruc
    ```
 
 The dashboard will be available at: **http://localhost:5000**
+
+### Activate the Field Orchestrator (Optional)
+
+The orchestrator supervises ScrollChain agent processes, streams status updates over NATS, and writes signed receipts to Supabase.
+
+1. Create an environment file based on `.env.orchestrator.example` and populate the NATS, Supabase, and Hugging Face credentials.
+2. Launch the orchestrator loop:
+   ```bash
+   npm run orchestrator
+   ```
+
+The orchestrator will automatically reconcile the agent mesh definition in `config/agent-mesh.json`, publish lineage to `mesh.status.*`, and forward receipts to the configured Supabase tables.
 
 ## 📊 API Endpoints
 
