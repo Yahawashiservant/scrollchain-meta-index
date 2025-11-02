@@ -10,6 +10,7 @@ Sovereign publishing layer for scroll-authored governance, DAO-native infrastruc
 ### Prerequisites
 - Node.js (v18 or later)
 - npm (v8 or later)
+- Optional: Local NATS server (for agent mesh orchestration)
 
 ### Installation & Setup
 
@@ -35,6 +36,33 @@ Sovereign publishing layer for scroll-authored governance, DAO-native infrastruc
    ```
 
 The dashboard will be available at: **http://localhost:5000**
+
+### Activate the Field Orchestrator (Optional)
+
+The orchestrator supervises ScrollChain agent processes, streams status updates over NATS, and writes signed receipts to Supabase.
+
+1. Create an environment file based on `.env.orchestrator.example` and populate the NATS, Supabase, and Hugging Face credentials.
+   - **NATS_URL** should point at your running NATS broker (for a local developer box the default `nats://localhost:4222` usually works).
+   - If you do not have a NATS instance yet, keep the placeholder value— the orchestrator detects that the socket is unreachable and falls back to degraded mode instead of exiting.
+2. Launch the orchestrator loop:
+   ```bash
+   npm run orchestrator
+   ```
+
+> ℹ️ If the optional `nats` dependency is not installed locally the orchestrator will stay in a degraded mode, skip spawning agents, and log actionable instructions instead of exiting.
+
+The orchestrator will automatically reconcile the agent mesh definition in `config/agent-mesh.json`, publish lineage to `mesh.status.*`, and forward receipts to the configured Supabase tables.
+
+### Launch a Standalone Agent
+
+Every agent definition in `config/agent-mesh.json` now references a reversible Node.js runtime that can be bootstrapped without the orchestrator. Use the shared launcher to run an agent locally:
+
+```bash
+node src/orchestrator/agentLauncher.js --agent scroll-audit-agent
+```
+
+> Copy `agents/.env.agent.example` to `.env` (or point `AGENT_ENV` at a custom file) to supply the required `NATS_URL`, Supabase credentials, and Hugging Face token before starting.
+> Agents launched without the `nats` package available will fail fast with a clear "install dependencies" message so you can recover quickly.
 
 ## 📊 API Endpoints
 
