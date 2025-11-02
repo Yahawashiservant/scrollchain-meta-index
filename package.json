@@ -2,44 +2,22 @@
   "name": "scrollchain-meta-index",
   "version": "1.0.0",
   "description": "Sovereign kernel minting and dashboard deployment for ScrollChainOS",
-  "main": "server/deployment-ready.js",
-  "scripts": {
-    "start": "node server/deployment-ready.js",
-    "dev": "NODE_ENV=development node server/deployment-ready.js",
-    "orchestrator": "node src/orchestrator/fieldOrchestrator.js",
-    "check-sh": "node scripts/check-sh.js",
-    "run-sh": "node scripts/check-sh.js --run --yes --continue-on-error",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "health": "curl -s http://localhost:5000/api/health || echo 'Server not running'",
-    "install-all": "npm install && cd sovereign-annuity-dapp && npm install && cd ../my-smart-wallets-app && npm install && cd ../scroll-prophecy && npm install && cd ..",
-    "start-dashboard": "./launch-scrollchain-dashboard.sh",
-    "fix-and-launch": "./FixAndLaunch.sh",
-    "local-dev": "./start-local-dev.sh",
-    "stop-local-dev": "./stop-local-dev.sh"
-  },
-  "dependencies": {
-    "@ensdomains/ensjs": "^4.0.2",
-    "@ensdomains/eth-ens-namehash": "^2.0.15",
-    "@nomicfoundation/hardhat-toolbox": "^6.1.0",
-    "@vitejs/plugin-react": "^4.7.0",
-    "@web3-storage/w3up-client": "^17.3.0",
-    "cors": "^2.8.5",
-    "dotenv": "^17.2.0",
-    "ethers": "^6.15.0",
-    "express": "^4.21.2",
-    "files-from-path": "^1.1.4",
-    "nats": "^2.25.0",
-    "vite": "^6.4.1",
-    "web3.storage": "^4.5.5",
-    "@supabase/supabase-js": "^2.47.5"
-  },
-  "keywords": [
-    "scrollchain",
-    "sovereignty",
-    "ritual",
-    "biosystem",
-    "dashboard"
+  "private": true,
+  "workspaces": [
+    "cockpit",
+    "agents/*",
+    "kernels/*",
+    "rag/*",
+    "functions/*"
   ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev --workspace cockpit\" \"npm run dev --workspace functions\"",
+    "build": "npm run build --workspace cockpit",
+    "start": "npm run start --workspace cockpit"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  },
   "author": "Keith D. Whitfield",
   "license": "MIT"
 }

@@ -1,0 +1,32 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "cockpit/package.json",
+      "use": "@vercel/next"
+    },
+    {
+      "src": "functions/**/*.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "agents/**/*.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "kernels/**/*.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "rag/**/*.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    { "src": "/api/(.*)", "dest": "functions/$1.js" },
+    { "src": "/agents/(.*)", "dest": "agents/$1.js" },
+    { "src": "/kernels/(.*)", "dest": "kernels/$1.js" },
+    { "src": "/rag/(.*)", "dest": "rag/$1.js" },
+    { "src": "/(.*)", "dest": "cockpit/$1" }
+  ]
+}
