@@ -1,6 +1,4 @@
 "use client"
-import { useEffect, useRef, useState } from "react"
-import { AudioEngine } from "@/lib/audioEngine"
 import Spectrogram from "@/components/Spectrogram"
 import ShaderSpectrum from "@/components/ShaderSpectrum"
 import ChannelStripFx from "@/components/ChannelStripFx"
@@ -8,35 +6,33 @@ import MasteringChain from "@/components/MasteringChain"
 import TransportBar from "@/components/TransportBar"
 import Sequencer from "@/components/Sequencer"
 import AudioReactiveBackground from "@/components/AudioReactiveBackground"
+import { useAudioEngine } from "@/hooks/useAudioEngine"
+import EngineBootScreen from "@/components/layout/EngineBootScreen"
 
 export default function MixerBoard() {
-  const engineRef = useRef<AudioEngine | null>(null)
-  const [ready, setReady] = useState(false)
+  const { engine, engineRef, ready, status, error, boot } = useAudioEngine()
   const channels = ["Bass", "Pad", "Drum", "Lead"] as const
-
-  useEffect(() => {
-    const engine = new AudioEngine()
-    engineRef.current = engine
-    ;(async () => {
-      await engine.boot()
-      setReady(true)
-    })()
-  }, [])
 
   if (!ready)
     return (
-      <main className="min-h-screen bg-[#0B0E13] text-gray-100 p-8 flex items-center justify-center relative">
-        <AudioReactiveBackground />
-        <div className="relative z-10 text-center space-y-4">
-          <div className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
-            Mixer Console
-          </div>
-          <div className="text-sm opacity-70 animate-pulse">Booting audio engine...</div>
-        </div>
-      </main>
+      <EngineBootScreen
+        title="Mixer Console"
+        message={status === "error" ? "Audio engine failed to boot." : "Booting audio engine..."}
+        className="bg-[#0B0E13]"
+      >
+        {status === "error" ? (
+          <button
+            onClick={() => void boot()}
+            className="mx-auto inline-flex items-center justify-center rounded-lg bg-cyan-600/80 px-4 py-2 text-sm font-semibold text-white hover:bg-cyan-500 transition-colors"
+          >
+            Retry
+          </button>
+        ) : null}
+        {error ? (
+          <div className="text-xs text-red-400/80">{error instanceof Error ? error.message : "Unknown error"}</div>
+        ) : null}
+      </EngineBootScreen>
     )
-
-  const engine = engineRef.current!
 
   return (
     <main className="flex flex-col min-h-screen bg-[#0B0E13] text-gray-100 relative">
