@@ -89,6 +89,15 @@ export class LatticeSynthesisEngine {
     this.samples["fx_glitch"] = await this.generateGlitch(entropy)
     this.samples["fx_reverse"] = await this.generateReverse(entropy)
 
+    // JAZZ & SOUL (New Category)
+    this.samples["jazz_upright"] = await this.generateUprightBass(45, entropy)
+    this.samples["jazz_rhodes"] = await this.generateRhodes(261.63, entropy)
+    this.samples["jazz_trumpet"] = await this.generateTrumpet(440, entropy)
+    this.samples["jazz_sax"] = await this.generateSaxophone(330, entropy)
+    this.samples["soul_organ"] = await this.generateJazzOrgan(261.63, entropy)
+    this.samples["hiphop_kick"] = await this.generateMPCKick(entropy)
+    this.samples["hiphop_snare"] = await this.generateMPCSnare(entropy)
+
     console.log(`[v0] Generated ${Object.keys(this.samples).length} lattice-based instruments with entropy shaping`)
   }
 
@@ -696,6 +705,155 @@ export class LatticeSynthesisEngine {
       const osc = Math.sin(2 * Math.PI * freq * t)
       const env = progress
       data[i] = osc * env * 0.5
+    }
+    return buffer
+  }
+
+  // JAZZ & SOUL SYNTHESIS METHODS
+  private async generateUprightBass(freq: number, entropy: EntropyParams): Promise<AudioBuffer> {
+    const sampleRate = this.ctx.sampleRate
+    const duration = 1.5
+    const buffer = this.ctx.createBuffer(1, sampleRate * duration, sampleRate)
+    const data = buffer.getChannelData(0)
+
+    for (let i = 0; i < data.length; i++) {
+      const t = i / sampleRate
+      const sine = Math.sin(2 * Math.PI * freq * t)
+      const tri = (Math.abs(((freq * t) % 1) * 4 - 2) - 1) * 0.5
+      
+      // Entropy affects "woodiness" (noise/buzz)
+      const buzz = (Math.random() * 2 - 1) * Math.exp(-t * 50) * 0.2 * (1 + entropy.density)
+      
+      const env = Math.exp(-t * (3 * entropy.coherence))
+      data[i] = (sine + tri + buzz) * env * 0.6
+    }
+    return buffer
+  }
+
+  private async generateRhodes(freq: number, entropy: EntropyParams): Promise<AudioBuffer> {
+    const sampleRate = this.ctx.sampleRate
+    const duration = 2.0
+    const buffer = this.ctx.createBuffer(1, sampleRate * duration, sampleRate)
+    const data = buffer.getChannelData(0)
+
+    for (let i = 0; i < data.length; i++) {
+      const t = i / sampleRate
+      let osc = Math.sin(2 * Math.PI * freq * t)
+      // Entropy adds more tines/harmonics
+      osc += Math.sin(2 * Math.PI * freq * 2 * t) * 0.2 * (1 + entropy.density)
+      osc += Math.sin(2 * Math.PI * freq * 3 * t) * 0.1
+      
+      // Entropy affects tremolo speed
+      const tremolo = 1 + Math.sin(2 * Math.PI * (6 * entropy.phase) * t) * 0.2
+      
+      const env = Math.exp(-t * 1.5)
+      data[i] = osc * tremolo * env * 0.5
+    }
+    return buffer
+  }
+
+  private async generateTrumpet(freq: number, entropy: EntropyParams): Promise<AudioBuffer> {
+    const sampleRate = this.ctx.sampleRate
+    const duration = 1.0
+    const buffer = this.ctx.createBuffer(1, sampleRate * duration, sampleRate)
+    const data = buffer.getChannelData(0)
+
+    for (let i = 0; i < data.length; i++) {
+      const t = i / sampleRate
+      let osc = 0
+      for(let h=1; h<=12; h++) {
+         osc += Math.sin(2 * Math.PI * freq * h * t) / h
+      }
+      
+      const attack = Math.min(t / 0.05, 1)
+      const decay = Math.exp(-(t - 0.05) * 2)
+      const env = attack * (t < 0.05 ? 1 : decay)
+      
+      // Entropy affects vibrato depth
+      const vibrato = Math.sin(2 * Math.PI * 5 * t) * 0.02 * (1 + entropy.phase)
+      
+      data[i] = osc * env * (1 + vibrato) * 0.3
+    }
+    return buffer
+  }
+
+  private async generateSaxophone(freq: number, entropy: EntropyParams): Promise<AudioBuffer> {
+    const sampleRate = this.ctx.sampleRate
+    const duration = 1.2
+    const buffer = this.ctx.createBuffer(1, sampleRate * duration, sampleRate)
+    const data = buffer.getChannelData(0)
+
+    for (let i = 0; i < data.length; i++) {
+      const t = i / sampleRate
+      let osc = 0
+      for(let h=1; h<=10; h++) {
+         const amp = h % 2 === 1 ? 1/h : 0.3/h
+         osc += Math.sin(2 * Math.PI * freq * h * t) * amp
+      }
+      
+      // Entropy affects breath noise
+      const noise = (Math.random() * 2 - 1) * 0.1 * Math.exp(-t * 2) * (1 + entropy.density)
+      
+      const env = Math.min(t / 0.1, 1) * Math.exp(-(t - 0.1) * 1.5)
+      data[i] = (osc + noise) * env * 0.3
+    }
+    return buffer
+  }
+
+  private async generateJazzOrgan(freq: number, entropy: EntropyParams): Promise<AudioBuffer> {
+    const sampleRate = this.ctx.sampleRate
+    const duration = 1.5
+    const buffer = this.ctx.createBuffer(1, sampleRate * duration, sampleRate)
+    const data = buffer.getChannelData(0)
+
+    for (let i = 0; i < data.length; i++) {
+      const t = i / sampleRate
+      let osc = Math.sin(2 * Math.PI * freq * t)
+      osc += Math.sin(2 * Math.PI * freq * 2 * t) * 0.5
+      osc += Math.sin(2 * Math.PI * freq * 3 * t) * 0.3
+      
+      // Entropy affects Leslie speed
+      const leslie = 1 + Math.sin(2 * Math.PI * (4 * entropy.phase) * t) * 0.3
+      
+      const env = Math.min(t / 0.02, 1) * Math.exp(-t * 0.5)
+      data[i] = osc * leslie * env * 0.4
+    }
+    return buffer
+  }
+
+  private async generateMPCKick(entropy: EntropyParams): Promise<AudioBuffer> {
+    const sampleRate = this.ctx.sampleRate
+    const duration = 0.4
+    const buffer = this.ctx.createBuffer(1, sampleRate * duration, sampleRate)
+    const data = buffer.getChannelData(0)
+
+    for (let i = 0; i < data.length; i++) {
+      const t = i / sampleRate
+      const freq = 60 * Math.exp(-t * 15)
+      const osc = Math.sin(2 * Math.PI * freq * t)
+      // Entropy affects saturation/clipping
+      const clipped = Math.tanh(osc * (2 + entropy.density))
+      const env = Math.exp(-t * 8)
+      data[i] = clipped * env * 0.8
+    }
+    return buffer
+  }
+
+  private async generateMPCSnare(entropy: EntropyParams): Promise<AudioBuffer> {
+    const sampleRate = this.ctx.sampleRate
+    const duration = 0.2
+    const buffer = this.ctx.createBuffer(1, sampleRate * duration, sampleRate)
+    const data = buffer.getChannelData(0)
+
+    for (let i = 0; i < data.length; i++) {
+      const t = i / sampleRate
+      const tone = Math.sin(2 * Math.PI * 220 * t) * Math.exp(-t * 20)
+      const noise = (Math.random() * 2 - 1) * Math.exp(-t * 15)
+      const raw = (tone + noise) * 0.8
+      // Entropy affects bitcrushing
+      const crushFactor = 16 - (entropy.density * 12) // Lower is more crushed
+      const crushed = Math.round(raw * crushFactor) / crushFactor
+      data[i] = crushed
     }
     return buffer
   }

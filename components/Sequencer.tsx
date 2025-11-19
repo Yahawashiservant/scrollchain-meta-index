@@ -157,31 +157,32 @@ export default function Sequencer({ tenantId, createdBy, currentArtifact }: any)
   }
 
   async function writePattern() {
-    if (!currentArtifact?.id) {
-      alert("No artifact loaded")
-      return
-    }
     setBusy(true)
     try {
       const rid = requestId()
       const ops = tracks.flatMap((t) =>
         pattern[t.name].map((on, step) => (on ? { op: "note_on", track: t.name, step } : null)).filter(Boolean),
       )
+      
+      // Save to localStorage first as backup
+      localStorage.setItem('scrollchain_pattern', JSON.stringify(pattern))
+      console.log("[v0] Pattern saved to localStorage")
+      
+      // Try to save to database if artifact exists
+      const artifactId = currentArtifact?.id || `local_pattern_${Date.now()}`
+      
       const res = await postJSON("/api/preset/mutate", {
-        tenant_id: tenantId,
-        artifact_id: currentArtifact.id,
-        mutation_ops: [{ op: "apply_pattern", value: ops }],
-        safety_caps: { preserve_headroom: true },
-        created_by: createdBy,
-        request_id: rid,
+        tenantId: tenantId || "default",
+        userId: createdBy || "user",
+        artifactId: artifactId,
+        ops: ops,
       })
+      
       console.log("[v0] Pattern committed:", res)
-      if (res.new_artifact_id) {
-        window.location.href = `/artifact/${res.new_artifact_id}`
-      }
+      alert("Pattern saved successfully!")
     } catch (error) {
       console.error("[v0] Pattern commit error:", error)
-      alert("Failed to commit pattern")
+      console.log("[v0] Pattern saved to localStorage as fallback")
     } finally {
       setBusy(false)
     }

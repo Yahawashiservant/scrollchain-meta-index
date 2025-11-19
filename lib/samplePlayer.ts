@@ -43,8 +43,20 @@ export class SamplePlayer {
     this.samples["bass_sub"] = await this.generateSubBass(40)
     this.samples["bass_808"] = await this.generate808Bass(55)
     this.samples["bass_synth"] = await this.generateSynthBass(65)
+    this.samples["bass_upright"] = await this.generateUprightBass(45)
 
-    console.log("[v0] Generated 22 professional drum and bass samples with ADSR envelopes")
+    // Jazz & Soul Instruments
+    this.samples["rhodes"] = await this.generateRhodes(261.63) // Middle C
+    this.samples["trumpet"] = await this.generateTrumpet(440)
+    this.samples["sax"] = await this.generateSaxophone(330)
+    this.samples["organ_jazz"] = await this.generateJazzOrgan(261.63)
+
+    // Hip Hop Drums (MPC Style)
+    this.samples["kick_mpc"] = await this.generateMPCKick()
+    this.samples["snare_mpc"] = await this.generateMPCSnare()
+    this.samples["hat_mpc"] = await this.generateMPCHat()
+
+    console.log("[v0] Generated professional drum, bass, and jazz samples")
   }
 
   private async generateProfessionalKick(baseFreq: number, duration: number): Promise<AudioBuffer> {
@@ -332,6 +344,182 @@ export class SamplePlayer {
       // Amplitude envelope
       const env = Math.exp(-t * 6)
       data[i] = osc * filterEnv * env * 0.3
+    }
+    return buffer
+  }
+
+  private async generateUprightBass(freq: number): Promise<AudioBuffer> {
+    const sampleRate = this.ctx.sampleRate
+    const duration = 1.5
+    const buffer = this.ctx.createBuffer(1, sampleRate * duration, sampleRate)
+    const data = buffer.getChannelData(0)
+
+    for (let i = 0; i < data.length; i++) {
+      const t = i / sampleRate
+      // Mix of sine and triangle for woody tone
+      const sine = Math.sin(2 * Math.PI * freq * t)
+      const tri = (Math.abs(((freq * t) % 1) * 4 - 2) - 1) * 0.5
+      
+      // Pluck envelope
+      const env = Math.exp(-t * 3)
+      // Add some "string buzz" noise at the start
+      const buzz = (Math.random() * 2 - 1) * Math.exp(-t * 50) * 0.2
+      
+      data[i] = (sine + tri + buzz) * env * 0.6
+    }
+    return buffer
+  }
+
+  private async generateRhodes(freq: number): Promise<AudioBuffer> {
+    const sampleRate = this.ctx.sampleRate
+    const duration = 2.0
+    const buffer = this.ctx.createBuffer(1, sampleRate * duration, sampleRate)
+    const data = buffer.getChannelData(0)
+
+    for (let i = 0; i < data.length; i++) {
+      const t = i / sampleRate
+      // Rhodes has strong fundamental + specific harmonics
+      let osc = Math.sin(2 * Math.PI * freq * t)
+      osc += Math.sin(2 * Math.PI * freq * 2 * t) * 0.2
+      osc += Math.sin(2 * Math.PI * freq * 3 * t) * 0.1
+      osc += Math.sin(2 * Math.PI * freq * 4 * t) * 0.05
+
+      // Tremolo effect
+      const tremolo = 1 + Math.sin(2 * Math.PI * 6 * t) * 0.2
+      
+      const env = Math.exp(-t * 1.5)
+      data[i] = osc * tremolo * env * 0.5
+    }
+    return buffer
+  }
+
+  private async generateTrumpet(freq: number): Promise<AudioBuffer> {
+    const sampleRate = this.ctx.sampleRate
+    const duration = 1.0
+    const buffer = this.ctx.createBuffer(1, sampleRate * duration, sampleRate)
+    const data = buffer.getChannelData(0)
+
+    for (let i = 0; i < data.length; i++) {
+      const t = i / sampleRate
+      // Sawtooth-like for brass
+      let osc = 0
+      for(let h=1; h<=12; h++) {
+         osc += Math.sin(2 * Math.PI * freq * h * t) / h
+      }
+      
+      // Envelope with slight swell
+      const attack = Math.min(t / 0.05, 1)
+      const decay = Math.exp(-(t - 0.05) * 2)
+      const env = attack * (t < 0.05 ? 1 : decay)
+      
+      // Vibrato
+      const vibrato = Math.sin(2 * Math.PI * 5 * t) * 0.02
+      
+      data[i] = osc * env * (1 + vibrato) * 0.3
+    }
+    return buffer
+  }
+
+  private async generateSaxophone(freq: number): Promise<AudioBuffer> {
+    const sampleRate = this.ctx.sampleRate
+    const duration = 1.2
+    const buffer = this.ctx.createBuffer(1, sampleRate * duration, sampleRate)
+    const data = buffer.getChannelData(0)
+
+    for (let i = 0; i < data.length; i++) {
+      const t = i / sampleRate
+      // Square/Saw hybrid for reed sound
+      let osc = 0
+      for(let h=1; h<=10; h++) {
+         // Odd harmonics emphasized
+         const amp = h % 2 === 1 ? 1/h : 0.3/h
+         osc += Math.sin(2 * Math.PI * freq * h * t) * amp
+      }
+      
+      // Breath noise
+      const noise = (Math.random() * 2 - 1) * 0.1 * Math.exp(-t * 2)
+      
+      const env = Math.min(t / 0.1, 1) * Math.exp(-(t - 0.1) * 1.5)
+      data[i] = (osc + noise) * env * 0.3
+    }
+    return buffer
+  }
+
+  private async generateJazzOrgan(freq: number): Promise<AudioBuffer> {
+    const sampleRate = this.ctx.sampleRate
+    const duration = 1.5
+    const buffer = this.ctx.createBuffer(1, sampleRate * duration, sampleRate)
+    const data = buffer.getChannelData(0)
+
+    for (let i = 0; i < data.length; i++) {
+      const t = i / sampleRate
+      // Hammond-style drawbars (approximate)
+      let osc = Math.sin(2 * Math.PI * freq * t) // Fundamental
+      osc += Math.sin(2 * Math.PI * freq * 2 * t) * 0.5 // 2nd harmonic
+      osc += Math.sin(2 * Math.PI * freq * 3 * t) * 0.3 // 3rd harmonic
+      osc += Math.sin(2 * Math.PI * freq * 4 * t) * 0.1 // 4th harmonic
+      
+      // Leslie speaker simulation (amplitude modulation)
+      const leslie = 1 + Math.sin(2 * Math.PI * 4 * t) * 0.3
+      
+      const env = Math.min(t / 0.02, 1) * Math.exp(-t * 0.5)
+      data[i] = osc * leslie * env * 0.4
+    }
+    return buffer
+  }
+
+  private async generateMPCKick(): Promise<AudioBuffer> {
+    // Punchy, slightly saturated kick
+    const sampleRate = this.ctx.sampleRate
+    const duration = 0.4
+    const buffer = this.ctx.createBuffer(1, sampleRate * duration, sampleRate)
+    const data = buffer.getChannelData(0)
+
+    for (let i = 0; i < data.length; i++) {
+      const t = i / sampleRate
+      const freq = 60 * Math.exp(-t * 15)
+      const osc = Math.sin(2 * Math.PI * freq * t)
+      // Soft clipping for saturation
+      const clipped = Math.tanh(osc * 2)
+      const env = Math.exp(-t * 8)
+      data[i] = clipped * env * 0.8
+    }
+    return buffer
+  }
+
+  private async generateMPCSnare(): Promise<AudioBuffer> {
+    // Tight, dry snare
+    const sampleRate = this.ctx.sampleRate
+    const duration = 0.2
+    const buffer = this.ctx.createBuffer(1, sampleRate * duration, sampleRate)
+    const data = buffer.getChannelData(0)
+
+    for (let i = 0; i < data.length; i++) {
+      const t = i / sampleRate
+      const tone = Math.sin(2 * Math.PI * 220 * t) * Math.exp(-t * 20)
+      const noise = (Math.random() * 2 - 1) * Math.exp(-t * 15)
+      // Bitcrush-like effect (simple quantization)
+      const raw = (tone + noise) * 0.8
+      const crushed = Math.round(raw * 16) / 16
+      data[i] = crushed
+    }
+    return buffer
+  }
+
+  private async generateMPCHat(): Promise<AudioBuffer> {
+    // Sharp, metallic hat
+    const sampleRate = this.ctx.sampleRate
+    const duration = 0.05
+    const buffer = this.ctx.createBuffer(1, sampleRate * duration, sampleRate)
+    const data = buffer.getChannelData(0)
+
+    for (let i = 0; i < data.length; i++) {
+      const t = i / sampleRate
+      const noise = (Math.random() * 2 - 1)
+      // High pass filter approximation
+      const filtered = noise * (Math.random() > 0.5 ? 1 : -1)
+      const env = Math.exp(-t * 60)
+      data[i] = filtered * env * 0.6
     }
     return buffer
   }

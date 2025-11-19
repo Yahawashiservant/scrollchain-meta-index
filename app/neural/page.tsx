@@ -1,7 +1,7 @@
 "use client"
-import { useCallback, useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
+import { AudioEngine } from "@/lib/audioEngine"
 import { useNatsBus } from "@/hooks/useNatsBus"
-import { useAudioEngine } from "@/hooks/useAudioEngine"
 import ShaderSpectrum from "@/components/ShaderSpectrum"
 import Spectrogram from "@/components/Spectrogram"
 import ChannelStripFx from "@/components/ChannelStripFx"
@@ -13,9 +13,10 @@ import ScenePlaylist from "@/components/ScenePlaylist"
 import { emitSessionMapOps, emitScenePlaylistOps } from "@/lib/sessionOps"
 import Studio3D from "@/components/Studio3D"
 import AudioReactiveBackground from "@/components/AudioReactiveBackground"
-import EngineBootScreen from "@/components/layout/EngineBootScreen"
 
 export default function NeuralConsole() {
+  const engineRef = useRef<AudioEngine | null>(null)
+  const [ready, setReady] = useState(false)
   const [catalog, setCatalog] = useState<any[]>([])
   const [isPlaying, setIsPlaying] = useState(false)
   const [spectrum, setSpectrum] = useState<Float32Array>()
@@ -23,27 +24,16 @@ export default function NeuralConsole() {
   const tenantId = "default-tenant"
   const createdBy = "user@example.com"
 
-  const { engine, engineRef, ready, status, error, boot } = useAudioEngine({
-    onReady: useCallback(async () => {
-      try {
-        const res = await fetch("/api/audit")
-        const data = await res.json()
-        setCatalog(data.artifacts ?? [])
-      } catch (fetchError) {
-        console.error("[v0] Failed to fetch artifacts:", fetchError)
-      }
-    }, []),
-  })
-
+  const engine = engineRef.current!
   useNatsBus(engine, tenantId)
 
   useEffect(() => {
-    if (!ready) return
+    if (!ready || !engineRef.current) return
 
     let animationId: number
     const animate = () => {
-      engine.sampleSpectra()
-      const masterSpectrum = engine.getSpectrum("Master")
+      engineRef.current!.sampleSpectra()
+      const masterSpectrum = engineRef.current!.getSpectrum("Master")
       if (masterSpectrum) {
         const normalized = new Float32Array(masterSpectrum.length)
         for (let i = 0; i < masterSpectrum.length; i++) {
@@ -56,7 +46,23 @@ export default function NeuralConsole() {
     animate()
 
     return () => cancelAnimationFrame(animationId)
-  }, [engine, ready])
+  }, [ready])
+
+  useEffect(() => {
+    const engine = new AudioEngine()
+    engineRef.current = engine
+    ;(async () => {
+      await engine.boot()
+      setReady(true)
+      try {
+        const res = await fetch("/api/audit")
+        const data = await res.json()
+        setCatalog(data.artifacts ?? [])
+      } catch (error) {
+        console.error("[v0] Failed to fetch artifacts:", error)
+      }
+    })()
+  }, [])
 
   async function saveSessionMap(map: any) {
     const request_id = crypto.randomUUID()
@@ -105,27 +111,21 @@ export default function NeuralConsole() {
 
   if (!ready)
     return (
-      <EngineBootScreen
-        title="Neural Console"
-        message={status === "error" ? "Audio engine failed to initialize." : "Initializing audio engine..."}
-        className="bg-gradient-to-br from-[#0B0E13] via-[#1a1f2e] to-[#0B0E13]"
-      >
-        {status === "error" ? (
-          <button
-            onClick={() => void boot()}
-            className="mx-auto inline-flex items-center justify-center rounded-lg bg-cyan-600/80 px-4 py-2 text-sm font-semibold text-white hover:bg-cyan-500 transition-colors"
-          >
-            Retry
-          </button>
-        ) : (
-          <div className="w-64 h-1 bg-white/10 rounded-full overflow-hidden mx-auto">
-            <div className="h-full bg-gradient-to-r from-cyan-500 to-purple-500 animate-pulse" style={{ width: "60%" }} />
+      <main className="min-h-screen bg-gradient-to-br from-[#0B0E13] via-[#1a1f2e] to-[#0B0E13] text-gray-100 flex items-center justify-center relative">
+        <AudioReactiveBackground />
+        <div className="relative z-10 text-center space-y-4">
+          <div className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
+            Neural Console
           </div>
-        )}
-        {error ? (
-          <div className="text-xs text-red-400/80">{error instanceof Error ? error.message : "Unknown error"}</div>
-        ) : null}
-      </EngineBootScreen>
+          <div className="text-sm opacity-70 animate-pulse">Initializing audio engine...</div>
+          <div className="w-64 h-1 bg-white/10 rounded-full overflow-hidden mx-auto">
+            <div
+              className="h-full bg-gradient-to-r from-cyan-500 to-purple-500 animate-pulse"
+              style={{ width: "60%" }}
+            />
+          </div>
+        </div>
+      </main>
     )
 
   return (

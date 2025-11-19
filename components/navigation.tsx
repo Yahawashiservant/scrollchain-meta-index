@@ -1,6 +1,6 @@
 "use client"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname } from 'next/navigation'
 
 export function Navigation() {
   const pathname = usePathname()
@@ -17,11 +17,11 @@ export function Navigation() {
   ]
 
   return (
-    <nav className="border-b border-white/10 backdrop-blur bg-white/5">
+    <nav className="border-b border-amber-900/20 backdrop-blur bg-[#1a0b00]/80">
       <div className="max-w-7xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
-          <Link href="/" className="text-xl font-bold">
-            ScrollChain Lattice
+          <Link href="/" className="text-xl font-bold text-amber-500 tracking-wider">
+            THE DEN HOUSE
           </Link>
 
           <div className="flex items-center gap-1">
@@ -32,7 +32,9 @@ export function Navigation() {
                   key={link.href}
                   href={link.href}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    isActive ? "bg-white/10 text-white" : "text-white/70 hover:text-white hover:bg-white/5"
+                    isActive
+                      ? "bg-amber-500/20 text-amber-200"
+                      : "text-amber-100/60 hover:text-amber-100 hover:bg-amber-500/10"
                   }`}
                 >
                   {link.label}

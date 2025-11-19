@@ -1,6 +1,6 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
+import { Geist, Geist_Mono } from 'next/font/google'
 import "./globals.css"
 import { Navigation } from "@/components/navigation"
 
@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "ScrollChain Lattice",
-  description: "Lattice entropy app for audio artifacts",
+  title: "THE DEN HOUSE",
+  description: "Hip Hop, Soul & Jazz Lattice Studio",
     generator: 'v0.app'
 }
 
@@ -28,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white min-h-screen`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gradient-to-br from-[#1a0b00] via-[#2d1b0e] to-[#0f0500] text-amber-50 min-h-screen`}
       >
         <Navigation />
         {children}
