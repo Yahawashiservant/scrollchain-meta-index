@@ -99,7 +99,8 @@ export default function Sequencer({ tenantId, createdBy, currentArtifact }: any)
       engineRef.current = engine
 
       const player = new LatticeSynthesisEngine(engine.ctx!)
-      await player.generateAllInstruments(entropy)
+      // Initial generation with default params
+      await updateSynthesis(entropy, player)
       playerRef.current = player
 
       const clock = new SequencerClock(engine.ctx!)
@@ -119,9 +120,28 @@ export default function Sequencer({ tenantId, createdBy, currentArtifact }: any)
     init()
   }, [])
 
+  async function updateSynthesis(params: EntropyParams, player: LatticeSynthesisEngine) {
+    try {
+      const res = await postJSON("/api/lattice/generate", {
+        params: params,
+        tenantId: tenantId || "default",
+        userId: createdBy || "user"
+      })
+      
+      if (res.synthesisConfig) {
+        await player.generateFromConfig(res.synthesisConfig)
+      }
+    } catch (error) {
+      console.error("[v0] Failed to fetch synthesis config:", error)
+    }
+  }
+
   useEffect(() => {
     if (playerRef.current) {
-      playerRef.current.generateAllInstruments(entropy)
+      const timer = setTimeout(() => {
+        updateSynthesis(entropy, playerRef.current!)
+      }, 200)
+      return () => clearTimeout(timer)
     }
   }, [entropy])
 
