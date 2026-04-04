@@ -2,48 +2,88 @@ import { NextResponse } from "next/server"
 import { createClient } from "@supabase/supabase-js"
 
 export async function GET() {
-  // Try to call the Edge Function first
-  try {
-    const res = await fetch(`${process.env.SUPABASE_URL}/functions/v1/scrollchain-audit`, {
-      headers: { apikey: process.env.SUPABASE_ANON_KEY! },
-    })
+  // Always return valid JSON - never throw
+  const emptyResponse = { artifacts: [] }
 
-    if (res.ok) {
-      return NextResponse.json(await res.json())
+  try {
+    const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY
+
+    if (!supabaseUrl || !supabaseKey) {
+      return NextResponse.json(emptyResponse)
     }
-  } catch (error) {
-    console.log("[v0] Edge Function not available, falling back to direct query")
-  }
 
-  // Fallback to direct Supabase query
-  const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
+    // Try Edge Function first (with timeout)
+    try {
+      const controller = new AbortController()
+      const timeout = setTimeout(() => controller.abort(), 3000)
 
-  try {
-    // Try to fetch from receipts table
-    const { data: receipts, error } = await supabase
+      const res = await fetch(`${supabaseUrl}/functions/v1/scrollchain-audit`, {
+        headers: {
+          apikey: supabaseKey,
+          Authorization: `Bearer ${supabaseKey}`,
+          "Content-Type": "application/json",
+        },
+        signal: controller.signal,
+      })
+
+      clearTimeout(timeout)
+
+      if (res.ok) {
+        const text = await res.text()
+        try {
+          const data = JSON.parse(text)
+          if (data.artifacts) {
+            return NextResponse.json(data)
+          }
+        } catch {
+          // Not valid JSON, continue to fallback
+        }
+      }
+    } catch {
+      console.log("[v0] Edge Function not available, falling back to direct query")
+    }
+
+    // Direct Supabase query fallback
+    const supabase = createClient(supabaseUrl, supabaseKey)
+
+    // Try artifacts table first
+    const { data: artifacts, error: artifactsError } = await supabase
+      .from("artifacts")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(50)
+
+    if (!artifactsError && artifacts && artifacts.length > 0) {
+      return NextResponse.json({ artifacts })
+    }
+
+    // Try receipts table
+    const { data: receipts, error: receiptsError } = await supabase
       .from("receipts")
       .select("*")
       .order("created_at", { ascending: false })
       .limit(50)
 
-    if (error) {
-      // If receipts table doesn't exist, try audit_logs
-      if (error.code === "42P01") {
-        const { data: auditLogs } = await supabase
-          .from("audit_logs")
-          .select("*")
-          .order("created_at", { ascending: false })
-          .limit(50)
-
-        return NextResponse.json({ artifacts: auditLogs || [] })
-      }
-      throw error
+    if (!receiptsError && receipts && receipts.length > 0) {
+      return NextResponse.json({ artifacts: receipts })
     }
 
-    return NextResponse.json({ artifacts: receipts || [] })
-  } catch (error: any) {
-    console.error("[v0] Failed to fetch audit logs:", error)
-    // Return empty array instead of error to prevent UI crash
-    return NextResponse.json({ artifacts: [] })
+    // Try audit_logs table
+    const { data: auditLogs, error: auditError } = await supabase
+      .from("audit_logs")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(50)
+
+    if (!auditError && auditLogs && auditLogs.length > 0) {
+      return NextResponse.json({ artifacts: auditLogs })
+    }
+
+    // No data found in any table - return empty
+    return NextResponse.json(emptyResponse)
+  } catch (error) {
+    // Catch-all: always return valid JSON
+    return NextResponse.json(emptyResponse)
   }
 }
